@@ -1,0 +1,2 @@
+kinematic.c:11:10:kinematicForward	40	static
+kinematic.c:31:10:kinematicInverse	88	static

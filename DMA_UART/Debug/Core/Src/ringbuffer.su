@@ -1,0 +1,8 @@
+ringbuffer.c:28:9:ringBuff_PushChar	16	static
+ringbuffer.c:53:9:ringBuff_PopChar	16	static
+ringbuffer.c:78:9:ringBuff_PushArray	32	static
+ringbuffer.c:100:9:ringBuff_PopArray	32	static
+ringbuffer.c:120:9:ringBuff_IsFull	8	static
+ringbuffer.c:131:9:ringBuff_IsEmpty	8	static
+ringbuffer.c:148:9:ringBuff_DistanceOf	32	static
+ringbuffer.c:180:9:ringBuff_HowManySpace	16	static
