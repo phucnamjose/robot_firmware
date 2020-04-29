@@ -174,17 +174,17 @@ void StartDefaultTask(void const * argument)
   // Report buffer;
   uint8_t				respond[40];
   int32_t				respond_lenght;
-  uint8_t				position[85];
-  uint8_t				infor[90];
+  uint8_t				position[110];
+  uint8_t				infor[120];
   int32_t				infor_lenght;
-  uint8_t				task_usb[100];
+  uint8_t				task_usb[125];
   int32_t				task_usb_lenght;
 
   uint8_t				respond_packed[50];
   int32_t				respond_packed_lenght;
-  uint8_t				infor_packed[100];
+  uint8_t				infor_packed[125];
   int32_t				infor_packed_lenght;
-  uint8_t				usb_buff[256];
+  uint8_t				usb_buff[300];
   int32_t				usb_lenght;
 
   // Robot variable
@@ -208,7 +208,7 @@ void StartDefaultTask(void const * argument)
 	  positionNext.Theta2 = PI/3;
 	  positionNext.D3 = 10;
 	  positionNext.Theta4 = 0;
-
+	  positionNext.t = 0;
 	  kinematicForward(&positionNext);
 #endif
   /* Infinite loop */
@@ -334,6 +334,7 @@ void StartDefaultTask(void const * argument)
 						  no_duty_success++;
 						  current_state		= SCARA_DUTY_STATE_FLOW;
 						  run_time			= 0;
+						  positionCurrent.t = 0;
 						  // Respond
 						  respond_lenght 	= commandRespond(RPD_OK,
 								  	  	  	  	  	  	  	  duty_cmd.id_command,
@@ -391,6 +392,7 @@ void StartDefaultTask(void const * argument)
 			  case SCARA_DUTY_STATE_FINISH:
 				  {
 					  current_state = SCARA_DUTY_STATE_READY;
+					  positionNext.t = 0;
 					  // Done Inform
 					  scaraPosition2String((char *)position, positionCurrent);
 					  infor_lenght 		= commandRespond(RPD_DONE,
@@ -464,9 +466,9 @@ void Start_USB_RX_Task(void const * argument)
 	DUTY_Command_TypeDef 	duty_cmd;
 	Robot_CommandTypedef 	cmd_type;
 	Robot_RespondTypedef 	rpd_type;
-	uint8_t			 	detail[85];
-	uint8_t				respond[100];
-	uint8_t				message[110];
+	uint8_t			 	detail[110];
+	uint8_t				respond[120];
+	uint8_t				message[125];
 	int32_t				respond_lenght;
 	int32_t				message_lenght;
 

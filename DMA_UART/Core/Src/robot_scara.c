@@ -774,6 +774,8 @@ SCARA_StatusTypeDef	scaraInitScurve	(Trajectory_Scurve_TypeDef *scurve,
 SCARA_StatusTypeDef	scaraFlowDuty		(float time) {
 	SCARA_StatusTypeDef status1, status2, status3, status4;
 	SCARA_PositionTypeDef	positionCompute;
+	// Update time
+	positionCompute.t = time;
 	/*---- Task space ----*/
 	if ( DUTY_SPACE_TASK == myDUTY.space_type) {
 		float s, angle, x, y, z;
@@ -1140,6 +1142,8 @@ int32_t					scaraPosition2String(char * result, SCARA_PositionTypeDef position) 
 	uint8_t x[12];
 	uint8_t y[12];
 	uint8_t z[12];
+	uint8_t roll[12];
+	uint8_t time[12];
 	int32_t lenght;
 
 	float2string(theta1, position.Theta1, 6);
@@ -1149,15 +1153,18 @@ int32_t					scaraPosition2String(char * result, SCARA_PositionTypeDef position) 
 	float2string(x, position.x, 6);
 	float2string(y, position.y, 6);
 	float2string(z, position.z, 6);
-
-	lenght = snprintf( (char *)result, 85,
-						"%s %s %s %s %s %s %s",
+	float2string(roll, position.roll, 6);
+	float2string(time, position.t, 4);
+	lenght = snprintf( (char *)result, 108,
+						"%s %s %s %s %s %s %s %s %s",
 						theta1,
 						theta2,
 						d3,
 						theta4,
 						x,
 						y,
-						z);
+						z,
+						roll,
+						time);
 	return lenght;
 }
