@@ -45,8 +45,8 @@ DMA_UART.list \
 all: DMA_UART.elf secondary-outputs
 
 # Tool invocations
-DMA_UART.elf: $(OBJS) $(USER_OBJS) D:\STM32_RTOS\DMA_UART\STM32F407VGTX_FLASH.ld
-	arm-none-eabi-gcc -o "DMA_UART.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\STM32_RTOS\DMA_UART\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DMA_UART.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
+DMA_UART.elf: $(OBJS) $(USER_OBJS) F:\THESIS\SOURCE\robot_firmware\DMA_UART\STM32F407VGTX_FLASH.ld
+	arm-none-eabi-gcc -o "DMA_UART.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"F:\THESIS\SOURCE\robot_firmware\DMA_UART\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DMA_UART.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

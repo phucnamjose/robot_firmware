@@ -1,2 +1,2 @@
 common_def.c:32:9:LOG_REPORT	96	static
-common_def.c:50:9:float2string	56	static
+common_def.c:50:9:double2string	80	static

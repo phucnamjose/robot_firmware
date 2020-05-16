@@ -126,38 +126,39 @@ typedef enum
 /*** Instance Form ***/
 typedef struct
 {
-	float						q;
-	float						v;
-	float						a;
-	float						t;
-	float 						x;
-	float 						y;
-	float 						z;
-	float						roll;
-	float 						Theta1;//Rotate
-	float 						Theta2;//Rotate
-	float 						D3;//Transpose
-	float 						Theta4;//Rotate
+	double						q;
+	double						v;
+	double						a;
+	double						t;
+	double						total_time;
+	double 						x;
+	double 						y;
+	double 						z;
+	double						roll;
+	double 						Theta1;//Rotate
+	double 						Theta2;//Rotate
+	double 						D3;//Transpose
+	double 						Theta4;//Rotate
 }SCARA_PositionTypeDef;
 
 typedef struct
 {
 	int8_t			 dir;
-	float			 s0;
-	float 			 s1;
-	float			 v0;
-	float			 v1;
-	float 			 v_design;
-	float 			 a_design;
-	float			 v_lim;
-	float			 Ta;
-	float			 Td;
-	float			 Tf;
+	double			 s0;
+	double 			 s1;
+	double			 v0;
+	double			 v1;
+	double 			 v_design;
+	double 			 a_design;
+	double			 v_lim;
+	double			 Ta;
+	double			 Td;
+	double			 Tf;
 	uint32_t		 num_of_sampling;
-	float			 total_s;
-	float			 a_current;
-	float			 v_current;
-	float			 s_current;
+	double			 total_s;
+	double			 a_current;
+	double			 v_current;
+	double			 s_current;
 
 }Trajectory_LSPB_TypeDef;
 
@@ -165,73 +166,73 @@ typedef struct
 typedef struct
 {
 	int8_t			 dir;
-	float			 s0;
-	float 			 s1;
-	float			 v0;
-	float			 v1;
-	float 			 v_design;
-	float 			 a_design;
-	float			 v_lim;
+	double			 s0;
+	double 			 s1;
+	double			 v0;
+	double			 v1;
+	double 			 v_design;
+	double 			 a_design;
+	double			 v_lim;
 	uint8_t			 num_of_phase;
-	float			 j_max;
-	float			 Tm;
-	float			 Tc;
-	float			 Tf;
+	double			 j_max;
+	double			 Tm;
+	double			 Tc;
+	double			 Tf;
 	uint32_t		 num_of_sampling;
-	float			 total_s;
-	float			 v_1;
-	float			 s_1;
-	float			 v_2;
-	float			 s_2;
-	float			 v_3;
-	float			 s_3;
-	float			 v_4;
-	float			 s_4;
-	float			 a_current;
-	float			 v_current;
-	float			 s_current;
+	double			 total_s;
+	double			 v_1;
+	double			 s_1;
+	double			 v_2;
+	double			 s_2;
+	double			 v_3;
+	double			 s_3;
+	double			 v_4;
+	double			 s_4;
+	double			 a_current;
+	double			 v_current;
+	double			 s_current;
 }Trajectory_Scurve_TypeDef;
 
 
 typedef struct
 {
-	float			 x0;
-	float			 x1;
-	float			 y0;
-	float			 y1;
-	float			 z0;
-	float			 z1;
-	float			 denta_x;
-	float			 denta_y;
-	float			 denta_z;
-	float			 total_s;
-	float			 delta_s;
-	float			 x_current;
-	float			 y_current;
-	float			 z_current;
+	double			 x0;
+	double			 x1;
+	double			 y0;
+	double			 y1;
+	double			 z0;
+	double			 z1;
+	double			 denta_x;
+	double			 denta_y;
+	double			 denta_z;
+	double			 total_s;
+	double			 delta_s;
+	double			 x_current;
+	double			 y_current;
+	double			 z_current;
 }Path_Line_TypeDef;
 
 
 typedef struct
 {
 	int8_t			 dir;
-	float			 radius;
-	float			 angle_start;
-	float			 angle_stop;
-	float			 x0;
-	float			 x1;
-	float			 y0;
-	float			 y1;
-	float			 xi;
-	float			 yi;
-	float			 z0;
-	float			 z1;
-	float			 zi;
-	float			 total_s;
-	float			 total_angle;
-	float			 x_current;
-	float			 y_current;
-	float			 z_current;
+	double			 radius;
+	double			 angle_start;
+	double			 angle_stop;
+	double			 x0;
+	double			 x1;
+	double			 y0;
+	double			 y1;
+	double			 xi;
+	double			 yi;
+	double			 z0;
+	double			 z1;
+	double			 zi;
+	double			 total_s;
+	double			 total_angle;
+	double			 x_current;
+	double			 y_current;
+	double			 z_current;
 }Path_Circle_TypeDef;
 
 
@@ -256,17 +257,17 @@ typedef struct
 	Path_TypeDef	 		path;
 	Trajectory_TypeDef 		trajectory_3d;
 	Trajectory_TypeDef 		trajectory_roll;
-	float					roll_start;
+	double					roll_start;
 }DUTY_Task_TypeDef;
 
 
 typedef struct
 {
 	Trajectory_TypeDef		trajectory[4];
-	float					theta1_start;
-	float					theta2_start;
-	float					d3_start;
-	float					theta4_start;
+	double					theta1_start;
+	double					theta2_start;
+	double					d3_start;
+	double					theta4_start;
 }DUTY_Joint_TypeDef;
 
 
@@ -275,7 +276,7 @@ typedef struct
 	SpaceTypeDef		space_type;
 	DUTY_Task_TypeDef	task;
 	DUTY_Joint_TypeDef	joint;
-	float				time_total;
+	double				time_total;
 }DUTY_TypeDef;
 
 
@@ -290,12 +291,12 @@ typedef struct
 	TrajectoryTypeDef			trajec_type;
 	ModeInitTypeDef				modeInit_type;
 	int32_t						sub_para_int;
-	float						sub_para_float;
-	float						time_total;
+	double						sub_para_double;
+	double						time_total;
 	SCARA_PositionTypeDef		target_point;
 	SCARA_PositionTypeDef		sub_point;
-	float						v_factor;
-	float						a_factor;
+	double						v_factor;
+	double						a_factor;
 }DUTY_Command_TypeDef;
 
 
@@ -323,23 +324,23 @@ SCARA_StatusTypeDef			scaraInitCircle		(Path_Circle_TypeDef *circle,
 
 SCARA_StatusTypeDef			scaraInitLSPB		(Trajectory_LSPB_TypeDef *lspb,
 												Trajectory_TargetTypeDef target,
-												float total_s,
+												double total_s,
 												ModeInitTypeDef modeinits);
 
 SCARA_StatusTypeDef			scaraInitScurve		(Trajectory_Scurve_TypeDef *scurve,
 												Trajectory_TargetTypeDef target,
-												float total_s,
+												double total_s,
 												ModeInitTypeDef modeinit);
 
-SCARA_StatusTypeDef			scaraFlowDuty		(float time);
-SCARA_StatusTypeDef			scaraFlowLine		(Path_Line_TypeDef *line, float s);
-SCARA_StatusTypeDef			scaraFlowCircle		(Path_Circle_TypeDef *circle, float s);
-SCARA_StatusTypeDef			scaraFlowLSPB		(Trajectory_LSPB_TypeDef *lspb, float time);
-SCARA_StatusTypeDef			scaraFLowScurve		(Trajectory_Scurve_TypeDef *scurve, float time);
+SCARA_StatusTypeDef			scaraFlowDuty		(double time);
+SCARA_StatusTypeDef			scaraFlowLine		(Path_Line_TypeDef *line, double s);
+SCARA_StatusTypeDef			scaraFlowCircle		(Path_Circle_TypeDef *circle, double s);
+SCARA_StatusTypeDef			scaraFlowLSPB		(Trajectory_LSPB_TypeDef *lspb, double time);
+SCARA_StatusTypeDef			scaraFLowScurve		(Trajectory_Scurve_TypeDef *scurve, double time);
 
 
-SCARA_StatusTypeDef			scaraCheckWorkSpace4(float theta1, float theta2, float d3, float theta4);
-SCARA_StatusTypeDef			scaraCheckWorkSpace1(Trajectory_TargetTypeDef target, float value);
+SCARA_StatusTypeDef			scaraCheckWorkSpace4(double theta1, double theta2, double d3, double theta4);
+SCARA_StatusTypeDef			scaraCheckWorkSpace1(Trajectory_TargetTypeDef target, double value);
 
 void						scaraSetScanFlag	(void);
 void						scaraSetOutput		(int8_t level);
@@ -350,7 +351,7 @@ void						scaraGetPosition	(SCARA_PositionTypeDef *pos);
 SCARA_ModeTypeDef			scaraGetMode		(void);
 SCARA_DutyStateTypeDef		scaraGetDutyState	(void);
 uint8_t						scaraIsScanLimit	(void);
-uint8_t						scaraIsFinish		(float run_time);
+uint8_t						scaraIsFinish		(double run_time);
 int32_t						scaraPosition2String(char * result, SCARA_PositionTypeDef position);
 
 #endif /* INC_ROBOT_SCARA_H_ */

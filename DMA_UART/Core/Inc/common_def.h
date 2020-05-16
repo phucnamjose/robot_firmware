@@ -24,6 +24,6 @@
 
 
 uint8_t LOG_REPORT(char *message, uint16_t line);
-int32_t	float2string( uint8_t *result, float value, uint8_t precision);
+int32_t	double2string( uint8_t *result, double value, uint8_t precision);
 
 #endif /* INC_COMMON_DEF_H_ */

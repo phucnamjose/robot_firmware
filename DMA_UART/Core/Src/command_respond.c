@@ -56,7 +56,7 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 	// Move Home
 	} else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_MOVE_HOME])) {
 		if (3 == result) {
-			result = sscanf( para, "%f %f",
+			result = sscanf( para, "%lf %lf",
 							&(duty_cmd->v_factor),
 							&(duty_cmd->a_factor));
 			if (2 != result) {
@@ -72,9 +72,9 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 	// Move Line
 	} else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_MOVE_LINE])) {
 		if (3 == result) {
-			float temp_fl;
+			double temp_fl;
 			int8_t mode_init;
-			result = sscanf( para, "%f %f %f %f %f %d %f",
+			result = sscanf( para, "%lf %lf %lf %lf %lf %d %lf",
 							&(duty_cmd->target_point.x),
 							&(duty_cmd->target_point.y),
 							&(duty_cmd->target_point.z),
@@ -86,6 +86,7 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 			if (7 != result) {
 				return CMD_ERROR;
 			}
+			duty_cmd->path_type = DUTY_PATH_LINE;
 			duty_cmd->space_type = DUTY_SPACE_TASK;
 			duty_cmd->robot_mode = SCARA_MODE_DUTY;
 
@@ -106,9 +107,9 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 	// Move Circle
 	} else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_MOVE_CIRCLE])) {
 		if (3 == result) {
-			float temp_fl;
+			double temp_fl;
 			int8_t mode_init;
-			result = sscanf( para, "%f %f %f %f %f %f %f %d %f %d %f",
+			result = sscanf( para, "%lf %lf %lf %lf %lf %lf %lf %d %lf %d %lf",
 							&(duty_cmd->target_point.x),
 							&(duty_cmd->target_point.y),
 							&(duty_cmd->target_point.z),
@@ -124,6 +125,7 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 			if (11 != result) {
 				return CMD_ERROR;
 			}
+			duty_cmd->path_type = DUTY_PATH_CIRCLE;
 			duty_cmd->space_type = DUTY_SPACE_TASK;
 			duty_cmd->robot_mode = SCARA_MODE_DUTY;
 
@@ -144,9 +146,9 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 	// Move Joint
 	} else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_MOVE_JOINT])) {
 		if (3 == result) {
-			float temp_fl;
+			double temp_fl;
 			int8_t mode_init;
-			result = sscanf( para, "%f %f %f %f %f %d %f",
+			result = sscanf( para, "%lf %lf %lf %lf %lf %d %lf",
 							&(duty_cmd->target_point.x),
 							&(duty_cmd->target_point.y),
 							&(duty_cmd->target_point.z),
@@ -159,6 +161,7 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 				return CMD_ERROR;
 			}
 			duty_cmd->space_type = DUTY_SPACE_JOINT;
+			duty_cmd->joint_type = DUTY_JOINT_4DOF;
 			duty_cmd->robot_mode = SCARA_MODE_DUTY;
 
 			if ( DUTY_MODE_INIT_QVA == mode_init) {
@@ -178,11 +181,11 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 	// Rotate Single
 	} else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_ROTATE_SINGLE])) {
 		if (3 == result) {
-			float temp_fl;
+			double temp_fl;
 			int8_t mode_init;
-			result = sscanf( para, "%d %f %f %d %f",
+			result = sscanf( para, "%d %lf %lf %d %lf",
 							(int *)&(duty_cmd->sub_para_int),
-							&(duty_cmd->sub_para_float),
+							&(duty_cmd->sub_para_double),
 							&(duty_cmd->v_factor),
 							(int *)&mode_init,
 							&temp_fl);
@@ -191,6 +194,7 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 				return CMD_ERROR;
 			}
 			duty_cmd->space_type = DUTY_SPACE_JOINT;
+			duty_cmd->joint_type = DUTY_JOINT_SINGLE;
 			duty_cmd->robot_mode = SCARA_MODE_DUTY;
 
 			if ( DUTY_MODE_INIT_QVA == mode_init) {
@@ -374,7 +378,7 @@ int32_t				commandRespond	(Robot_RespondTypedef rpd,
 
 		{
 			out_lenght = snprintf( (char *)respond,
-									100,
+									145,
 									"%d %s %s",
 									(int)id_command,
 									ROBOTRESPOND[rpd],

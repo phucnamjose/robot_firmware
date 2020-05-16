@@ -15,8 +15,8 @@
 #define		d1		(211.0f)
 #define 	a1		(197.0f)
 #define		a2		(160.0f)
-#define		d4		(67.0f)
-#define		a4		(20.0f)
+#define		d4		(77.0f)
+#define		a4		(30.0f)
 
 
 

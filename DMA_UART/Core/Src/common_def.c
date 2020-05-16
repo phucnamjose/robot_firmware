@@ -47,11 +47,11 @@ uint8_t LOG_REPORT(char *message, uint16_t line) {
 	return TRUE;
 }
 
-int32_t	float2string( uint8_t *result, float value, uint8_t precision) {
+int32_t	double2string( uint8_t *result, double value, uint8_t precision) {
 	uint8_t nguyen[4];
 	uint8_t le[6];
 	int8_t sign;
-	float temp1, temp2;
+	double temp1, temp2;
 	int32_t index;
 
 	if((precision < 0) || (6 < precision)) {
@@ -83,6 +83,10 @@ int32_t	float2string( uint8_t *result, float value, uint8_t precision) {
 	le[3] 	= (int32_t)temp2/100;
 	le[4] 	= (int32_t)temp2/10 - le[3]*10;
 	le[5]	= (int32_t)temp2 - le[3]*100 - le[4]*10;
+	// Rounding
+	if ((temp2 - le[3]*1000 - le[4]*100 - le[5]) >= 0.5) {
+		le[5]++;
+	}
 
 	index = 0;
 

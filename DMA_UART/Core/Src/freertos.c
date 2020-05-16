@@ -61,6 +61,7 @@
 extern RINGBUFFER_TypeDef 			usb_rx_ringbuff;
 extern RINGBUFFER_TypeDef 			cmd_tx_ringbuff;
 extern const char 					*DETAIL_STATUS[NUM_OF_STATUS];
+extern SCARA_PositionTypeDef		positionPrevios;
 extern SCARA_PositionTypeDef		positionCurrent;
 extern SCARA_PositionTypeDef		positionNext;
 
@@ -174,23 +175,23 @@ void StartDefaultTask(void const * argument)
   // Report buffer;
   uint8_t				respond[40];
   int32_t				respond_lenght;
-  uint8_t				position[110];
-  uint8_t				infor[120];
+  uint8_t				position[135];
+  uint8_t				infor[145];
   int32_t				infor_lenght;
-  uint8_t				task_usb[125];
+  uint8_t				task_usb[150];
   int32_t				task_usb_lenght;
 
   uint8_t				respond_packed[50];
   int32_t				respond_packed_lenght;
-  uint8_t				infor_packed[125];
+  uint8_t				infor_packed[150];
   int32_t				infor_packed_lenght;
-  uint8_t				usb_buff[300];
+  uint8_t				usb_buff[350];
   int32_t				usb_lenght;
 
   // Robot variable
   SCARA_ModeTypeDef			current_mode;
   SCARA_DutyStateTypeDef 	current_state;
-  float						run_time;
+  double						run_time;
 
   LOG_REPORT("free_rtos.c: PROGRAM START...", __LINE__);
 
@@ -224,6 +225,7 @@ void StartDefaultTask(void const * argument)
 	  usb_lenght			= 0;
 	  // Update new position
 #ifdef SIMULATION
+	  memcpy(&positionPrevios, &positionCurrent, sizeof(SCARA_PositionTypeDef));
 	  memcpy(&positionCurrent, &positionNext, sizeof(SCARA_PositionTypeDef));
 #endif
 
@@ -334,7 +336,6 @@ void StartDefaultTask(void const * argument)
 						  no_duty_success++;
 						  current_state		= SCARA_DUTY_STATE_FLOW;
 						  run_time			= 0;
-						  positionCurrent.t = 0;
 						  // Respond
 						  respond_lenght 	= commandRespond(RPD_OK,
 								  	  	  	  	  	  	  	  duty_cmd.id_command,
@@ -393,6 +394,8 @@ void StartDefaultTask(void const * argument)
 				  {
 					  current_state = SCARA_DUTY_STATE_READY;
 					  positionNext.t = 0;
+					  positionNext.total_time = 0;
+					  positionNext.q = 0;
 					  // Done Inform
 					  scaraPosition2String((char *)position, positionCurrent);
 					  infor_lenght 		= commandRespond(RPD_DONE,
@@ -466,9 +469,9 @@ void Start_USB_RX_Task(void const * argument)
 	DUTY_Command_TypeDef 	duty_cmd;
 	Robot_CommandTypedef 	cmd_type;
 	Robot_RespondTypedef 	rpd_type;
-	uint8_t			 	detail[110];
-	uint8_t				respond[120];
-	uint8_t				message[125];
+	uint8_t			 	detail[135];
+	uint8_t				respond[145];
+	uint8_t				message[150];
 	int32_t				respond_lenght;
 	int32_t				message_lenght;
 
