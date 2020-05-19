@@ -66,7 +66,6 @@ extern SCARA_PositionTypeDef		positionCurrent;
 extern SCARA_PositionTypeDef		positionNext;
 
 osMailQId commandMailHandle;
-osMailQId taskMailHandle;
 /* USER CODE END Variables */
 osThreadId defaultTaskHandle;
 osThreadId USB_RX_Check_Handle;
@@ -161,6 +160,7 @@ void StartDefaultTask(void const * argument)
 {
   /* init code for USB_DEVICE */
   MX_USB_DEVICE_Init();
+  HAL_GPIO_WritePin(USB_SIGN_GPIO_Port, USB_SIGN_Pin, GPIO_PIN_SET);
   /* USER CODE BEGIN StartDefaultTask */
   osEvent 				ret_mail;
   DUTY_Command_TypeDef 	duty_cmd;

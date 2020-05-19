@@ -499,9 +499,9 @@ SCARA_StatusTypeDef	scaraInitDuty		(DUTY_Command_TypeDef command) {
 	return SCARA_STATUS_OK;
 }
 
-SCARA_StatusTypeDef			scaraInitLine		(Path_Line_TypeDef *line,
-												SCARA_PositionTypeDef start,
-												SCARA_PositionTypeDef end) {
+SCARA_StatusTypeDef	scaraInitLine		(Path_Line_TypeDef *line,
+										SCARA_PositionTypeDef start,
+										SCARA_PositionTypeDef end) {
 	// Check limit workspace
 	if ( FALSE ==  kinematicInverse(&end, start)) {
 		return SCARA_STATUS_ERROR_OVER_WORKSPACE;
@@ -526,11 +526,11 @@ SCARA_StatusTypeDef			scaraInitLine		(Path_Line_TypeDef *line,
 	return SCARA_STATUS_OK;
 }
 
-SCARA_StatusTypeDef			scaraInitCircle		(Path_Circle_TypeDef *circle,
-												SCARA_PositionTypeDef start,
-												SCARA_PositionTypeDef end,
-												SCARA_PositionTypeDef center,
-												int32_t dir){
+SCARA_StatusTypeDef	scaraInitCircle		(Path_Circle_TypeDef *circle,
+										SCARA_PositionTypeDef start,
+										SCARA_PositionTypeDef end,
+										SCARA_PositionTypeDef center,
+										int32_t dir){
 	// Check limit workspace
 	if ( FALSE == kinematicInverse(&end, start) ) {
 		return SCARA_STATUS_ERROR_OVER_WORKSPACE;
@@ -591,10 +591,10 @@ SCARA_StatusTypeDef			scaraInitCircle		(Path_Circle_TypeDef *circle,
 	return SCARA_STATUS_OK;
 }
 
-SCARA_StatusTypeDef	scaraInitLSPB	(Trajectory_LSPB_TypeDef *lspb,
-									Trajectory_TargetTypeDef target,
-									double total_s,
-									ModeInitTypeDef modeinit) {
+SCARA_StatusTypeDef	scaraInitLSPB		(Trajectory_LSPB_TypeDef *lspb,
+										Trajectory_TargetTypeDef target,
+										double total_s,
+										ModeInitTypeDef modeinit) {
 	 double v_design, a_design, v_lim, q0, q1, v0, v1, ta, td, tf;
 	 uint32_t	no_sample;
 	 int8_t	dir;
@@ -706,10 +706,10 @@ SCARA_StatusTypeDef	scaraInitLSPB	(Trajectory_LSPB_TypeDef *lspb,
 	 return SCARA_STATUS_OK;
 }
 
-SCARA_StatusTypeDef	scaraInitScurve	(Trajectory_Scurve_TypeDef *scurve,
-									Trajectory_TargetTypeDef target,
-									double total_s,
-									ModeInitTypeDef modeinit) {
+SCARA_StatusTypeDef	scaraInitScurve		(Trajectory_Scurve_TypeDef *scurve,
+										Trajectory_TargetTypeDef target,
+										double total_s,
+										ModeInitTypeDef modeinit) {
 	 double v_design, a_design, q0, q1, v0, v1, v_lim, j_max, tm, tc, tf, dir;
 	 double v_1, s_1, v_2, s_2, v_3, s_3, v_4, s_4;
 	 uint32_t	 no_sample;
@@ -1147,7 +1147,7 @@ SCARA_StatusTypeDef	scaraCheckWorkSpace4 (double theta1, double theta2, double d
 	return SCARA_STATUS_OK;
 }
 
-SCARA_StatusTypeDef			scaraCheckWorkSpace1 (Trajectory_TargetTypeDef target, double value) {
+SCARA_StatusTypeDef	scaraCheckWorkSpace1 (Trajectory_TargetTypeDef target, double value) {
 	if ( TRAJECTORY_J0 == target) {
 		if ( (LIM_MIN_J0 <= value) && ( value <= LIM_MAX_J0)) {
 			return SCARA_STATUS_OK;
@@ -1181,11 +1181,9 @@ void				scaraSetScanFlag(void) {
 	mySCARA.isScanLitmit = TRUE;
 }
 
-
 void				scaraSetOutput		(int8_t level) {
 	mySCARA.outputSet	 = level;
 }
-
 
 void				scaraSetDutyState(SCARA_DutyStateTypeDef state) {
 	mySCARA.duty_State = state;

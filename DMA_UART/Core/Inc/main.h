@@ -29,6 +29,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -58,6 +59,18 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define OUPPUT_1_Pin GPIO_PIN_10
+#define OUPPUT_1_GPIO_Port GPIOB
+#define OUTPUT_2_Pin GPIO_PIN_11
+#define OUTPUT_2_GPIO_Port GPIOB
+#define ENCODER_RESET_Pin GPIO_PIN_11
+#define ENCODER_RESET_GPIO_Port GPIOD
+#define PULSE_WRITE_Pin GPIO_PIN_12
+#define PULSE_WRITE_GPIO_Port GPIOD
+#define STOP_Pin GPIO_PIN_6
+#define STOP_GPIO_Port GPIOD
+#define USB_SIGN_Pin GPIO_PIN_4
+#define USB_SIGN_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
