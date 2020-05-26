@@ -1,2 +1,2 @@
-kinematic.c:11:10:kinematicForward	64	static
-kinematic.c:31:10:kinematicInverse	160	static
+kinematic.c:13:10:kinematicForward	64	static
+kinematic.c:33:10:kinematicInverse	160	static

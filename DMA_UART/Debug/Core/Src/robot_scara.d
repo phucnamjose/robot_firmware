@@ -33,7 +33,8 @@ Core/Src/robot_scara.o: ../Core/Src/robot_scara.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
- ../Core/Inc/kinematic.h ../Core/Inc/robot_scara.h
+ ../Core/Inc/system_params.h ../Core/Inc/kinematic.h \
+ ../Core/Inc/robot_scara.h
 
 ../Core/Inc/robot_scara.h:
 
@@ -106,6 +107,8 @@ Core/Src/robot_scara.o: ../Core/Src/robot_scara.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h:
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h:
+
+../Core/Inc/system_params.h:
 
 ../Core/Inc/kinematic.h:
 

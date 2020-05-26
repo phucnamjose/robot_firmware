@@ -6,7 +6,9 @@
  */
 
 #include "kinematic.h"
+#include "common_def.h"
 #include "math.h"
+#include "system_params.h"
 
 uint8_t		kinematicForward(SCARA_PositionTypeDef *pnt) {
 	double x, y, z, roll;

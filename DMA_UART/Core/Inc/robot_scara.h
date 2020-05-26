@@ -9,6 +9,7 @@
 #define INC_ROBOT_SCARA_H_
 
 #include "common_def.h"
+#include "system_params.h"
 
 /* Limit Joint*/
 #define LIM_MIN_J0		(-PI/2)
@@ -21,20 +22,20 @@
 #define LIM_MAX_J3		(PI)
 
 /* Maximum Velocity System*/
-#define V_DESIGN_3D		(20.0f)
-#define V_DESIGN_ROLL	(PI/10)
-#define V_DESIGN_J0		(PI/10)
-#define V_DESIGN_J1		(PI/10)
-#define V_DESIGN_J2		(20.0f)
-#define V_DESIGN_J3		(PI/10)
+#define V_DESIGN_3D		(0.9*20.0f)
+#define V_DESIGN_ROLL	(0.9*PI/5)
+#define V_DESIGN_J0		(0.9*LIM_PULSE_J0/(GEAR_J0*T_SAMPLING))
+#define V_DESIGN_J1		(0.9*LIM_PULSE_J1/(GEAR_J1*T_SAMPLING))
+#define V_DESIGN_J2		(0.9*LIM_PULSE_J2/(GEAR_J2*T_SAMPLING))
+#define V_DESIGN_J3		(0.9*LIM_PULSE_J3/(GEAR_J3*T_SAMPLING))
 
 /* Maximum Accelerate System*/
-#define A_DESIGN_3D		(5.0f)
-#define A_DESIGN_ROLL	(PI/100)
-#define A_DESIGN_J0		(PI/100)
-#define A_DESIGN_J1		(PI/100)
-#define A_DESIGN_J2		(5.0f)
-#define A_DESIGN_J3		(PI/100)
+#define A_DESIGN_3D		(V_DESIGN_3D/5)
+#define A_DESIGN_ROLL	(V_DESIGN_ROLL/5)
+#define A_DESIGN_J0		(V_DESIGN_J0/5)
+#define A_DESIGN_J1		(V_DESIGN_J1/5)
+#define A_DESIGN_J2		(V_DESIGN_J2/5)
+#define A_DESIGN_J3		(V_DESIGN_J3/5)
 
 /* Sampling Period*/
 #define T_SAMPLING		(0.01f)
