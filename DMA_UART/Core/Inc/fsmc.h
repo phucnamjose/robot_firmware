@@ -33,7 +33,8 @@
 extern NOR_HandleTypeDef hnor1;
 
 /* USER CODE BEGIN Private defines */
-
+void FSMC_Write(uint32_t ui_address, uint16_t ui_data);
+uint16_t FSMC_Read(uint32_t ui_address);
 /* USER CODE END Private defines */
 
 void MX_FSMC_Init(void);

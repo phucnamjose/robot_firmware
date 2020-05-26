@@ -1,5 +1,5 @@
 Core/Src/kinematic.o: ../Core/Src/kinematic.c ../Core/Inc/kinematic.h \
- ../Core/Inc/common_def.h ../Core/Inc/main.h \
+ ../Core/Inc/robot_scara.h ../Core/Inc/common_def.h ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -33,9 +33,12 @@ Core/Src/kinematic.o: ../Core/Src/kinematic.c ../Core/Inc/kinematic.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
- ../Core/Inc/robot_scara.h
+ ../Core/Inc/system_params.h ../Core/Inc/common_def.h \
+ ../Core/Inc/system_params.h
 
 ../Core/Inc/kinematic.h:
+
+../Core/Inc/robot_scara.h:
 
 ../Core/Inc/common_def.h:
 
@@ -107,4 +110,8 @@ Core/Src/kinematic.o: ../Core/Src/kinematic.c ../Core/Inc/kinematic.h \
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h:
 
-../Core/Inc/robot_scara.h:
+../Core/Inc/system_params.h:
+
+../Core/Inc/common_def.h:
+
+../Core/Inc/system_params.h:

@@ -21,7 +21,14 @@
 #include "fsmc.h"
 
 /* USER CODE BEGIN 0 */
+void FSMC_Write(uint32_t ui_address, uint16_t ui_data)
+{
+	*(volatile uint16_t *)ui_address = ui_data;
+}
 
+uint16_t FSMC_Read(uint32_t ui_address) {
+	return *(volatile uint16_t *)ui_address;
+}
 /* USER CODE END 0 */
 
 NOR_HandleTypeDef hnor1;

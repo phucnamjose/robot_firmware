@@ -33,7 +33,8 @@ Core/Src/command_respond.o: ../Core/Src/command_respond.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
- ../Core/Inc/robot_scara.h ../Core/Inc/robot_scara.h
+ ../Core/Inc/robot_scara.h ../Core/Inc/system_params.h \
+ ../Core/Inc/robot_scara.h
 
 ../Core/Inc/command_respond.h:
 
@@ -108,5 +109,7 @@ Core/Src/command_respond.o: ../Core/Src/command_respond.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h:
 
 ../Core/Inc/robot_scara.h:
+
+../Core/Inc/system_params.h:
 
 ../Core/Inc/robot_scara.h:
