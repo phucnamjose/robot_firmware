@@ -344,7 +344,7 @@ SCARA_StatusTypeDef			scaraCheckWorkSpace4(double theta1, double theta2, double 
 SCARA_StatusTypeDef			scaraCheckWorkSpace1(Trajectory_TargetTypeDef target, double value);
 
 void						scaraSetScanFlag	(void);
-void						scaraSetOutput		(int8_t level);
+void						scaraSetOutput		(uint8_t level);
 void						scaraSetDutyState	(SCARA_DutyStateTypeDef state);
 void						scaraSetMode		(SCARA_ModeTypeDef mode);
 

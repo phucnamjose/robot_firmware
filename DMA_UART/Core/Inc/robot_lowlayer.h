@@ -15,5 +15,6 @@
 uint8_t	lowlayer_computeAndWritePulse(SCARA_PositionTypeDef current, SCARA_PositionTypeDef next);
 uint8_t	lowlayer_writePulse(int8_t pulse0, int8_t pulse1, int8_t pulse2, int8_t pulse3);
 uint8_t lowlayer_readLimitSwitch(void);
+void	lowlayer_setOutput(uint8_t value);
 
 #endif /* INC_ROBOT_LOWLAYER_H_ */

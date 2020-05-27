@@ -11,6 +11,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include "robot_lowlayer.h"
 
 SCARA_TypeDef 				mySCARA = { SCARA_MODE_DUTY,
 										SCARA_DUTY_STATE_READY,
@@ -1181,8 +1182,9 @@ void				scaraSetScanFlag(void) {
 	mySCARA.isScanLitmit = TRUE;
 }
 
-void				scaraSetOutput		(int8_t level) {
+void				scaraSetOutput		(uint8_t level) {
 	mySCARA.outputSet	 = level;
+	lowlayer_setOutput(level);
 }
 
 void				scaraSetDutyState(SCARA_DutyStateTypeDef state) {

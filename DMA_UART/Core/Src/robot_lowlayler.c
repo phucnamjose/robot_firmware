@@ -109,3 +109,11 @@ uint8_t lowlayer_readLimitSwitch(void) {
 
 	return (uint8_t)read_data;
 }
+
+void	lowlayer_setOutput(uint8_t value) {
+	if (value > 0) {
+		HAL_GPIO_WritePin(OUTPUT_1_GPIO_Port, OUTPUT_1_Pin, GPIO_PIN_SET);
+	} else {
+		HAL_GPIO_WritePin(OUTPUT_1_GPIO_Port, OUTPUT_1_Pin, GPIO_PIN_RESET);
+	}
+}
