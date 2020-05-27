@@ -18,8 +18,8 @@
 #define LIM_MAX_J1		(3*PI/4)
 #define LIM_MIN_J2		(0)
 #define LIM_MAX_J2		(100)
-#define LIM_MIN_J3		(-PI)
-#define LIM_MAX_J3		(PI)
+#define LIM_MIN_J3		(-5*PI/6)
+#define LIM_MAX_J3		(5*PI/6)
 
 /* Maximum Velocity System*/
 #define V_DESIGN_3D		(0.9*20.0f)
@@ -333,7 +333,10 @@ SCARA_StatusTypeDef			scaraInitScurve		(Trajectory_Scurve_TypeDef *scurve,
 												double total_s,
 												ModeInitTypeDef modeinit);
 
-SCARA_StatusTypeDef			scaraFlowDuty		(double time);
+SCARA_StatusTypeDef			scaraFlowDuty		(double time,
+												SCARA_PositionTypeDef *pos_Next ,
+												SCARA_PositionTypeDef pos_Current);
+
 SCARA_StatusTypeDef			scaraFlowLine		(Path_Line_TypeDef *line, double s);
 SCARA_StatusTypeDef			scaraFlowCircle		(Path_Circle_TypeDef *circle, double s);
 SCARA_StatusTypeDef			scaraFlowLSPB		(Trajectory_LSPB_TypeDef *lspb, double time);
@@ -342,6 +345,7 @@ SCARA_StatusTypeDef			scaraFLowScurve		(Trajectory_Scurve_TypeDef *scurve, doubl
 
 SCARA_StatusTypeDef			scaraCheckWorkSpace4(double theta1, double theta2, double d3, double theta4);
 SCARA_StatusTypeDef			scaraCheckWorkSpace1(Trajectory_TargetTypeDef target, double value);
+SCARA_StatusTypeDef			scaraTestDuty(void);
 
 void						scaraSetScanFlag	(void);
 void						scaraSetOutput		(uint8_t level);
@@ -353,6 +357,6 @@ SCARA_ModeTypeDef			scaraGetMode		(void);
 SCARA_DutyStateTypeDef		scaraGetDutyState	(void);
 uint8_t						scaraIsScanLimit	(void);
 uint8_t						scaraIsFinish		(double run_time);
-int32_t						scaraPosition2String(char * result, SCARA_PositionTypeDef position);
+int32_t						scaraPosition2String(char *result, SCARA_PositionTypeDef position);
 
 #endif /* INC_ROBOT_SCARA_H_ */

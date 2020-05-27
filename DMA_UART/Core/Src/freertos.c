@@ -266,13 +266,12 @@ void StartDefaultTask(void const * argument)
 							  	  	  	  	  	  	  duty_cmd.id_command,
 													  "Start Scan",
 													  (char *)respond);
-					  LOG_REPORT("SCAN", __LINE__);
 				  } else {
 					  respond_lenght = commandRespond(RPD_ERROR,
 							  	  	  	  	  	  	  duty_cmd.id_command,
 													  "Busy",
 													  (char *)respond);
-					  LOG_REPORT("SCAN FAIL:NOT SCAN", __LINE__);
+					  LOG_REPORT("SCAN FAIL: BUSY", __LINE__);
 				  }
 			  }
 			  break;
@@ -351,7 +350,6 @@ void StartDefaultTask(void const * argument)
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  0,
 															  (char *)position,
 															  (char *)infor);
-						  LOG_REPORT("INIT SUCCESS", __LINE__);
 					  } else {
 						  no_duty_fail++;
 						  current_state 	= SCARA_DUTY_STATE_READY;
@@ -372,7 +370,7 @@ void StartDefaultTask(void const * argument)
 					  if (scaraIsFinish(run_time)) {
 						  current_state = SCARA_DUTY_STATE_FINISH;// Work Done
 					  } else {
-						  status = scaraFlowDuty(run_time);
+						  status = scaraFlowDuty(run_time , &positionNext, positionCurrent);
 						  if ( SCARA_STATUS_OK == status) {
 							  // lowLevelExcute();
 							  // Running Inform
@@ -479,14 +477,8 @@ void Start_USB_RX_Task(void const * argument)
 	int32_t				respond_lenght;
 	int32_t				message_lenght;
 
-	//uint8_t test_command1[60] = "(1 ROTA 3 0.785398 0.3 0 0.3)";
-	//uint8_t test_command2[60] = "(456 OUTP 1)";
-
-	//ringBuff_PushArray(&usb_rx_ringbuff, test_command1, strlen((char *)test_command1));
-	//ringBuff_PushArray(&usb_rx_ringbuff, test_command2, strlen((char *)test_command2));
 	no_duty	 = 0;
 	no_other = 0;
-
 
   /* Infinite loop */
   for(;;)

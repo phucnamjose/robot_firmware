@@ -25,7 +25,7 @@ SCARA_PositionTypeDef		positionNext;
 
 Trajectory_TargetTypeDef	joint_taget[4] = {  TRAJECTORY_J0, TRAJECTORY_J1,
 												TRAJECTORY_J2, TRAJECTORY_J3};
-
+/* Detail error */
 const char *DETAIL_STATUS[NUM_OF_STATUS]  = {"Accept Command",
 											 "Stupid Code",
 											 "Wrong Space Type",
@@ -42,7 +42,7 @@ const char *DETAIL_STATUS[NUM_OF_STATUS]  = {"Accept Command",
 											};
 
 
-
+/* Compute duty corresponding to new command */
 SCARA_StatusTypeDef	scaraInitDuty		(DUTY_Command_TypeDef command) {
 	SCARA_StatusTypeDef status, status1, status2;
 
@@ -500,6 +500,7 @@ SCARA_StatusTypeDef	scaraInitDuty		(DUTY_Command_TypeDef command) {
 	return SCARA_STATUS_OK;
 }
 
+/* Compute straight line path parameters */
 SCARA_StatusTypeDef	scaraInitLine		(Path_Line_TypeDef *line,
 										SCARA_PositionTypeDef start,
 										SCARA_PositionTypeDef end) {
@@ -527,6 +528,7 @@ SCARA_StatusTypeDef	scaraInitLine		(Path_Line_TypeDef *line,
 	return SCARA_STATUS_OK;
 }
 
+/* Compute circular path parameters */
 SCARA_StatusTypeDef	scaraInitCircle		(Path_Circle_TypeDef *circle,
 										SCARA_PositionTypeDef start,
 										SCARA_PositionTypeDef end,
@@ -592,6 +594,7 @@ SCARA_StatusTypeDef	scaraInitCircle		(Path_Circle_TypeDef *circle,
 	return SCARA_STATUS_OK;
 }
 
+/* Compute trapezoidal trajectory parameters */
 SCARA_StatusTypeDef	scaraInitLSPB		(Trajectory_LSPB_TypeDef *lspb,
 										Trajectory_TargetTypeDef target,
 										double total_s,
@@ -707,6 +710,7 @@ SCARA_StatusTypeDef	scaraInitLSPB		(Trajectory_LSPB_TypeDef *lspb,
 	 return SCARA_STATUS_OK;
 }
 
+/* Compute s-curve trajectory parameters */
 SCARA_StatusTypeDef	scaraInitScurve		(Trajectory_Scurve_TypeDef *scurve,
 										Trajectory_TargetTypeDef target,
 										double total_s,
@@ -844,7 +848,10 @@ SCARA_StatusTypeDef	scaraInitScurve		(Trajectory_Scurve_TypeDef *scurve,
 	 return SCARA_STATUS_OK;
 }
 
-SCARA_StatusTypeDef	scaraFlowDuty		(double time) {
+/* Compute new x, y ,z corresponding to time */
+SCARA_StatusTypeDef	scaraFlowDuty		(double time,
+										SCARA_PositionTypeDef *pos_Next ,
+										SCARA_PositionTypeDef pos_Current) {
 	SCARA_StatusTypeDef status1, status2, status3, status4;
 	SCARA_PositionTypeDef	positionCompute;
 	// Update time
@@ -903,10 +910,10 @@ SCARA_StatusTypeDef	scaraFlowDuty		(double time) {
 		positionCompute.q		= s;
 		positionCompute.total_time = myDUTY.time_total;
 		positionCompute.t		= time;
-		if ( FALSE == kinematicInverse(&positionCompute, positionCurrent)) {
+		if ( FALSE == kinematicInverse(&positionCompute, pos_Current)) {
 			return SCARA_STATUS_ERROR_OVER_WORKSPACE;
 		} else {
-			memcpy(&positionNext, &positionCompute, sizeof(SCARA_PositionTypeDef));
+			memcpy(pos_Next, &positionCompute, sizeof(SCARA_PositionTypeDef));
 		}
 
 	/*---- Joint space -----*/
@@ -973,9 +980,9 @@ SCARA_StatusTypeDef	scaraFlowDuty		(double time) {
 										  positionCompute.Theta4)) {
 			return SCARA_STATUS_ERROR_OVER_WORKSPACE;
 		} else {
-			memcpy(&positionNext, &positionCompute, sizeof(SCARA_PositionTypeDef));
+			memcpy(pos_Next, &positionCompute, sizeof(SCARA_PositionTypeDef));
 		}
-		kinematicForward(&positionNext);
+		kinematicForward(pos_Next);
 
 	} else {
 		return SCARA_STATUS_ERROR_SPACE;
@@ -984,6 +991,7 @@ SCARA_StatusTypeDef	scaraFlowDuty		(double time) {
 	return SCARA_STATUS_OK;
 }
 
+/* Compute new x, y ,z corresponding to s */
 SCARA_StatusTypeDef	scaraFlowLine		(Path_Line_TypeDef *line, double s) {
 	// Avoid div with 0
 	if ( line->total_s > 0.01) {
@@ -999,6 +1007,7 @@ SCARA_StatusTypeDef	scaraFlowLine		(Path_Line_TypeDef *line, double s) {
 	return SCARA_STATUS_OK;
 }
 
+/* Compute new x, y ,z corresponding to s */
 SCARA_StatusTypeDef	scaraFlowCircle		(Path_Circle_TypeDef *circle, double s) {
 	double angle;
 	angle = s/(circle->radius);
@@ -1009,6 +1018,7 @@ SCARA_StatusTypeDef	scaraFlowCircle		(Path_Circle_TypeDef *circle, double s) {
 	return SCARA_STATUS_OK;
 }
 
+/* Compute new s corresponding to time */
 SCARA_StatusTypeDef	scaraFlowLSPB		(Trajectory_LSPB_TypeDef *lspb, double time) {
 	double tf, td, ta;
 
@@ -1041,6 +1051,7 @@ SCARA_StatusTypeDef	scaraFlowLSPB		(Trajectory_LSPB_TypeDef *lspb, double time) 
 	return SCARA_STATUS_OK;
 }
 
+/* Compute new s corresponding to time */
 SCARA_StatusTypeDef	scaraFLowScurve		(Trajectory_Scurve_TypeDef *scurve, double time) {
 	double j_max, tm, tc, t;
 
@@ -1128,6 +1139,7 @@ SCARA_StatusTypeDef	scaraFLowScurve		(Trajectory_Scurve_TypeDef *scurve, double 
 	 return SCARA_STATUS_OK;
 }
 
+/* Check limit 4 joint variable */
 SCARA_StatusTypeDef	scaraCheckWorkSpace4 (double theta1, double theta2, double d3, double theta4) {
 	// check theta 1
 	if ( theta1 < LIM_MIN_J0 || theta1 > LIM_MAX_J0) {
@@ -1148,6 +1160,7 @@ SCARA_StatusTypeDef	scaraCheckWorkSpace4 (double theta1, double theta2, double d
 	return SCARA_STATUS_OK;
 }
 
+/* Check limit 1 joint variable */
 SCARA_StatusTypeDef	scaraCheckWorkSpace1 (Trajectory_TargetTypeDef target, double value) {
 	if ( TRAJECTORY_J0 == target) {
 		if ( (LIM_MIN_J0 <= value) && ( value <= LIM_MAX_J0)) {
@@ -1176,6 +1189,25 @@ SCARA_StatusTypeDef	scaraCheckWorkSpace1 (Trajectory_TargetTypeDef target, doubl
 	} else {
 		return SCARA_STATUS_ERROR;
 	}
+}
+
+/* Check all of point in travel */
+SCARA_StatusTypeDef	scaraTestDuty(void) {
+	int32_t sample_count;
+	double run_time = 0;
+	SCARA_PositionTypeDef test_Next, test_Current;
+	SCARA_StatusTypeDef status;
+	memcpy(&test_Current, &positionCurrent, sizeof(SCARA_PositionTypeDef));
+	sample_count = ceil(myDUTY.time_total/T_SAMPLING);
+	for (int32_t i = 1; i < sample_count; i++) {
+		run_time += T_SAMPLING;
+		status = scaraFlowDuty(run_time, &test_Next, test_Current);
+		if (status != SCARA_STATUS_OK) {
+			return status;
+		}
+		memcpy(&test_Next, &test_Current, sizeof(SCARA_PositionTypeDef));
+	}
+	return SCARA_STATUS_OK;
 }
 
 void				scaraSetScanFlag(void) {
@@ -1219,7 +1251,8 @@ uint8_t					scaraIsFinish		(double run_time) {
 	}
 }
 
-int32_t					scaraPosition2String(char * result, SCARA_PositionTypeDef position) {
+/* Convert position to string*/
+int32_t					scaraPosition2String(char *result, SCARA_PositionTypeDef position) {
 	uint8_t theta1[12];
 	uint8_t theta2[12];
 	uint8_t d3[12];

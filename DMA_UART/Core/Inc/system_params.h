@@ -11,13 +11,13 @@
 // Motor Ratio
 #define GEAR_J0				(20000.0f)
 #define GEAR_J1				(32000.0f)
-#define GEAR_J2				(500.0f / 5.0f) // ball screw 5 mm / round.
+#define GEAR_J2				(500.0f / 3.0f) // ball screw 3 mm / round.
 #define GEAR_J3				(400.0f)
 
 // Limit pulse per 10 ms
 #define LIM_PULSE_J0		(104u) // Calculate in file Excel
 #define LIM_PULSE_J1		(125u)
-#define LIM_PULSE_J2		(20u)
+#define LIM_PULSE_J2		(33u)
 #define LIM_PULSE_J3		(4u)
 
 // Module DDA Address
