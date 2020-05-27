@@ -49,8 +49,8 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- ../Core/Inc/dma.h ../Core/Inc/main.h ../Core/Inc/usart.h \
- ../Core/Inc/common_def.h ../Core/Inc/ringbuffer.h \
+ ../Core/Inc/tim.h ../Core/Inc/main.h ../Core/Inc/dma.h \
+ ../Core/Inc/usart.h ../Core/Inc/common_def.h ../Core/Inc/ringbuffer.h \
  ../Core/Inc/common_def.h ../Core/Inc/robot_scara.h \
  ../Core/Inc/system_params.h ../Core/Inc/command_respond.h \
  ../Core/Inc/robot_scara.h ../Core/Inc/kinematic.h \
@@ -165,9 +165,11 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
 
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
 
-../Core/Inc/dma.h:
+../Core/Inc/tim.h:
 
 ../Core/Inc/main.h:
+
+../Core/Inc/dma.h:
 
 ../Core/Inc/usart.h:
 

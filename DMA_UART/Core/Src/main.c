@@ -22,6 +22,7 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "dma.h"
+#include "tim.h"
 #include "usart.h"
 #include "usb_device.h"
 #include "gpio.h"
@@ -97,6 +98,7 @@ int main(void)
   MX_DMA_Init();
   MX_UART4_Init();
   MX_FSMC_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */

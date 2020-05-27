@@ -26,6 +26,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */     
+#include "tim.h"
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
@@ -65,6 +66,7 @@ extern SCARA_PositionTypeDef		positionPrevios;
 extern SCARA_PositionTypeDef		positionCurrent;
 extern SCARA_PositionTypeDef		positionNext;
 
+extern TIM_HandleTypeDef htim7;
 osMailQId commandMailHandle;
 /* USER CODE END Variables */
 osThreadId defaultTaskHandle;
@@ -160,7 +162,6 @@ void StartDefaultTask(void const * argument)
 {
   /* init code for USB_DEVICE */
   MX_USB_DEVICE_Init();
-  HAL_GPIO_WritePin(USB_SIGN_GPIO_Port, USB_SIGN_Pin, GPIO_PIN_SET);
   /* USER CODE BEGIN StartDefaultTask */
   osEvent 				ret_mail;
   DUTY_Command_TypeDef 	duty_cmd;
@@ -213,9 +214,12 @@ void StartDefaultTask(void const * argument)
 	  kinematicForward(&positionNext);
 #endif
   /* Infinite loop */
-
+//Start Timer 7
+	  HAL_TIM_Base_Start_IT(&htim7);
   for(;;)
   {
+	  /*---------Wait for Timer Trigger-----------*/
+	  osSignalWait(0x01, osWaitForever); // Very Important
 	  /* 1--- Reset Value ---*/
 	  respond_lenght		= 0;
 	  respond_packed_lenght = 0;
@@ -447,7 +451,7 @@ void StartDefaultTask(void const * argument)
 	  scaraSetMode(current_mode);
 	  scaraSetDutyState(current_state);
 
-    osDelay(10);
+    osDelay(1);
   }
   /* USER CODE END StartDefaultTask */
 }
