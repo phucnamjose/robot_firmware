@@ -205,6 +205,9 @@ void StartDefaultTask(void const * argument)
   current_mode	 = scaraGetMode();
   current_state	 = scaraGetDutyState();
 
+  // Start up robot
+  scaraStartup();
+
 #ifdef SIMULATION
 	  positionNext.Theta1 = -PI/3;
 	  positionNext.Theta2 = PI/3;

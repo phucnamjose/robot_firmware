@@ -41,6 +41,10 @@ const char *DETAIL_STATUS[NUM_OF_STATUS]  = {"Accept Command",
 											 "Wrong Coordinate"
 											};
 
+void				scaraStartup(void) {
+	lowlayer_CPLD_Init();
+	lowlayer_stepMotorInit();
+}
 
 /* Compute duty corresponding to new command */
 SCARA_StatusTypeDef	scaraInitDuty		(DUTY_Command_TypeDef command) {

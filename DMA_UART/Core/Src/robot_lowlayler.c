@@ -51,34 +51,34 @@ uint8_t	lowlayer_writePulse(int8_t pulse0, int8_t pulse1, int8_t pulse2, int8_t 
 	// Var 0
 	if (pulse0 < 0) {
 		pulse0_abs = -pulse0;
-		pulse0_combine = -pulse0 | (0x01 << 7);
+		pulse0_combine = -pulse0 | (!DIR_J0); // Negative : Clockwise
 	} else {
 		pulse0_abs = pulse0;
-		pulse0_combine = pulse0;
+		pulse0_combine = pulse0 | DIR_J0; // Positive : Anti-Clockwise
 	}
 	// Var 1
 	if (pulse1 < 0) {
 		pulse1_abs = -pulse1;
-		pulse1_combine = -pulse1 | (0x01 << 7);
+		pulse1_combine = -pulse1 | (!DIR_J1);
 	} else {
 		pulse1_abs = pulse1;
-		pulse1_combine = pulse1;
+		pulse1_combine = pulse1 | DIR_J1;
 	}
 	// Var 2
 	if (pulse2 < 0) {
 		pulse2_abs = -pulse2;
-		pulse2_combine = -pulse2 | (0x01 << 7);
+		pulse2_combine = -pulse2 | (!DIR_J2);
 	} else {
 		pulse2_abs = pulse2;
-		pulse2_combine = pulse2;
+		pulse2_combine = pulse2 | DIR_J2;
 	}
 	// Var 3
 	if (pulse3 < 0) {
 		pulse3_abs = -pulse3;
-		pulse3_combine = -pulse3 | (0x01 << 7);
+		pulse3_combine = -pulse3 | (!DIR_J3);
 	} else {
 		pulse3_abs = pulse3;
-		pulse3_combine = pulse3;
+		pulse3_combine = pulse3 | DIR_J3;
 	}
 
 	// Check limit
@@ -87,6 +87,12 @@ uint8_t	lowlayer_writePulse(int8_t pulse0, int8_t pulse1, int8_t pulse2, int8_t 
 		|| pulse2_abs > LIM_PULSE_J2
 		|| pulse3_abs > LIM_PULSE_J3) {
 		return FALSE;
+	}
+	// Sleep Step if it does not work
+	if (pulse3_abs == 0) {
+		HAL_GPIO_WritePin(STEP_SLEEP_GPIO_Port, STEP_SLEEP_Pin, GPIO_PIN_RESET); // Sleep low active
+	} else {
+		HAL_GPIO_WritePin(STEP_SLEEP_GPIO_Port, STEP_SLEEP_Pin, GPIO_PIN_SET);
 	}
 
 	// Write to Module DDA
@@ -116,4 +122,13 @@ void	lowlayer_setOutput(uint8_t value) {
 	} else {
 		HAL_GPIO_WritePin(OUTPUT_1_GPIO_Port, OUTPUT_1_Pin, GPIO_PIN_RESET);
 	}
+}
+
+void	lowlayer_CPLD_Init(void) {
+	HAL_GPIO_WritePin(STOP_GPIO_Port, STOP_Pin, GPIO_PIN_SET); // STOP low active
+}
+
+void	lowlayer_stepMotorInit(void) {
+	HAL_GPIO_WritePin(STEP_ENABLE_GPIO_Port, STEP_ENABLE_Pin, GPIO_PIN_RESET); // ENABLE low active
+	HAL_GPIO_WritePin(STEP_RESET_GPIO_Port, STEP_RESET_Pin, GPIO_PIN_SET); // RESET low active
 }

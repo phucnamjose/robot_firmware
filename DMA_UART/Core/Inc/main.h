@@ -67,6 +67,12 @@ void Error_Handler(void);
 #define ENCODER_RESET_GPIO_Port GPIOD
 #define PULSE_WRITE_Pin GPIO_PIN_12
 #define PULSE_WRITE_GPIO_Port GPIOD
+#define STEP_SLEEP_Pin GPIO_PIN_8
+#define STEP_SLEEP_GPIO_Port GPIOA
+#define STEP_RESET_Pin GPIO_PIN_9
+#define STEP_RESET_GPIO_Port GPIOA
+#define STEP_ENABLE_Pin GPIO_PIN_10
+#define STEP_ENABLE_GPIO_Port GPIOA
 #define STOP_Pin GPIO_PIN_6
 #define STOP_GPIO_Port GPIOD
 #define USB_SIGN_Pin GPIO_PIN_4

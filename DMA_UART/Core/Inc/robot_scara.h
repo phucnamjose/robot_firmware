@@ -311,6 +311,7 @@ typedef struct
 
 
 /* Function prototype */
+void						scaraStartup		(void);
 SCARA_StatusTypeDef			scaraInitDuty		(DUTY_Command_TypeDef command);
 
 SCARA_StatusTypeDef			scaraInitLine		(Path_Line_TypeDef *line,
