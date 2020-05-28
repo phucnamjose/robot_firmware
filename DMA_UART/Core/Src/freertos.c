@@ -35,6 +35,7 @@
 #include "common_def.h"
 #include "ringbuffer.h"
 #include "robot_scara.h"
+#include "robot_lowlayer.h"
 #include "command_respond.h"
 #include "kinematic.h"
 #include "communicate_payload.h"
@@ -163,6 +164,8 @@ void StartDefaultTask(void const * argument)
   /* init code for USB_DEVICE */
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN StartDefaultTask */
+  HAL_GPIO_WritePin(USB_SIGN_GPIO_Port, USB_SIGN_Pin, GPIO_PIN_SET); // Pull-up Resistor
+
   osEvent 				ret_mail;
   DUTY_Command_TypeDef 	duty_cmd;
   DUTY_Command_TypeDef 	*dataMail;
@@ -235,7 +238,7 @@ void StartDefaultTask(void const * argument)
 	  memcpy(&positionPrevios, &positionCurrent, sizeof(SCARA_PositionTypeDef));
 	  memcpy(&positionCurrent, &positionNext, sizeof(SCARA_PositionTypeDef));
 #endif
-
+	  //lowlayer_readLimitSwitch(); // OK
 	  /* 2--- Check New Duty Phase ---*/
 	  // Check mail
 	  ret_mail = osMailGet(commandMailHandle, 0);
@@ -336,16 +339,18 @@ void StartDefaultTask(void const * argument)
 			  break;
 			  case SCARA_DUTY_STATE_INIT:
 				  {
-					  SCARA_StatusTypeDef status;
-					  status = scaraInitDuty(duty_cmd);
-					  if ( SCARA_STATUS_OK == status) {
+					  SCARA_StatusTypeDef status1, status2;
+					  status1 = scaraInitDuty(duty_cmd);
+					  if ( SCARA_STATUS_OK == status1) {
+						  status2 = scaraTestDuty();
+						  if (SCARA_STATUS_OK == status2) {
 						  no_duty_success++;
 						  current_state		= SCARA_DUTY_STATE_FLOW;
 						  run_time			= 0;
 						  // Respond
 						  respond_lenght 	= commandRespond(RPD_OK,
 								  	  	  	  	  	  	  	  duty_cmd.id_command,
-															  (char *)DETAIL_STATUS[status],
+															  (char *)DETAIL_STATUS[status1],
 															  (char *)respond);
 						  scaraPosition2String((char *)position, positionCurrent);
 						  // Start Inform
@@ -353,12 +358,21 @@ void StartDefaultTask(void const * argument)
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  0,
 															  (char *)position,
 															  (char *)infor);
+						  } else {
+							  no_duty_fail++;
+							  current_state 	= SCARA_DUTY_STATE_READY;
+							  respond_lenght	= commandRespond(RPD_ERROR,
+									  	  	  	  	  	  	  	  duty_cmd.id_command,
+																  (char *)DETAIL_STATUS[status2],
+																  (char *)respond);
+							  LOG_REPORT("TEST FAIL", __LINE__);
+						  }
 					  } else {
 						  no_duty_fail++;
 						  current_state 	= SCARA_DUTY_STATE_READY;
 						  respond_lenght	= commandRespond(RPD_ERROR,
 								  	  	  	  	  	  	  	  duty_cmd.id_command,
-															  (char *)DETAIL_STATUS[status],
+															  (char *)DETAIL_STATUS[status1],
 															  (char *)respond);
 						  LOG_REPORT("INIT FAIL", __LINE__);
 					  }
@@ -375,7 +389,7 @@ void StartDefaultTask(void const * argument)
 					  } else {
 						  status = scaraFlowDuty(run_time , &positionNext, positionCurrent);
 						  if ( SCARA_STATUS_OK == status) {
-							  // lowLevelExcute();
+							  lowlayer_computeAndWritePulse(positionCurrent, positionNext);
 							  // Running Inform
 							  scaraPosition2String((char *)position, positionCurrent);
 							  infor_lenght = commandRespond(RPD_RUNNING,
@@ -489,7 +503,6 @@ void Start_USB_RX_Task(void const * argument)
 	  for(;;) {
 		  distance = ringBuff_DistanceOf(&usb_rx_ringbuff, END_CHAR);
 		  if ( -1 != distance ) {
-			  LOG_REPORT("NEW PACKET", __LINE__);
 			  uint8_t temp[distance+1];
 			  int32_t ret;
 			  ringBuff_PopArray(&usb_rx_ringbuff, temp, distance + 1);
@@ -497,7 +510,6 @@ void Start_USB_RX_Task(void const * argument)
 			  if( -1 == ret) {
 				  LOG_REPORT("UNPACK FAIL", __LINE__);
 			  } else {
-				  LOG_REPORT("UNPACK SUCCESS", __LINE__);
 				  LOG_REPORT((char*) temp, __LINE__);
 				  cmd_type = commandRead(temp, &id_command, &duty_cmd);
 				  memset(detail, 0, sizeof(detail));
@@ -515,7 +527,7 @@ void Start_USB_RX_Task(void const * argument)
 					  osStatus result;
 					  result = osMailPut(commandMailHandle, dataMail);
 					  if (osOK == result) {
-						  LOG_REPORT("DUTY SEND", __LINE__);
+						  //LOG_REPORT("DUTY SEND", __LINE__);
 					  }
 
 				  } else {
@@ -529,7 +541,6 @@ void Start_USB_RX_Task(void const * argument)
 					  // Mutex
 					  osMutexWait(usbTxMutexHandle, osWaitForever);
 					  ringBuff_PushArray(&cmd_tx_ringbuff, message, message_lenght);
-					  LOG_REPORT("ADD RINGBUFF", __LINE__);
 					  osMutexRelease(usbTxMutexHandle);
 				  }
 			  }

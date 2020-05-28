@@ -21,7 +21,7 @@
 #include "fsmc.h"
 
 /* USER CODE BEGIN 0 */
-void FSMC_Write(uint32_t ui_address, uint16_t ui_data)
+void FSMC_Write(uint32_t ui_address, uint32_t ui_data)
 {
 	*(volatile uint16_t *)ui_address = ui_data;
 }
@@ -51,7 +51,7 @@ void MX_FSMC_Init(void)
   hnor1.Init.WaitSignalPolarity = FSMC_WAIT_SIGNAL_POLARITY_LOW;
   hnor1.Init.WrapMode = FSMC_WRAP_MODE_DISABLE;
   hnor1.Init.WaitSignalActive = FSMC_WAIT_TIMING_BEFORE_WS;
-  hnor1.Init.WriteOperation = FSMC_WRITE_OPERATION_DISABLE;
+  hnor1.Init.WriteOperation = FSMC_WRITE_OPERATION_ENABLE;
   hnor1.Init.WaitSignal = FSMC_WAIT_SIGNAL_DISABLE;
   hnor1.Init.ExtendedMode = FSMC_EXTENDED_MODE_DISABLE;
   hnor1.Init.AsynchronousWait = FSMC_ASYNCHRONOUS_WAIT_DISABLE;

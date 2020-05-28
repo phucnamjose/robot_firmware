@@ -52,9 +52,10 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
  ../Core/Inc/tim.h ../Core/Inc/main.h ../Core/Inc/dma.h \
  ../Core/Inc/usart.h ../Core/Inc/common_def.h ../Core/Inc/ringbuffer.h \
  ../Core/Inc/common_def.h ../Core/Inc/robot_scara.h \
- ../Core/Inc/system_params.h ../Core/Inc/command_respond.h \
- ../Core/Inc/robot_scara.h ../Core/Inc/kinematic.h \
- ../Core/Inc/communicate_payload.h ../USB_DEVICE/App/usbd_cdc_if.h \
+ ../Core/Inc/system_params.h ../Core/Inc/robot_lowlayer.h \
+ ../Core/Inc/robot_scara.h ../Core/Inc/command_respond.h \
+ ../Core/Inc/kinematic.h ../Core/Inc/communicate_payload.h \
+ ../USB_DEVICE/App/usbd_cdc_if.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
@@ -183,9 +184,11 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
 
 ../Core/Inc/system_params.h:
 
-../Core/Inc/command_respond.h:
+../Core/Inc/robot_lowlayer.h:
 
 ../Core/Inc/robot_scara.h:
+
+../Core/Inc/command_respond.h:
 
 ../Core/Inc/kinematic.h:
 

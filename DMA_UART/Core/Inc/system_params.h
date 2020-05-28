@@ -33,7 +33,7 @@
 #define ADDRESS_DDA_3 		(0x60000006)
 
 // Limit Switch Address
-#define ADDRESS_LIMIT 		(0x60000010)
+#define ADDRESS_LIMIT 		(0x60000020)
 
 // Kinematic Parameters
 #define		d1				(211.0f)

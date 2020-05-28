@@ -1,4 +1,4 @@
-freertos.c:94:6:vApplicationGetIdleTaskMemory	24	static
-freertos.c:108:6:MX_FREERTOS_Init	96	static
-freertos.c:161:6:StartDefaultTask	1672	static,ignoring_inline_asm
-freertos.c:464:6:Start_USB_RX_Task	1048	dynamic
+freertos.c:95:6:vApplicationGetIdleTaskMemory	24	static
+freertos.c:109:6:MX_FREERTOS_Init	96	static
+freertos.c:162:6:StartDefaultTask	1672	static,ignoring_inline_asm
+freertos.c:481:6:Start_USB_RX_Task	1048	dynamic
