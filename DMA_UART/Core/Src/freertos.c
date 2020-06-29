@@ -40,6 +40,7 @@
 #include "kinematic.h"
 #include "communicate_payload.h"
 #include "usbd_cdc_if.h"
+#include "gpio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -191,8 +192,10 @@ void StartDefaultTask(void const * argument)
   int32_t				infor_packed_lenght;
   uint8_t				usb_buff[350];
   int32_t				usb_lenght;
+  // Debug variables
+  //uint32_t total_pulse = 0;
 
-  // Robot variable
+  // Robot variables
   SCARA_ModeTypeDef			current_mode;
   SCARA_DutyStateTypeDef 	current_state;
   double						run_time;
@@ -210,6 +213,7 @@ void StartDefaultTask(void const * argument)
 
   // Start up robot
   scaraStartup();
+  osDelay(10);
 
 #ifdef SIMULATION
 	  positionNext.Theta1 = -PI/3;
@@ -238,7 +242,8 @@ void StartDefaultTask(void const * argument)
 	  memcpy(&positionPrevios, &positionCurrent, sizeof(SCARA_PositionTypeDef));
 	  memcpy(&positionCurrent, &positionNext, sizeof(SCARA_PositionTypeDef));
 #endif
-	  //lowlayer_readLimitSwitch(); // OK
+
+
 	  /* 2--- Check New Duty Phase ---*/
 	  // Check mail
 	  ret_mail = osMailGet(commandMailHandle, 0);
@@ -247,7 +252,6 @@ void StartDefaultTask(void const * argument)
 		   memcpy( &duty_cmd, dataMail, sizeof(DUTY_Command_TypeDef));
 		   isNewDuty = TRUE;
 		   osMailFree(commandMailHandle, dataMail);/* free memory allocated for mail */
-		   LOG_REPORT("Receive mail", __LINE__);
 	  }
 	  if(isNewDuty) {
 		  memset(respond, 0, 40);
@@ -267,6 +271,7 @@ void StartDefaultTask(void const * argument)
 			  {
 				  if (SCARA_MODE_DUTY == current_mode && SCARA_DUTY_STATE_READY == current_state) {
 					  no_scan++;
+					  lowlayer_scanReset();
 					  current_mode = SCARA_MODE_SCAN;
 					  respond_lenght = commandRespond(RPD_OK,
 							  	  	  	  	  	  	  duty_cmd.id_command,
@@ -324,8 +329,18 @@ void StartDefaultTask(void const * argument)
 		  break;
 	  case SCARA_MODE_SCAN:
 		  {
-			  current_mode 	= SCARA_MODE_DUTY;
-			  current_state = SCARA_DUTY_STATE_READY;
+			  if(lowlayer_scanFlow()) {
+				  current_mode 	= SCARA_MODE_DUTY;
+				  current_state = SCARA_DUTY_STATE_READY;
+				  scaraSetScanFlag();
+				  // Done Inform
+//				 	scaraPosition2String((char *)position, positionCurrent);
+//				 	infor_lenght 		= commandRespond(RPD_DONE,
+//				 	  	  	  	  	  	  	  	  	  	 0,
+//				 										(char *)position,
+//				 										(char *)infor);
+
+			  }
 		  }
 		  break;
 	  case SCARA_MODE_DUTY:
@@ -380,6 +395,7 @@ void StartDefaultTask(void const * argument)
 			  break;
 			  case SCARA_DUTY_STATE_FLOW:
 				  {
+					  HAL_GPIO_WritePin(STEP_ENABLE_GPIO_Port, STEP_ENABLE_Pin, GPIO_PIN_RESET);
 					  SCARA_StatusTypeDef status;
 					  // Increase run time
 					  run_time += T_SAMPLING;
@@ -399,7 +415,7 @@ void StartDefaultTask(void const * argument)
 						  } else {
 							  current_state = SCARA_DUTY_STATE_FINISH;
 							  // Critical
-							  // If appear a error while Flow, This is very important
+							  // If a error appear while Flowing, This is very important
 							  infor_lenght = commandRespond(RPD_STOP,
 															0,
 															(char *)DETAIL_STATUS[status],
@@ -411,6 +427,7 @@ void StartDefaultTask(void const * argument)
 			  break;
 			  case SCARA_DUTY_STATE_FINISH:
 				  {
+					  //HAL_GPIO_WritePin(STEP_ENABLE_GPIO_Port, STEP_ENABLE_Pin, GPIO_PIN_SET);
 					  current_state = SCARA_DUTY_STATE_READY;
 					  positionNext.t = 0;
 					  positionNext.total_time = 0;

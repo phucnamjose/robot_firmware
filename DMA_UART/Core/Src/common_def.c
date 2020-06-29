@@ -33,7 +33,7 @@ uint8_t LOG_REPORT(char *message, uint16_t line) {
 	uint8_t temp_buff[64];
 	int32_t len;
 
-	len = snprintf((char*)temp_buff, 63, "LINE:%d, %s\n", line, message);
+	len = snprintf((char*)temp_buff, 63, "LINE:%d, %s \r\n", line, message);
 	if (-1 == len) {
 		return FALSE;
 	}

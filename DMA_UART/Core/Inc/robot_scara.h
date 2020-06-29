@@ -11,35 +11,6 @@
 #include "common_def.h"
 #include "system_params.h"
 
-/* Limit Joint*/
-#define LIM_MIN_J0		(-PI/2)
-#define LIM_MAX_J0		(PI/2)
-#define LIM_MIN_J1		(-3*PI/4)
-#define LIM_MAX_J1		(3*PI/4)
-#define LIM_MIN_J2		(0)
-#define LIM_MAX_J2		(100)
-#define LIM_MIN_J3		(-5*PI/6)
-#define LIM_MAX_J3		(5*PI/6)
-
-/* Maximum Velocity System*/
-#define V_DESIGN_3D		(0.9*20.0f)
-#define V_DESIGN_ROLL	(0.9*PI/5)
-#define V_DESIGN_J0		(0.9*LIM_PULSE_J0/(GEAR_J0*T_SAMPLING))
-#define V_DESIGN_J1		(0.9*LIM_PULSE_J1/(GEAR_J1*T_SAMPLING))
-#define V_DESIGN_J2		(0.9*LIM_PULSE_J2/(GEAR_J2*T_SAMPLING))
-#define V_DESIGN_J3		(0.9*LIM_PULSE_J3/(GEAR_J3*T_SAMPLING))
-
-/* Maximum Accelerate System*/
-#define A_DESIGN_3D		(V_DESIGN_3D/5)
-#define A_DESIGN_ROLL	(V_DESIGN_ROLL/5)
-#define A_DESIGN_J0		(V_DESIGN_J0/5)
-#define A_DESIGN_J1		(V_DESIGN_J1/5)
-#define A_DESIGN_J2		(V_DESIGN_J2/5)
-#define A_DESIGN_J3		(V_DESIGN_J3/5)
-
-/* Sampling Period*/
-#define T_SAMPLING		(0.01f)
-
 
 /* FOR ROBOT */
 typedef enum
@@ -327,12 +298,16 @@ SCARA_StatusTypeDef			scaraInitCircle		(Path_Circle_TypeDef *circle,
 SCARA_StatusTypeDef			scaraInitLSPB		(Trajectory_LSPB_TypeDef *lspb,
 												Trajectory_TargetTypeDef target,
 												double total_s,
-												ModeInitTypeDef modeinits);
+												ModeInitTypeDef modeinits,
+												double v_factor,
+												double a_factor);
 
 SCARA_StatusTypeDef			scaraInitScurve		(Trajectory_Scurve_TypeDef *scurve,
 												Trajectory_TargetTypeDef target,
 												double total_s,
-												ModeInitTypeDef modeinit);
+												ModeInitTypeDef modeinit,
+												double v_factor,
+												double a_factor);
 
 SCARA_StatusTypeDef			scaraFlowDuty		(double time,
 												SCARA_PositionTypeDef *pos_Next ,

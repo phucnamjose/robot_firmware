@@ -32,6 +32,7 @@
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
 #include "string.h"
+#include "robot_lowlayer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -100,11 +101,18 @@ int main(void)
   MX_FSMC_Init();
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
-
+//  HAL_GPIO_WritePin(CAPTURE_ENABLE_GPIO_Port, CAPTURE_ENABLE_Pin, RESET);
+//  int32_t enc_0, enc_1, enc_2;
+  //int32_t cap_0, cap_1, cap_2;
+//  uint8_t lim0, lim1, lim2, lim3 , lim_regiter;
+  //char report[30];
+  //uint32_t total_pulse = 0;
+  //lowlayer_writePulse(0, 0, 0, 0);
+  //HAL_Delay(10);
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
-  MX_FREERTOS_Init(); 
+  MX_FREERTOS_Init();
 
   /* Start scheduler */
   osKernelStart();
@@ -113,11 +121,32 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+//  while( total_pulse < 9009) {
+//		  if (HAL_GPIO_ReadPin(CPLD_BUSY_GPIO_Port, CPLD_BUSY_Pin) != GPIO_PIN_RESET) {
+//			  while(1);// Error
+//		  }
+//  		  lowlayer_writePulse(0, 0, 9, 0);
+//  		  if (HAL_GPIO_ReadPin(CPLD_BUSY_GPIO_Port, CPLD_BUSY_Pin) != GPIO_PIN_SET) {
+//  			  while(1);// Error
+//  		  }
+//  		  total_pulse = total_pulse + 9;
+//
+//  		  HAL_Delay(10);
+//  	  }
+//  lowlayer_writePulse(0, 0, 0, 0);
+//  __NOP();
+
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+//	  cap_0 = lowlayer_readCapture(0);
+//	  cap_1 = lowlayer_readCapture(1);
+//	  cap_2 = lowlayer_readCapture(2);
+//	  sprintf(report, "%d %d %d \r\n", (int)cap_0, (int)cap_1, (int)cap_2);
+//	  LOG_REPORT(report, __LINE__);
+//	  HAL_Delay(300);
   }
   /* USER CODE END 3 */
 }
