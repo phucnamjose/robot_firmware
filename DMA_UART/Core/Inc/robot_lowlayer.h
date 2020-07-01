@@ -14,7 +14,9 @@
 /* Function Prototype*/
 void	lowlayer_scanReset(void);
 uint8_t	lowlayer_scanFlow(void);
+uint8_t	lowlayer_goToSoftLimit(SCARA_PositionTypeDef *setpoint);
 void	lowlayer_readTruePosition(SCARA_PositionTypeDef *true);
+void	lowlayer_readSetPosition(SCARA_PositionTypeDef *setpoint);
 uint8_t	lowlayer_computeAndWritePulse(SCARA_PositionTypeDef current, SCARA_PositionTypeDef next);
 uint8_t	lowlayer_writePulse(int8_t pulse0, int8_t pulse1, int8_t pulse2, int8_t pulse3);
 void	lowlayer_resetEncoder(void);

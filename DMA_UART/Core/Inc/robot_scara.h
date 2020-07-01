@@ -47,6 +47,14 @@ typedef enum
 }SCARA_DutyStateTypeDef;
 
 
+typedef enum
+{
+	  SCARA_SCAN_STATE_INIT				= 0x00U,
+	  SCARA_SCAN_STATE_HARD				= 0x01U,
+	  SCARA_SCAN_STATE_SOFT				= 0x02U,
+	  SCARA_SCAN_STATE_FINISH			= 0x03U
+}SCARA_ScanStateTypeDef;
+
 /* FOR DUTY */
 typedef enum
 {

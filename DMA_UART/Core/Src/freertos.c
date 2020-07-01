@@ -67,6 +67,7 @@ extern const char 					*DETAIL_STATUS[NUM_OF_STATUS];
 extern SCARA_PositionTypeDef		positionPrevios;
 extern SCARA_PositionTypeDef		positionCurrent;
 extern SCARA_PositionTypeDef		positionNext;
+extern SCARA_PositionTypeDef		positionTrue;
 
 extern TIM_HandleTypeDef htim7;
 osMailQId commandMailHandle;
@@ -197,7 +198,8 @@ void StartDefaultTask(void const * argument)
 
   // Robot variables
   SCARA_ModeTypeDef			current_mode;
-  SCARA_DutyStateTypeDef 	current_state;
+  SCARA_DutyStateTypeDef 	current_duty_state;
+  SCARA_ScanStateTypeDef	current_scan_state;
   double						run_time;
 
   LOG_REPORT("free_rtos.c: PROGRAM START...", __LINE__);
@@ -209,7 +211,7 @@ void StartDefaultTask(void const * argument)
   no_duty_success	= 0;
   no_duty_fail		= 0;
   current_mode	 = scaraGetMode();
-  current_state	 = scaraGetDutyState();
+  current_duty_state	 = scaraGetDutyState();
 
   // Start up robot
   scaraStartup();
@@ -242,8 +244,10 @@ void StartDefaultTask(void const * argument)
 	  memcpy(&positionPrevios, &positionCurrent, sizeof(SCARA_PositionTypeDef));
 	  memcpy(&positionCurrent, &positionNext, sizeof(SCARA_PositionTypeDef));
 #endif
-
-
+	  if(scaraIsScanLimit()) {
+		  lowlayer_readTruePosition(&positionTrue);
+		  kinematicForward(&positionTrue);
+	  }
 	  /* 2--- Check New Duty Phase ---*/
 	  // Check mail
 	  ret_mail = osMailGet(commandMailHandle, 0);
@@ -267,12 +271,13 @@ void StartDefaultTask(void const * argument)
 				  LOG_REPORT("ROBOT STOP !!!", __LINE__);
 			  }
 			  break;
+
 		  case SCARA_MODE_SCAN:
 			  {
-				  if (SCARA_MODE_DUTY == current_mode && SCARA_DUTY_STATE_READY == current_state) {
+				  if (SCARA_MODE_DUTY == current_mode && SCARA_DUTY_STATE_READY == current_duty_state) {
 					  no_scan++;
-					  lowlayer_scanReset();
 					  current_mode = SCARA_MODE_SCAN;
+					  current_scan_state = SCARA_SCAN_STATE_INIT;
 					  respond_lenght = commandRespond(RPD_OK,
 							  	  	  	  	  	  	  duty_cmd.id_command,
 													  "Start Scan",
@@ -286,13 +291,14 @@ void StartDefaultTask(void const * argument)
 				  }
 			  }
 			  break;
+
 		  case SCARA_MODE_DUTY:
 			  {
 				  no_duty++;
-				  if (SCARA_MODE_DUTY == current_mode && SCARA_DUTY_STATE_READY == current_state) {
+				  if (SCARA_MODE_DUTY == current_mode && SCARA_DUTY_STATE_READY == current_duty_state) {
 					  if (scaraIsScanLimit()) {
 						  current_mode	 = SCARA_MODE_DUTY;
-						  current_state	 = SCARA_DUTY_STATE_INIT;
+						  current_duty_state	 = SCARA_DUTY_STATE_INIT;
 					  } else {
 						  no_duty_fail++;
 						  respond_lenght = commandRespond(RPD_ERROR,
@@ -324,34 +330,67 @@ void StartDefaultTask(void const * argument)
 	  case SCARA_MODE_STOP:
 		  {
 			  current_mode 	= SCARA_MODE_DUTY;
-			  current_state = SCARA_DUTY_STATE_READY;
+			  current_duty_state = SCARA_DUTY_STATE_READY;
 		  }
 		  break;
+
 	  case SCARA_MODE_SCAN:
 		  {
-			  if(lowlayer_scanFlow()) {
-				  current_mode 	= SCARA_MODE_DUTY;
-				  current_state = SCARA_DUTY_STATE_READY;
-				  scaraSetScanFlag();
-				  // Done Inform
-//				 	scaraPosition2String((char *)position, positionCurrent);
-//				 	infor_lenght 		= commandRespond(RPD_DONE,
-//				 	  	  	  	  	  	  	  	  	  	 0,
-//				 										(char *)position,
-//				 										(char *)infor);
-
+			  switch (current_scan_state) {
+			  case SCARA_SCAN_STATE_INIT:
+				  {
+					  lowlayer_scanReset();
+					  current_scan_state = SCARA_SCAN_STATE_HARD;
+				  }
+				  break;
+			  case SCARA_SCAN_STATE_HARD:
+				  {
+					  if(lowlayer_scanFlow()) {
+						  current_scan_state = SCARA_SCAN_STATE_SOFT;
+					  }
+				  }
+				  break;
+			  case SCARA_SCAN_STATE_SOFT:
+				  {
+					  if(lowlayer_goToSoftLimit(&positionNext)) {
+						  current_scan_state = SCARA_SCAN_STATE_FINISH;
+					  	}
+				  }
+				  break;
+			  case SCARA_SCAN_STATE_FINISH:
+				  {
+					  current_mode 	= SCARA_MODE_DUTY;
+					  current_duty_state = SCARA_DUTY_STATE_READY;
+					  kinematicForward(&positionNext);
+					  scaraSetScanFlag();
+					   //Done Inform
+//					  scaraPosition2String((char *)position, positionCurrent);
+//					  infor_lenght 		= commandRespond(RPD_DONE,
+//					 	  	  	  	  	  	  	  	  	 0,
+//					 									(char *)position,
+//					 									(char *)infor);
+				  }
+				  break;
+			  default:
+				  {
+					  LOG_REPORT("ERROR STATE !!!", __LINE__);
+					  while(1);
+				  }
 			  }
+
 		  }
 		  break;
+
 	  case SCARA_MODE_DUTY:
 		  {
-			  switch (current_state){
+			  switch (current_duty_state){
 			  case SCARA_DUTY_STATE_READY:
 				  {
 					  // Do nothing();
 					  __NOP();
 				  }
 			  break;
+
 			  case SCARA_DUTY_STATE_INIT:
 				  {
 					  SCARA_StatusTypeDef status1, status2;
@@ -360,14 +399,15 @@ void StartDefaultTask(void const * argument)
 						  status2 = scaraTestDuty();
 						  if (SCARA_STATUS_OK == status2) {
 						  no_duty_success++;
-						  current_state		= SCARA_DUTY_STATE_FLOW;
+						  current_duty_state		= SCARA_DUTY_STATE_FLOW;
 						  run_time			= 0;
 						  // Respond
 						  respond_lenght 	= commandRespond(RPD_OK,
 								  	  	  	  	  	  	  	  duty_cmd.id_command,
 															  (char *)DETAIL_STATUS[status1],
 															  (char *)respond);
-						  scaraPosition2String((char *)position, positionCurrent);
+						  //scaraPosition2String((char *)position, positionCurrent);
+						  scaraPosition2String((char *)position, positionTrue);
 						  // Start Inform
 						  infor_lenght 		= commandRespond(RPD_START,
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  0,
@@ -375,7 +415,7 @@ void StartDefaultTask(void const * argument)
 															  (char *)infor);
 						  } else {
 							  no_duty_fail++;
-							  current_state 	= SCARA_DUTY_STATE_READY;
+							  current_duty_state 	= SCARA_DUTY_STATE_READY;
 							  respond_lenght	= commandRespond(RPD_ERROR,
 									  	  	  	  	  	  	  	  duty_cmd.id_command,
 																  (char *)DETAIL_STATUS[status2],
@@ -384,7 +424,7 @@ void StartDefaultTask(void const * argument)
 						  }
 					  } else {
 						  no_duty_fail++;
-						  current_state 	= SCARA_DUTY_STATE_READY;
+						  current_duty_state 	= SCARA_DUTY_STATE_READY;
 						  respond_lenght	= commandRespond(RPD_ERROR,
 								  	  	  	  	  	  	  	  duty_cmd.id_command,
 															  (char *)DETAIL_STATUS[status1],
@@ -393,6 +433,7 @@ void StartDefaultTask(void const * argument)
 					  }
 				  }
 			  break;
+
 			  case SCARA_DUTY_STATE_FLOW:
 				  {
 					  HAL_GPIO_WritePin(STEP_ENABLE_GPIO_Port, STEP_ENABLE_Pin, GPIO_PIN_RESET);
@@ -401,19 +442,20 @@ void StartDefaultTask(void const * argument)
 					  run_time += T_SAMPLING;
 					  // Check Time Out
 					  if (scaraIsFinish(run_time)) {
-						  current_state = SCARA_DUTY_STATE_FINISH;// Work Done
+						  current_duty_state = SCARA_DUTY_STATE_FINISH;// Work Done
 					  } else {
 						  status = scaraFlowDuty(run_time , &positionNext, positionCurrent);
 						  if ( SCARA_STATUS_OK == status) {
 							  lowlayer_computeAndWritePulse(positionCurrent, positionNext);
 							  // Running Inform
-							  scaraPosition2String((char *)position, positionCurrent);
+							  //scaraPosition2String((char *)position, positionCurrent);
+							  scaraPosition2String((char *)position, positionTrue);
 							  infor_lenght = commandRespond(RPD_RUNNING,
 									  	  	  	  	  	  	0,
 															(char *)position,
 															(char *)infor);
 						  } else {
-							  current_state = SCARA_DUTY_STATE_FINISH;
+							  current_duty_state = SCARA_DUTY_STATE_FINISH;
 							  // Critical
 							  // If a error appear while Flowing, This is very important
 							  infor_lenght = commandRespond(RPD_STOP,
@@ -425,21 +467,24 @@ void StartDefaultTask(void const * argument)
 					  }
 				  }
 			  break;
+
 			  case SCARA_DUTY_STATE_FINISH:
 				  {
 					  //HAL_GPIO_WritePin(STEP_ENABLE_GPIO_Port, STEP_ENABLE_Pin, GPIO_PIN_SET);
-					  current_state = SCARA_DUTY_STATE_READY;
+					  current_duty_state = SCARA_DUTY_STATE_READY;
 					  positionNext.t = 0;
 					  positionNext.total_time = 0;
 					  positionNext.q = 0;
 					  // Done Inform
-					  scaraPosition2String((char *)position, positionCurrent);
+					  //scaraPosition2String((char *)position, positionCurrent);
+					  scaraPosition2String((char *)position, positionTrue);
 					  infor_lenght 		= commandRespond(RPD_DONE,
 	  	  	  	  	  	  	  	  	  	  	  	  	  	 0,
 														 (char *)position,
 														 (char *)infor);
 				  }
 			  break;
+
 			  default:
 				  {
 					  LOG_REPORT("ERROR STATE !!!", __LINE__);
@@ -449,6 +494,7 @@ void StartDefaultTask(void const * argument)
 
 		  }
 		  break;
+
 	  default:
 		  {
 			  LOG_REPORT("ERROR MODE !!!", __LINE__);
@@ -481,7 +527,7 @@ void StartDefaultTask(void const * argument)
 
 	  /* 5--- Update ---*/
 	  scaraSetMode(current_mode);
-	  scaraSetDutyState(current_state);
+	  scaraSetDutyState(current_duty_state);
 
     osDelay(1);
   }

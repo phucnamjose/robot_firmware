@@ -22,6 +22,7 @@ DUTY_TypeDef				myDUTY;
 SCARA_PositionTypeDef		positionPrevios;
 SCARA_PositionTypeDef		positionCurrent;
 SCARA_PositionTypeDef		positionNext;
+SCARA_PositionTypeDef		positionTrue;
 
 Trajectory_TargetTypeDef	joint_taget[4] = {  TRAJECTORY_J0, TRAJECTORY_J1,
 												TRAJECTORY_J2, TRAJECTORY_J3};
@@ -1233,7 +1234,7 @@ void				scaraSetDutyState(SCARA_DutyStateTypeDef state) {
 }
 
 void				scaraGetPosition	(SCARA_PositionTypeDef *pos) {
-	memcpy(pos, &positionCurrent, sizeof(SCARA_PositionTypeDef));
+	memcpy(pos, &positionTrue, sizeof(SCARA_PositionTypeDef));
 }
 
 void				scaraSetMode(SCARA_ModeTypeDef mode) {

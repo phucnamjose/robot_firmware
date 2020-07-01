@@ -9,14 +9,14 @@
 #define INC_SYSTEM_PARAMS_H_
 
 /* Limit Joint*/
-#define LIM_MIN_J0		(-85.0*PI/180)
-#define LIM_MAX_J0		(85*PI/180)
-#define LIM_MIN_J1		(-135*PI/180)
-#define LIM_MAX_J1		(135*PI/180)
-#define LIM_MIN_J2		(0)
+#define LIM_MIN_J0		(-85.0*PI/180.0)
+#define LIM_MAX_J0		(85.0*PI/180.0)
+#define LIM_MIN_J1		(-135.0*PI/180.0)
+#define LIM_MAX_J1		(135.0*PI/180.0)
+#define LIM_MIN_J2		(0.0)
 #define LIM_MAX_J2		(95.0)
-#define LIM_MIN_J3		(-165*PI/360)
-#define LIM_MAX_J3		(165*PI/360)
+#define LIM_MIN_J3		(-165.0*PI/180)
+#define LIM_MAX_J3		(165.0*PI/180.0)
 
 /* Maximum Velocity System*/
 #define V_DESIGN_3D		(0.9*LIM_PULSE_J2)/(GEAR_J2*T_SAMPLING)
@@ -45,15 +45,15 @@
 #define DIR_J3				(0x01)
 
 /* Encoder Increase Direction --- CPLD count independently */
-#define DIR_ENCODER_0		(0x00)
-#define DIR_ENCODER_1		(0x00)
-#define DIR_ENCODER_2		(0x01)
+#define DIR_ENCODER_0		(1.0f)
+#define DIR_ENCODER_1		(1.0f)
+#define DIR_ENCODER_2		(-1.0f)
 
 /* Motor Ratio */
 // baud rate
 #define GEAR_J0				(20000.0f) // per round ( 2*PI)
 // baud rate
-#define GEAR_J1				(16000.0f) // per round ( 2*PI)
+#define GEAR_J1				(32000.0f) // per round ( 2*PI)
 // baud rate, ball screw T3
 #define GEAR_J2				(500.0f/3.0f) // per milimeter.
 // motor, micro step, big-gear, small-gear
@@ -92,11 +92,11 @@
 #define ADDRESS_CAP2_LOW		(0x60000068)
 #define ADDRESS_CAP2_HIGH		(0x6000006A)
 
-/* Limit Absolute Position (Calibration) (rad) */
-#define POSITION_LIM0_NEG		(-1.621454508)
-#define POSITION_LIM1_POS		(2.448773299)
-#define POSITION_LIM2_NEG		(77.674)
-#define POSITION_LIM3_POS		(2.994575935)
+/* Hard Limit Absolute Position (Calibration) (rad) */
+#define HARD_LIM0_NEG		(-1.621454508f)
+#define HARD_LIM1_POS		(2.448773299f)
+#define HARD_LIM2_NEG		(-2.236f)
+#define HARD_LIM3_POS		(2.994575935f)
 
 /* Kinematic Parameters (mm) */
 #define		d1				(211.0f)

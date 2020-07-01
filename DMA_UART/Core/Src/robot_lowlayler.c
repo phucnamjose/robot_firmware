@@ -19,7 +19,7 @@ int32_t position_capture[3];
 
 int32_t pulse_accumulate[4];
 
-int32_t offset_setpoint[3];
+double  offset_setpoint[4];
 int32_t offset_encoder[3];
 int32_t offset_stepper;
 
@@ -27,7 +27,7 @@ uint8_t	limit_switch[4];
 uint8_t state_scan;
 uint8_t scan_flag;
 
-const int8_t	pulse_scan[4] = {4, 5, 8, 30};
+const int8_t	pulse_scan[4] = {3, 5, 8, 20};
 
 void	lowlayer_scanReset(void) {
 	scan_flag = 0;
@@ -45,25 +45,87 @@ uint8_t	lowlayer_scanFlow(void) {
 			lowlayer_writePulse(-pulse[0], pulse[1], -pulse[2], pulse[3]);
 		} else {
 			state_scan++;
+			lowlayer_writePulse(0, 0, 0, 0);
 		}
 
 		return FALSE;
 	} else {
-		lowlayer_updateCapture();
 		HAL_GPIO_WritePin(CAPTURE_ENABLE_GPIO_Port, CAPTURE_ENABLE_Pin, GPIO_PIN_SET);
+		lowlayer_updateCapture();
 		lowlayer_writePulse(0, 0, 0, 0);
 		scan_flag = 1;
+		// Update offset
+		offset_encoder[0] 	= position_capture[0];
+		offset_encoder[1] 	= position_capture[1];
+		offset_encoder[2] 	= position_capture[2];
+		offset_stepper		= pulse_accumulate[3];
 
+		offset_setpoint[0]	= HARD_LIM0_NEG
+				- DIR_ENCODER_0*offset_encoder[0]*2.0*PI/4.0/GEAR_J0;
+		offset_setpoint[1]	= HARD_LIM1_POS
+				- DIR_ENCODER_1*offset_encoder[1]*2.0*PI/4.0/GEAR_J1;
+		offset_setpoint[2]	= HARD_LIM2_NEG
+				- DIR_ENCODER_2*offset_encoder[2]/4.0/GEAR_J2;
+		offset_setpoint[3]  = HARD_LIM3_POS
+				- offset_stepper*2.0*PI/GEAR_J3;
+
+		return TRUE;
+	}
+}
+
+uint8_t	lowlayer_goToSoftLimit(SCARA_PositionTypeDef *setpoint) {
+	int8_t pulse[4] = {0, 0, 0 ,0};
+	uint8_t check = 0;
+	lowlayer_readSetPosition(setpoint);
+	if (setpoint->Theta1 < LIM_MIN_J0) {
+		pulse[0] = pulse_scan[0];
+		check++;
+	}
+	if (setpoint->Theta2 > LIM_MAX_J1) {
+		pulse[1] = pulse_scan[1];
+		check++;
+	}
+	if (setpoint->D3 < LIM_MIN_J2) {
+		pulse[2] = pulse_scan[2];
+		check++;
+	}
+	if (setpoint->Theta4 > LIM_MAX_J3) {
+		pulse[3] = pulse_scan[3];
+		check++;
+	}
+
+	if (check > 0) {
+		lowlayer_writePulse(pulse[0], -pulse[1], pulse[2], -pulse[3]);
+		return FALSE;
+	} else {
+		lowlayer_writePulse(0, 0, 0, 0);
 		return TRUE;
 	}
 }
 
 void	lowlayer_readTruePosition(SCARA_PositionTypeDef *true) {
 	lowlayer_updateEncoder();
-	true->Theta1 = LIM_MIN_J0 + position_encoder[0]*2.0*PI/4.0/GEAR_J0; // Servo Motor
-	true->Theta2 = LIM_MIN_J1 + position_encoder[1]*2.0*PI/4.0/GEAR_J1; // Servo Motor
-	true->D3	 = LIM_MIN_J2 + position_encoder[2]*2.0*PI/4.0/GEAR_J2; // Servo Motor
-	true->Theta4 = LIM_MIN_J3 + pulse_accumulate[3]*2.0*PI/4.0/GEAR_J3; // Stepper Motor
+	true->Theta1 = HARD_LIM0_NEG
+			+ DIR_ENCODER_0*(position_encoder[0] - offset_encoder[0])*2.0*PI/4.0/GEAR_J0; // Servo Motor
+
+	true->Theta2 = HARD_LIM1_POS
+			+ DIR_ENCODER_1*(position_encoder[1] - offset_encoder[1])*2.0*PI/4.0/GEAR_J1; // Servo Motor
+
+	true->D3	 = HARD_LIM2_NEG
+			+ DIR_ENCODER_2*(position_encoder[2] - offset_encoder[2])/4.0/GEAR_J2; // Servo Motor
+
+	true->Theta4 = HARD_LIM3_POS
+			+ (pulse_accumulate[3] - offset_stepper)*2.0*PI/GEAR_J3; // Stepper Motor
+}
+
+void	lowlayer_readSetPosition(SCARA_PositionTypeDef *setpoint) {
+	setpoint->Theta1 = offset_setpoint[0] + pulse_accumulate[0]*2.0*PI/GEAR_J0;
+
+	setpoint->Theta2 = offset_setpoint[1] + pulse_accumulate[1]*2.0*PI/GEAR_J1;
+
+	setpoint->D3	 = offset_setpoint[2] + pulse_accumulate[2]/GEAR_J2;
+
+	setpoint->Theta4 = offset_setpoint[3] + pulse_accumulate[3]*2.0*PI/GEAR_J3;
 }
 
 uint8_t	lowlayer_computeAndWritePulse(SCARA_PositionTypeDef current, SCARA_PositionTypeDef next) {
