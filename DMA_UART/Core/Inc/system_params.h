@@ -14,25 +14,26 @@
 #define LIM_MIN_J1		(-135.0*PI/180.0)
 #define LIM_MAX_J1		(135.0*PI/180.0)
 #define LIM_MIN_J2		(0.0)
-#define LIM_MAX_J2		(95.0)
-#define LIM_MIN_J3		(-165.0*PI/180)
-#define LIM_MAX_J3		(165.0*PI/180.0)
+#define LIM_MAX_J2		(90.0)
+#define LIM_MIN_J3		(-170.0*PI/180)
+#define LIM_MAX_J3		(170.0*PI/180.0)
 
 /* Maximum Velocity System*/
-#define V_DESIGN_3D		(0.9*LIM_PULSE_J2)/(GEAR_J2*T_SAMPLING)
-#define V_DESIGN_ROLL	(0.9*LIM_PULSE_J3*2*PI)/(GEAR_J3*T_SAMPLING)
 #define V_DESIGN_J0		(0.9*LIM_PULSE_J0*2*PI)/(GEAR_J0*T_SAMPLING)
 #define V_DESIGN_J1		(0.9*LIM_PULSE_J1*2*PI)/(GEAR_J1*T_SAMPLING)
 #define V_DESIGN_J2		(0.9*LIM_PULSE_J2)/(GEAR_J2*T_SAMPLING)
 #define V_DESIGN_J3		(0.9*LIM_PULSE_J3*2*PI)/(GEAR_J3*T_SAMPLING)
 
+#define V_DESIGN_3D		V_DESIGN_J2
+#define V_DESIGN_ROLL	V_DESIGN_J3
+
 /* Maximum Accelerate System*/
-#define A_DESIGN_3D		(V_DESIGN_3D/5)
-#define A_DESIGN_ROLL	(V_DESIGN_ROLL/5)
-#define A_DESIGN_J0		(V_DESIGN_J0/5)
-#define A_DESIGN_J1		(V_DESIGN_J1/5)
-#define A_DESIGN_J2		(V_DESIGN_J2/5)
-#define A_DESIGN_J3		(V_DESIGN_J3/5)
+#define A_DESIGN_3D		(V_DESIGN_3D/2)
+#define A_DESIGN_ROLL	(V_DESIGN_ROLL/2)
+#define A_DESIGN_J0		(V_DESIGN_J0/2)
+#define A_DESIGN_J1		(V_DESIGN_J1/2)
+#define A_DESIGN_J2		(V_DESIGN_J2/2)
+#define A_DESIGN_J3		(V_DESIGN_J3/2)
 
 /* Sampling Period*/
 #define T_SAMPLING		(0.01f)
@@ -49,22 +50,30 @@
 #define DIR_ENCODER_1		(1.0f)
 #define DIR_ENCODER_2		(-1.0f)
 
-/* Motor Ratio */
+/* Encoder Ratio */
+#define ENCODER_J0				(20000.0f*4.0f) // per round ( 2*PI)
+// baud rate
+#define ENCODER_J1				(32000.0f*4.0f) // per round ( 2*PI)
+// baud rate, ball screw T3
+#define ENCODER_J2				(500.0f*4.0f/3.0f) // per milimeter.
+
+
+/* Motor Ratio -- Driver */
 // baud rate
 #define GEAR_J0				(20000.0f) // per round ( 2*PI)
 // baud rate
 #define GEAR_J1				(32000.0f) // per round ( 2*PI)
 // baud rate, ball screw T3
-#define GEAR_J2				(500.0f/3.0f) // per milimeter.
+#define GEAR_J2				(300.0f/3.0f) // per milimeter.
 // motor, micro step, big-gear, small-gear
 #define GEAR_J3				(400.0f*32.0f*60.0f/19.0f) // per round ( 2*PI)
 
 
 /* Limit pulse per 10 ms (pulse) */
-#define LIM_PULSE_J0		(16u) // Calculate in file Excel
-#define LIM_PULSE_J1		(40u)
-#define LIM_PULSE_J2		(33u)
-#define LIM_PULSE_J3		(101u)
+#define LIM_PULSE_J0		(75u) // Calculate in file Excel
+#define LIM_PULSE_J1		(120u)
+#define LIM_PULSE_J2		(120u)
+#define LIM_PULSE_J3		(117u)
 
 /* Module DDA Address (8 bit data) */
 #define ADDRESS_DDA_0 			(0x60000000)
@@ -96,7 +105,7 @@
 #define HARD_LIM0_NEG		(-1.621454508f)
 #define HARD_LIM1_POS		(2.448773299f)
 #define HARD_LIM2_NEG		(-2.236f)
-#define HARD_LIM3_POS		(2.994575935f)
+#define HARD_LIM3_POS		(3.043581508f)
 
 /* Kinematic Parameters (mm) */
 #define		d1				(211.0f)

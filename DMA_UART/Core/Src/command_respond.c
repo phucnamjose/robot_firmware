@@ -65,7 +65,14 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 		} else {
 			return CMD_ERROR;
 		}
+		duty_cmd->target_point.x = 250;
+		duty_cmd->target_point.y = -200;
+		duty_cmd->target_point.z = 120;
+		duty_cmd->target_point.roll = 0;
+
+		duty_cmd->modeInit_type = DUTY_MODE_INIT_QVA;
 		duty_cmd->space_type = DUTY_SPACE_JOINT;
+		duty_cmd->joint_type = DUTY_JOINT_4DOF;
 		duty_cmd->robot_mode = SCARA_MODE_DUTY;
 		return CMD_MOVE_HOME;
 

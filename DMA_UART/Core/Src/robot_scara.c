@@ -45,6 +45,7 @@ const char *DETAIL_STATUS[NUM_OF_STATUS]  = {"Accept Command",
 void				scaraStartup(void) {
 	lowlayer_CPLD_Init();
 	lowlayer_stepMotorInit();
+	lowlayer_resetEncoder();
 	lowlayer_writePulse(0, 0, 0, 0);
 }
 
@@ -503,6 +504,9 @@ SCARA_StatusTypeDef	scaraInitDuty		(DUTY_Command_TypeDef command) {
 	positionCurrent.total_time = myDUTY.time_total;
 	positionNext.t = 0;
 	positionNext.total_time = myDUTY.time_total;
+	positionTrue.t = 0;
+	positionTrue.total_time = myDUTY.time_total;
+
 	return SCARA_STATUS_OK;
 }
 
@@ -1234,7 +1238,7 @@ void				scaraSetDutyState(SCARA_DutyStateTypeDef state) {
 }
 
 void				scaraGetPosition	(SCARA_PositionTypeDef *pos) {
-	memcpy(pos, &positionTrue, sizeof(SCARA_PositionTypeDef));
+	memcpy(pos, &positionCurrent, sizeof(SCARA_PositionTypeDef));
 }
 
 void				scaraSetMode(SCARA_ModeTypeDef mode) {

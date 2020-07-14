@@ -27,7 +27,7 @@ uint8_t	limit_switch[4];
 uint8_t state_scan;
 uint8_t scan_flag;
 
-const int8_t	pulse_scan[4] = {3, 5, 8, 20};
+const int8_t	pulse_scan[4] = {3, 5, 5, 20};
 
 void	lowlayer_scanReset(void) {
 	scan_flag = 0;
@@ -61,11 +61,11 @@ uint8_t	lowlayer_scanFlow(void) {
 		offset_stepper		= pulse_accumulate[3];
 
 		offset_setpoint[0]	= HARD_LIM0_NEG
-				- DIR_ENCODER_0*offset_encoder[0]*2.0*PI/4.0/GEAR_J0;
+				- DIR_ENCODER_0*offset_encoder[0]*2.0*PI/ENCODER_J0;
 		offset_setpoint[1]	= HARD_LIM1_POS
-				- DIR_ENCODER_1*offset_encoder[1]*2.0*PI/4.0/GEAR_J1;
+				- DIR_ENCODER_1*offset_encoder[1]*2.0*PI/ENCODER_J1;
 		offset_setpoint[2]	= HARD_LIM2_NEG
-				- DIR_ENCODER_2*offset_encoder[2]/4.0/GEAR_J2;
+				- DIR_ENCODER_2*offset_encoder[2]/ENCODER_J2;
 		offset_setpoint[3]  = HARD_LIM3_POS
 				- offset_stepper*2.0*PI/GEAR_J3;
 
@@ -106,13 +106,13 @@ uint8_t	lowlayer_goToSoftLimit(SCARA_PositionTypeDef *setpoint) {
 void	lowlayer_readTruePosition(SCARA_PositionTypeDef *true) {
 	lowlayer_updateEncoder();
 	true->Theta1 = HARD_LIM0_NEG
-			+ DIR_ENCODER_0*(position_encoder[0] - offset_encoder[0])*2.0*PI/4.0/GEAR_J0; // Servo Motor
+			+ DIR_ENCODER_0*(position_encoder[0] - offset_encoder[0])*2.0*PI/ENCODER_J0; // Servo Motor
 
 	true->Theta2 = HARD_LIM1_POS
-			+ DIR_ENCODER_1*(position_encoder[1] - offset_encoder[1])*2.0*PI/4.0/GEAR_J1; // Servo Motor
+			+ DIR_ENCODER_1*(position_encoder[1] - offset_encoder[1])*2.0*PI/ENCODER_J1; // Servo Motor
 
 	true->D3	 = HARD_LIM2_NEG
-			+ DIR_ENCODER_2*(position_encoder[2] - offset_encoder[2])/4.0/GEAR_J2; // Servo Motor
+			+ DIR_ENCODER_2*(position_encoder[2] - offset_encoder[2])/ENCODER_J2; // Servo Motor
 
 	true->Theta4 = HARD_LIM3_POS
 			+ (pulse_accumulate[3] - offset_stepper)*2.0*PI/GEAR_J3; // Stepper Motor

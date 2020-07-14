@@ -247,6 +247,9 @@ void StartDefaultTask(void const * argument)
 	  if(scaraIsScanLimit()) {
 		  lowlayer_readTruePosition(&positionTrue);
 		  kinematicForward(&positionTrue);
+		  positionTrue.t = positionCurrent.t;
+		  positionTrue.total_time = positionCurrent.total_time;
+		  positionTrue.q = positionCurrent.q;
 	  }
 	  /* 2--- Check New Duty Phase ---*/
 	  // Check mail
@@ -359,6 +362,7 @@ void StartDefaultTask(void const * argument)
 				  break;
 			  case SCARA_SCAN_STATE_FINISH:
 				  {
+					  lowlayer_readSetPosition(&positionNext);
 					  current_mode 	= SCARA_MODE_DUTY;
 					  current_duty_state = SCARA_DUTY_STATE_READY;
 					  kinematicForward(&positionNext);

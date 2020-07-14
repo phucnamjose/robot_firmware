@@ -818,7 +818,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x16 Core/Src/freertos.o
  .debug_macro   0x0000000000000000       0x20 Core/Src/freertos.o
  .debug_macro   0x0000000000000000       0x3c Core/Src/freertos.o
- .debug_macro   0x0000000000000000      0x17e Core/Src/freertos.o
+ .debug_macro   0x0000000000000000      0x190 Core/Src/freertos.o
  .group         0x0000000000000000        0xc Core/Src/fsmc.o
  .group         0x0000000000000000        0xc Core/Src/fsmc.o
  .group         0x0000000000000000        0xc Core/Src/fsmc.o
@@ -1112,7 +1112,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x12d Core/Src/kinematic.o
  .debug_macro   0x0000000000000000       0x94 Core/Src/kinematic.o
  .debug_macro   0x0000000000000000       0x22 Core/Src/kinematic.o
- .debug_macro   0x0000000000000000      0x17e Core/Src/kinematic.o
+ .debug_macro   0x0000000000000000      0x190 Core/Src/kinematic.o
  .debug_macro   0x0000000000000000       0x46 Core/Src/kinematic.o
  .debug_macro   0x0000000000000000       0x18 Core/Src/kinematic.o
  .debug_macro   0x0000000000000000       0x3c Core/Src/kinematic.o
@@ -1304,7 +1304,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x65 Core/Src/main.o
  .debug_macro   0x0000000000000000      0x1d0 Core/Src/main.o
  .debug_macro   0x0000000000000000       0x28 Core/Src/main.o
- .debug_macro   0x0000000000000000      0x17e Core/Src/main.o
+ .debug_macro   0x0000000000000000      0x190 Core/Src/main.o
  .group         0x0000000000000000        0xc Core/Src/ringbuffer.o
  .group         0x0000000000000000        0xc Core/Src/ringbuffer.o
  .group         0x0000000000000000        0xc Core/Src/ringbuffer.o
@@ -1468,8 +1468,6 @@ Discarded input sections
  .text          0x0000000000000000        0x0 Core/Src/robot_lowlayler.o
  .data          0x0000000000000000        0x0 Core/Src/robot_lowlayler.o
  .bss           0x0000000000000000        0x0 Core/Src/robot_lowlayler.o
- .text.lowlayer_resetEncoder
-                0x0000000000000000       0x3c Core/Src/robot_lowlayler.o
  .debug_macro   0x0000000000000000      0xa5a Core/Src/robot_lowlayler.o
  .debug_macro   0x0000000000000000      0x196 Core/Src/robot_lowlayler.o
  .debug_macro   0x0000000000000000       0x32 Core/Src/robot_lowlayler.o
@@ -1515,7 +1513,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x12d Core/Src/robot_lowlayler.o
  .debug_macro   0x0000000000000000       0x94 Core/Src/robot_lowlayler.o
  .debug_macro   0x0000000000000000       0x22 Core/Src/robot_lowlayler.o
- .debug_macro   0x0000000000000000      0x17e Core/Src/robot_lowlayler.o
+ .debug_macro   0x0000000000000000      0x190 Core/Src/robot_lowlayler.o
  .debug_macro   0x0000000000000000       0x46 Core/Src/robot_lowlayler.o
  .debug_macro   0x0000000000000000       0x18 Core/Src/robot_lowlayler.o
  .debug_macro   0x0000000000000000       0x3c Core/Src/robot_lowlayler.o
@@ -1652,7 +1650,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x12d Core/Src/robot_scara.o
  .debug_macro   0x0000000000000000       0x94 Core/Src/robot_scara.o
  .debug_macro   0x0000000000000000       0x22 Core/Src/robot_scara.o
- .debug_macro   0x0000000000000000      0x17e Core/Src/robot_scara.o
+ .debug_macro   0x0000000000000000      0x190 Core/Src/robot_scara.o
  .debug_macro   0x0000000000000000       0x46 Core/Src/robot_scara.o
  .debug_macro   0x0000000000000000       0x18 Core/Src/robot_scara.o
  .debug_macro   0x0000000000000000       0x3c Core/Src/robot_scara.o
@@ -8004,165 +8002,171 @@ LOAD c:/st/stm32cubeide_1.0.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.exte
                 0x0000000008000fa4                __aeabi_ldiv0
  *(.text*)
  .text.commandRead
-                0x0000000008000fa8      0x4f4 Core/Src/command_respond.o
+                0x0000000008000fa8      0x540 Core/Src/command_respond.o
                 0x0000000008000fa8                commandRead
  .text.commandReply
-                0x000000000800149c      0x258 Core/Src/command_respond.o
-                0x000000000800149c                commandReply
+                0x00000000080014e8      0x258 Core/Src/command_respond.o
+                0x00000000080014e8                commandReply
  .text.commandRespond
-                0x00000000080016f4       0xa0 Core/Src/command_respond.o
-                0x00000000080016f4                commandRespond
+                0x0000000008001740       0xa0 Core/Src/command_respond.o
+                0x0000000008001740                commandRespond
  .text.LOG_REPORT
-                0x0000000008001794       0x8c Core/Src/common_def.o
-                0x0000000008001794                LOG_REPORT
+                0x00000000080017e0       0x8c Core/Src/common_def.o
+                0x00000000080017e0                LOG_REPORT
+ *fill*         0x000000000800186c        0x4 
  .text.double2string
-                0x0000000008001820      0x558 Core/Src/common_def.o
-                0x0000000008001820                double2string
+                0x0000000008001870      0x558 Core/Src/common_def.o
+                0x0000000008001870                double2string
  .text.packPayload
-                0x0000000008001d78       0xd4 Core/Src/communicate_payload.o
-                0x0000000008001d78                packPayload
+                0x0000000008001dc8       0xd4 Core/Src/communicate_payload.o
+                0x0000000008001dc8                packPayload
  .text.unPackPayload
-                0x0000000008001e4c       0xec Core/Src/communicate_payload.o
-                0x0000000008001e4c                unPackPayload
+                0x0000000008001e9c       0xec Core/Src/communicate_payload.o
+                0x0000000008001e9c                unPackPayload
  .text.MX_DMA_Init
-                0x0000000008001f38       0x40 Core/Src/dma.o
-                0x0000000008001f38                MX_DMA_Init
+                0x0000000008001f88       0x40 Core/Src/dma.o
+                0x0000000008001f88                MX_DMA_Init
  .text.vApplicationGetIdleTaskMemory
-                0x0000000008001f78       0x34 Core/Src/freertos.o
-                0x0000000008001f78                vApplicationGetIdleTaskMemory
+                0x0000000008001fc8       0x34 Core/Src/freertos.o
+                0x0000000008001fc8                vApplicationGetIdleTaskMemory
  .text.MX_FREERTOS_Init
-                0x0000000008001fac       0xa8 Core/Src/freertos.o
-                0x0000000008001fac                MX_FREERTOS_Init
- *fill*         0x0000000008002054        0x4 
+                0x0000000008001ffc       0xa8 Core/Src/freertos.o
+                0x0000000008001ffc                MX_FREERTOS_Init
+ *fill*         0x00000000080020a4        0x4 
  .text.StartDefaultTask
-                0x0000000008002058      0x7b8 Core/Src/freertos.o
-                0x0000000008002058                StartDefaultTask
+                0x00000000080020a8      0x7dc Core/Src/freertos.o
+                0x00000000080020a8                StartDefaultTask
  .text.Start_USB_RX_Task
-                0x0000000008002810      0x210 Core/Src/freertos.o
-                0x0000000008002810                Start_USB_RX_Task
+                0x0000000008002884      0x210 Core/Src/freertos.o
+                0x0000000008002884                Start_USB_RX_Task
  .text.FSMC_Write
-                0x0000000008002a20       0x1e Core/Src/fsmc.o
-                0x0000000008002a20                FSMC_Write
+                0x0000000008002a94       0x1e Core/Src/fsmc.o
+                0x0000000008002a94                FSMC_Write
  .text.FSMC_Read
-                0x0000000008002a3e       0x1a Core/Src/fsmc.o
-                0x0000000008002a3e                FSMC_Read
+                0x0000000008002ab2       0x1a Core/Src/fsmc.o
+                0x0000000008002ab2                FSMC_Read
  .text.MX_FSMC_Init
-                0x0000000008002a58       0xc0 Core/Src/fsmc.o
-                0x0000000008002a58                MX_FSMC_Init
+                0x0000000008002acc       0xc0 Core/Src/fsmc.o
+                0x0000000008002acc                MX_FSMC_Init
  .text.HAL_FSMC_MspInit
-                0x0000000008002b18       0xbc Core/Src/fsmc.o
+                0x0000000008002b8c       0xbc Core/Src/fsmc.o
  .text.HAL_NOR_MspInit
-                0x0000000008002bd4       0x14 Core/Src/fsmc.o
-                0x0000000008002bd4                HAL_NOR_MspInit
+                0x0000000008002c48       0x14 Core/Src/fsmc.o
+                0x0000000008002c48                HAL_NOR_MspInit
  .text.MX_GPIO_Init
-                0x0000000008002be8      0x170 Core/Src/gpio.o
-                0x0000000008002be8                MX_GPIO_Init
+                0x0000000008002c5c      0x170 Core/Src/gpio.o
+                0x0000000008002c5c                MX_GPIO_Init
+ *fill*         0x0000000008002dcc        0x4 
  .text.kinematicForward
-                0x0000000008002d58      0x274 Core/Src/kinematic.o
-                0x0000000008002d58                kinematicForward
- *fill*         0x0000000008002fcc        0x4 
+                0x0000000008002dd0      0x274 Core/Src/kinematic.o
+                0x0000000008002dd0                kinematicForward
+ *fill*         0x0000000008003044        0x4 
  .text.kinematicInverse
-                0x0000000008002fd0      0x3fc Core/Src/kinematic.o
-                0x0000000008002fd0                kinematicInverse
- .text.main     0x00000000080033cc       0x2a Core/Src/main.o
-                0x00000000080033cc                main
- *fill*         0x00000000080033f6        0x2 
+                0x0000000008003048      0x3fc Core/Src/kinematic.o
+                0x0000000008003048                kinematicInverse
+ .text.main     0x0000000008003444       0x2a Core/Src/main.o
+                0x0000000008003444                main
+ *fill*         0x000000000800346e        0x2 
  .text.SystemClock_Config
-                0x00000000080033f8       0xd4 Core/Src/main.o
-                0x00000000080033f8                SystemClock_Config
+                0x0000000008003470       0xd4 Core/Src/main.o
+                0x0000000008003470                SystemClock_Config
  .text.HAL_TIM_PeriodElapsedCallback
-                0x00000000080034cc       0x24 Core/Src/main.o
-                0x00000000080034cc                HAL_TIM_PeriodElapsedCallback
+                0x0000000008003544       0x24 Core/Src/main.o
+                0x0000000008003544                HAL_TIM_PeriodElapsedCallback
  .text.Error_Handler
-                0x00000000080034f0        0xe Core/Src/main.o
-                0x00000000080034f0                Error_Handler
+                0x0000000008003568        0xe Core/Src/main.o
+                0x0000000008003568                Error_Handler
  .text.ringBuff_PushChar
-                0x00000000080034fe       0x70 Core/Src/ringbuffer.o
-                0x00000000080034fe                ringBuff_PushChar
+                0x0000000008003576       0x70 Core/Src/ringbuffer.o
+                0x0000000008003576                ringBuff_PushChar
  .text.ringBuff_PopChar
-                0x000000000800356e       0x70 Core/Src/ringbuffer.o
-                0x000000000800356e                ringBuff_PopChar
+                0x00000000080035e6       0x70 Core/Src/ringbuffer.o
+                0x00000000080035e6                ringBuff_PopChar
  .text.ringBuff_PushArray
-                0x00000000080035de       0x50 Core/Src/ringbuffer.o
-                0x00000000080035de                ringBuff_PushArray
+                0x0000000008003656       0x50 Core/Src/ringbuffer.o
+                0x0000000008003656                ringBuff_PushArray
  .text.ringBuff_PopArray
-                0x000000000800362e       0x42 Core/Src/ringbuffer.o
-                0x000000000800362e                ringBuff_PopArray
+                0x00000000080036a6       0x42 Core/Src/ringbuffer.o
+                0x00000000080036a6                ringBuff_PopArray
  .text.ringBuff_DistanceOf
-                0x0000000008003670       0xb6 Core/Src/ringbuffer.o
-                0x0000000008003670                ringBuff_DistanceOf
- *fill*         0x0000000008003726        0x2 
+                0x00000000080036e8       0xb6 Core/Src/ringbuffer.o
+                0x00000000080036e8                ringBuff_DistanceOf
+ *fill*         0x000000000800379e        0x2 
  .text.lowlayer_scanReset
-                0x0000000008003728       0x2c Core/Src/robot_lowlayler.o
-                0x0000000008003728                lowlayer_scanReset
- *fill*         0x0000000008003754        0x4 
+                0x00000000080037a0       0x2c Core/Src/robot_lowlayler.o
+                0x00000000080037a0                lowlayer_scanReset
+ *fill*         0x00000000080037cc        0x4 
  .text.lowlayer_scanFlow
-                0x0000000008003758      0x2c0 Core/Src/robot_lowlayler.o
-                0x0000000008003758                lowlayer_scanFlow
+                0x00000000080037d0      0x26c Core/Src/robot_lowlayler.o
+                0x00000000080037d0                lowlayer_scanFlow
+ *fill*         0x0000000008003a3c        0x4 
  .text.lowlayer_goToSoftLimit
-                0x0000000008003a18       0xf8 Core/Src/robot_lowlayler.o
-                0x0000000008003a18                lowlayer_goToSoftLimit
+                0x0000000008003a40       0xf8 Core/Src/robot_lowlayler.o
+                0x0000000008003a40                lowlayer_goToSoftLimit
  .text.lowlayer_readTruePosition
-                0x0000000008003b10      0x208 Core/Src/robot_lowlayler.o
-                0x0000000008003b10                lowlayer_readTruePosition
+                0x0000000008003b38      0x1b4 Core/Src/robot_lowlayler.o
+                0x0000000008003b38                lowlayer_readTruePosition
+ *fill*         0x0000000008003cec        0x4 
  .text.lowlayer_readSetPosition
-                0x0000000008003d18      0x168 Core/Src/robot_lowlayler.o
-                0x0000000008003d18                lowlayer_readSetPosition
+                0x0000000008003cf0      0x168 Core/Src/robot_lowlayler.o
+                0x0000000008003cf0                lowlayer_readSetPosition
  .text.lowlayer_computeAndWritePulse
-                0x0000000008003e80      0x34c Core/Src/robot_lowlayler.o
-                0x0000000008003e80                lowlayer_computeAndWritePulse
+                0x0000000008003e58      0x348 Core/Src/robot_lowlayler.o
+                0x0000000008003e58                lowlayer_computeAndWritePulse
  .text.lowlayer_writePulse
-                0x00000000080041cc      0x188 Core/Src/robot_lowlayler.o
-                0x00000000080041cc                lowlayer_writePulse
+                0x00000000080041a0      0x188 Core/Src/robot_lowlayler.o
+                0x00000000080041a0                lowlayer_writePulse
+ .text.lowlayer_resetEncoder
+                0x0000000008004328       0x3c Core/Src/robot_lowlayler.o
+                0x0000000008004328                lowlayer_resetEncoder
  .text.lowlayer_readLimitSwitch
-                0x0000000008004354       0x20 Core/Src/robot_lowlayler.o
-                0x0000000008004354                lowlayer_readLimitSwitch
+                0x0000000008004364       0x20 Core/Src/robot_lowlayler.o
+                0x0000000008004364                lowlayer_readLimitSwitch
  .text.lowlayer_readEncoder
-                0x0000000008004374       0x58 Core/Src/robot_lowlayler.o
-                0x0000000008004374                lowlayer_readEncoder
+                0x0000000008004384       0x58 Core/Src/robot_lowlayler.o
+                0x0000000008004384                lowlayer_readEncoder
  .text.lowlayer_readCapture
-                0x00000000080043cc       0x58 Core/Src/robot_lowlayler.o
-                0x00000000080043cc                lowlayer_readCapture
+                0x00000000080043dc       0x58 Core/Src/robot_lowlayler.o
+                0x00000000080043dc                lowlayer_readCapture
  .text.lowlayer_updateEncoder
-                0x0000000008004424       0x38 Core/Src/robot_lowlayler.o
-                0x0000000008004424                lowlayer_updateEncoder
+                0x0000000008004434       0x38 Core/Src/robot_lowlayler.o
+                0x0000000008004434                lowlayer_updateEncoder
  .text.lowlayer_updateCapture
-                0x000000000800445c       0x38 Core/Src/robot_lowlayler.o
-                0x000000000800445c                lowlayer_updateCapture
+                0x000000000800446c       0x38 Core/Src/robot_lowlayler.o
+                0x000000000800446c                lowlayer_updateCapture
  .text.lowlayer_updateLimit
-                0x0000000008004494       0x44 Core/Src/robot_lowlayler.o
-                0x0000000008004494                lowlayer_updateLimit
+                0x00000000080044a4       0x44 Core/Src/robot_lowlayler.o
+                0x00000000080044a4                lowlayer_updateLimit
  .text.lowlayer_setOutput
-                0x00000000080044d8       0x38 Core/Src/robot_lowlayler.o
-                0x00000000080044d8                lowlayer_setOutput
+                0x00000000080044e8       0x38 Core/Src/robot_lowlayler.o
+                0x00000000080044e8                lowlayer_setOutput
  .text.lowlayer_CPLD_Init
-                0x0000000008004510       0x18 Core/Src/robot_lowlayler.o
-                0x0000000008004510                lowlayer_CPLD_Init
+                0x0000000008004520       0x18 Core/Src/robot_lowlayler.o
+                0x0000000008004520                lowlayer_CPLD_Init
  .text.lowlayer_stepMotorInit
-                0x0000000008004528       0x30 Core/Src/robot_lowlayler.o
-                0x0000000008004528                lowlayer_stepMotorInit
+                0x0000000008004538       0x30 Core/Src/robot_lowlayler.o
+                0x0000000008004538                lowlayer_stepMotorInit
  .text.scaraStartup
-                0x0000000008004558       0x1c Core/Src/robot_scara.o
-                0x0000000008004558                scaraStartup
- *fill*         0x0000000008004574        0x4 
+                0x0000000008004568       0x20 Core/Src/robot_scara.o
+                0x0000000008004568                scaraStartup
  .text.scaraInitDuty
-                0x0000000008004578     0x15cc Core/Src/robot_scara.o
-                0x0000000008004578                scaraInitDuty
+                0x0000000008004588     0x15ec Core/Src/robot_scara.o
+                0x0000000008004588                scaraInitDuty
  .text.scaraInitLine
-                0x0000000008005b44      0x186 Core/Src/robot_scara.o
-                0x0000000008005b44                scaraInitLine
- *fill*         0x0000000008005cca        0x6 
+                0x0000000008005b74      0x186 Core/Src/robot_scara.o
+                0x0000000008005b74                scaraInitLine
+ *fill*         0x0000000008005cfa        0x6 
  .text.scaraInitCircle
-                0x0000000008005cd0      0x2ec Core/Src/robot_scara.o
-                0x0000000008005cd0                scaraInitCircle
- *fill*         0x0000000008005fbc        0x4 
+                0x0000000008005d00      0x2ec Core/Src/robot_scara.o
+                0x0000000008005d00                scaraInitCircle
+ *fill*         0x0000000008005fec        0x4 
  .text.scaraInitLSPB
-                0x0000000008005fc0      0x7fc Core/Src/robot_scara.o
-                0x0000000008005fc0                scaraInitLSPB
- *fill*         0x00000000080067bc        0x4 
+                0x0000000008005ff0      0x7d4 Core/Src/robot_scara.o
+                0x0000000008005ff0                scaraInitLSPB
+ *fill*         0x00000000080067c4        0x4 
  .text.scaraInitScurve
-                0x00000000080067c0      0x734 Core/Src/robot_scara.o
-                0x00000000080067c0                scaraInitScurve
+                0x00000000080067c8      0x72c Core/Src/robot_scara.o
+                0x00000000080067c8                scaraInitScurve
  .text.scaraFlowDuty
                 0x0000000008006ef4      0x508 Core/Src/robot_scara.o
                 0x0000000008006ef4                scaraFlowDuty
@@ -8180,11 +8184,13 @@ LOAD c:/st/stm32cubeide_1.0.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.exte
                 0x0000000008007978      0xdc8 Core/Src/robot_scara.o
                 0x0000000008007978                scaraFLowScurve
  .text.scaraCheckWorkSpace4
-                0x0000000008008740      0x110 Core/Src/robot_scara.o
+                0x0000000008008740      0x10c Core/Src/robot_scara.o
                 0x0000000008008740                scaraCheckWorkSpace4
+ *fill*         0x000000000800884c        0x4 
  .text.scaraCheckWorkSpace1
-                0x0000000008008850      0x130 Core/Src/robot_scara.o
+                0x0000000008008850      0x12c Core/Src/robot_scara.o
                 0x0000000008008850                scaraCheckWorkSpace1
+ *fill*         0x000000000800897c        0x4 
  .text.scaraTestDuty
                 0x0000000008008980       0xf0 Core/Src/robot_scara.o
                 0x0000000008008980                scaraTestDuty
@@ -10342,7 +10348,7 @@ OUTPUT(DMA_UART.elf elf32-littlearm)
  .debug_ranges  0x0000000000001960       0x50 USB_DEVICE/App/usbd_desc.o
  .debug_ranges  0x00000000000019b0       0xf0 USB_DEVICE/Target/usbd_conf.o
 
-.debug_macro    0x0000000000000000    0x29977
+.debug_macro    0x0000000000000000    0x29989
  .debug_macro   0x0000000000000000      0x3d0 Core/Src/command_respond.o
  .debug_macro   0x00000000000003d0      0xa5a Core/Src/command_respond.o
  .debug_macro   0x0000000000000e2a      0x196 Core/Src/command_respond.o
@@ -10389,261 +10395,261 @@ OUTPUT(DMA_UART.elf elf32-littlearm)
  .debug_macro   0x000000000001f3ac      0x12d Core/Src/command_respond.o
  .debug_macro   0x000000000001f4d9       0x94 Core/Src/command_respond.o
  .debug_macro   0x000000000001f56d       0x22 Core/Src/command_respond.o
- .debug_macro   0x000000000001f58f      0x17e Core/Src/command_respond.o
- .debug_macro   0x000000000001f70d       0x46 Core/Src/command_respond.o
- .debug_macro   0x000000000001f753       0x18 Core/Src/command_respond.o
- .debug_macro   0x000000000001f76b       0x3c Core/Src/command_respond.o
- .debug_macro   0x000000000001f7a7       0x34 Core/Src/command_respond.o
- .debug_macro   0x000000000001f7db       0x16 Core/Src/command_respond.o
- .debug_macro   0x000000000001f7f1       0x35 Core/Src/command_respond.o
- .debug_macro   0x000000000001f826      0x32a Core/Src/command_respond.o
- .debug_macro   0x000000000001fb50       0x10 Core/Src/command_respond.o
- .debug_macro   0x000000000001fb60       0x52 Core/Src/command_respond.o
- .debug_macro   0x000000000001fbb2       0x1f Core/Src/command_respond.o
- .debug_macro   0x000000000001fbd1       0x43 Core/Src/command_respond.o
- .debug_macro   0x000000000001fc14       0x20 Core/Src/command_respond.o
- .debug_macro   0x000000000001fc34      0x1a3 Core/Src/command_respond.o
- .debug_macro   0x000000000001fdd7       0x10 Core/Src/command_respond.o
- .debug_macro   0x000000000001fde7       0x1c Core/Src/command_respond.o
- .debug_macro   0x000000000001fe03       0x52 Core/Src/command_respond.o
- .debug_macro   0x000000000001fe55       0x40 Core/Src/command_respond.o
- .debug_macro   0x000000000001fe95       0x10 Core/Src/command_respond.o
- .debug_macro   0x000000000001fea5       0x40 Core/Src/command_respond.o
- .debug_macro   0x000000000001fee5       0xd7 Core/Src/command_respond.o
- .debug_macro   0x000000000001ffbc       0x1c Core/Src/command_respond.o
- .debug_macro   0x000000000001ffd8       0x3d Core/Src/command_respond.o
- .debug_macro   0x0000000000020015       0x16 Core/Src/command_respond.o
- .debug_macro   0x000000000002002b      0x145 Core/Src/command_respond.o
- .debug_macro   0x0000000000020170       0x16 Core/Src/command_respond.o
- .debug_macro   0x0000000000020186       0x20 Core/Src/command_respond.o
- .debug_macro   0x00000000000201a6      0x3d7 Core/Src/common_def.o
- .debug_macro   0x000000000002057d      0x321 Core/Src/communicate_payload.o
- .debug_macro   0x000000000002089e       0x22 Core/Src/communicate_payload.o
- .debug_macro   0x00000000000208c0       0x3c Core/Src/communicate_payload.o
- .debug_macro   0x00000000000208fc       0x10 Core/Src/communicate_payload.o
- .debug_macro   0x000000000002090c      0x224 Core/Src/dma.o
- .debug_macro   0x0000000000020b30      0x594 Core/Src/freertos.o
- .debug_macro   0x00000000000210c4       0xd6 Core/Src/freertos.o
- .debug_macro   0x000000000002119a      0x15a Core/Src/freertos.o
- .debug_macro   0x00000000000212f4       0xd7 Core/Src/freertos.o
- .debug_macro   0x00000000000213cb       0x10 Core/Src/freertos.o
- .debug_macro   0x00000000000213db       0x1f Core/Src/freertos.o
- .debug_macro   0x00000000000213fa      0x4b7 Core/Src/freertos.o
- .debug_macro   0x00000000000218b1       0xb5 Core/Src/freertos.o
- .debug_macro   0x0000000000021966       0x8c Core/Src/freertos.o
- .debug_macro   0x00000000000219f2       0x91 Core/Src/freertos.o
- .debug_macro   0x0000000000021a83       0x8d Core/Src/freertos.o
- .debug_macro   0x0000000000021b10       0x7e Core/Src/freertos.o
- .debug_macro   0x0000000000021b8e       0x19 Core/Src/freertos.o
- .debug_macro   0x0000000000021ba7       0xf2 Core/Src/freertos.o
- .debug_macro   0x0000000000021c99       0x10 Core/Src/freertos.o
- .debug_macro   0x0000000000021ca9       0x28 Core/Src/freertos.o
- .debug_macro   0x0000000000021cd1       0x28 Core/Src/freertos.o
- .debug_macro   0x0000000000021cf9       0x16 Core/Src/freertos.o
- .debug_macro   0x0000000000021d0f       0x16 Core/Src/freertos.o
- .debug_macro   0x0000000000021d25       0x29 Core/Src/freertos.o
- .debug_macro   0x0000000000021d4e       0x65 Core/Src/freertos.o
- .debug_macro   0x0000000000021db3      0x1d0 Core/Src/freertos.o
- .debug_macro   0x0000000000021f83       0x8f Core/Src/freertos.o
- .debug_macro   0x0000000000022012      0x224 Core/Src/fsmc.o
- .debug_macro   0x0000000000022236      0x224 Core/Src/gpio.o
- .debug_macro   0x000000000002245a      0x2ec Core/Src/kinematic.o
- .debug_macro   0x0000000000022746      0x1e1 Core/Src/kinematic.o
- .debug_macro   0x0000000000022927      0x50b Core/Src/main.o
- .debug_macro   0x0000000000022e32       0xd6 Core/Src/main.o
- .debug_macro   0x0000000000022f08      0x239 Core/Src/ringbuffer.o
- .debug_macro   0x0000000000023141      0x334 Core/Src/robot_lowlayler.o
- .debug_macro   0x0000000000023475      0x3ed Core/Src/robot_scara.o
- .debug_macro   0x0000000000023862       0x1c Core/Src/robot_scara.o
- .debug_macro   0x000000000002387e      0x21a Core/Src/stm32f4xx_hal_msp.o
- .debug_macro   0x0000000000023a98      0x20b Core/Src/stm32f4xx_hal_timebase_tim.o
- .debug_macro   0x0000000000023ca3      0x2ea Core/Src/stm32f4xx_it.o
- .debug_macro   0x0000000000023f8d      0x1ae Core/Src/sysmem.o
- .debug_macro   0x000000000002413b      0x23b Core/Src/sysmem.o
- .debug_macro   0x0000000000024376      0x211 Core/Src/system_stm32f4xx.o
- .debug_macro   0x0000000000024587      0x224 Core/Src/tim.o
- .debug_macro   0x00000000000247ab      0x23d Core/Src/usart.o
- .debug_macro   0x00000000000249e8      0x26b Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
- .debug_macro   0x0000000000024c53      0x20b Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
- .debug_macro   0x0000000000024e5e      0x211 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.o
- .debug_macro   0x000000000002506f      0x241 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
- .debug_macro   0x00000000000252b0      0x2a5 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_nor.o
- .debug_macro   0x0000000000025555      0x217 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd.o
- .debug_macro   0x000000000002576c      0x20b Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.o
- .debug_macro   0x0000000000025977      0x22f Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
- .debug_macro   0x0000000000025ba6      0x20c Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o
- .debug_macro   0x0000000000025db2      0x20b Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
- .debug_macro   0x0000000000025fbd      0x20c Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
- .debug_macro   0x00000000000261c9      0x20b Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fsmc.o
- .debug_macro   0x00000000000263d4      0x20b Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.o
- .debug_macro   0x00000000000265df      0x427 Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
- .debug_macro   0x0000000000026a06       0x97 Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
- .debug_macro   0x0000000000026a9d       0xfd Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
- .debug_macro   0x0000000000026b9a       0xd9 Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
- .debug_macro   0x0000000000026c73       0x54 Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
- .debug_macro   0x0000000000026cc7      0x40e Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
- .debug_macro   0x00000000000270d5      0x1d6 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
- .debug_macro   0x00000000000272ab      0x418 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o
- .debug_macro   0x00000000000276c3      0x414 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
- .debug_macro   0x0000000000027ad7      0x1f1 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.o
- .debug_macro   0x0000000000027cc8       0xc7 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.o
- .debug_macro   0x0000000000027d8f      0x17a Middlewares/Third_Party/FreeRTOS/Source/list.o
- .debug_macro   0x0000000000027f09      0x205 Middlewares/Third_Party/FreeRTOS/Source/queue.o
- .debug_macro   0x000000000002810e      0x273 Middlewares/Third_Party/FreeRTOS/Source/tasks.o
- .debug_macro   0x0000000000028381       0x10 Middlewares/Third_Party/FreeRTOS/Source/tasks.o
- .debug_macro   0x0000000000028391      0x196 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
- .debug_macro   0x0000000000028527      0x1a1 Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.o
- .debug_macro   0x00000000000286c8      0x448 USB_DEVICE/App/usb_device.o
- .debug_macro   0x0000000000028b10       0x9a USB_DEVICE/App/usb_device.o
- .debug_macro   0x0000000000028baa       0x22 USB_DEVICE/App/usb_device.o
- .debug_macro   0x0000000000028bcc      0x526 USB_DEVICE/App/usbd_cdc_if.o
- .debug_macro   0x00000000000290f2      0x451 USB_DEVICE/App/usbd_desc.o
- .debug_macro   0x0000000000029543       0x1c USB_DEVICE/App/usbd_desc.o
- .debug_macro   0x000000000002955f      0x418 USB_DEVICE/Target/usbd_conf.o
+ .debug_macro   0x000000000001f58f      0x190 Core/Src/command_respond.o
+ .debug_macro   0x000000000001f71f       0x46 Core/Src/command_respond.o
+ .debug_macro   0x000000000001f765       0x18 Core/Src/command_respond.o
+ .debug_macro   0x000000000001f77d       0x3c Core/Src/command_respond.o
+ .debug_macro   0x000000000001f7b9       0x34 Core/Src/command_respond.o
+ .debug_macro   0x000000000001f7ed       0x16 Core/Src/command_respond.o
+ .debug_macro   0x000000000001f803       0x35 Core/Src/command_respond.o
+ .debug_macro   0x000000000001f838      0x32a Core/Src/command_respond.o
+ .debug_macro   0x000000000001fb62       0x10 Core/Src/command_respond.o
+ .debug_macro   0x000000000001fb72       0x52 Core/Src/command_respond.o
+ .debug_macro   0x000000000001fbc4       0x1f Core/Src/command_respond.o
+ .debug_macro   0x000000000001fbe3       0x43 Core/Src/command_respond.o
+ .debug_macro   0x000000000001fc26       0x20 Core/Src/command_respond.o
+ .debug_macro   0x000000000001fc46      0x1a3 Core/Src/command_respond.o
+ .debug_macro   0x000000000001fde9       0x10 Core/Src/command_respond.o
+ .debug_macro   0x000000000001fdf9       0x1c Core/Src/command_respond.o
+ .debug_macro   0x000000000001fe15       0x52 Core/Src/command_respond.o
+ .debug_macro   0x000000000001fe67       0x40 Core/Src/command_respond.o
+ .debug_macro   0x000000000001fea7       0x10 Core/Src/command_respond.o
+ .debug_macro   0x000000000001feb7       0x40 Core/Src/command_respond.o
+ .debug_macro   0x000000000001fef7       0xd7 Core/Src/command_respond.o
+ .debug_macro   0x000000000001ffce       0x1c Core/Src/command_respond.o
+ .debug_macro   0x000000000001ffea       0x3d Core/Src/command_respond.o
+ .debug_macro   0x0000000000020027       0x16 Core/Src/command_respond.o
+ .debug_macro   0x000000000002003d      0x145 Core/Src/command_respond.o
+ .debug_macro   0x0000000000020182       0x16 Core/Src/command_respond.o
+ .debug_macro   0x0000000000020198       0x20 Core/Src/command_respond.o
+ .debug_macro   0x00000000000201b8      0x3d7 Core/Src/common_def.o
+ .debug_macro   0x000000000002058f      0x321 Core/Src/communicate_payload.o
+ .debug_macro   0x00000000000208b0       0x22 Core/Src/communicate_payload.o
+ .debug_macro   0x00000000000208d2       0x3c Core/Src/communicate_payload.o
+ .debug_macro   0x000000000002090e       0x10 Core/Src/communicate_payload.o
+ .debug_macro   0x000000000002091e      0x224 Core/Src/dma.o
+ .debug_macro   0x0000000000020b42      0x594 Core/Src/freertos.o
+ .debug_macro   0x00000000000210d6       0xd6 Core/Src/freertos.o
+ .debug_macro   0x00000000000211ac      0x15a Core/Src/freertos.o
+ .debug_macro   0x0000000000021306       0xd7 Core/Src/freertos.o
+ .debug_macro   0x00000000000213dd       0x10 Core/Src/freertos.o
+ .debug_macro   0x00000000000213ed       0x1f Core/Src/freertos.o
+ .debug_macro   0x000000000002140c      0x4b7 Core/Src/freertos.o
+ .debug_macro   0x00000000000218c3       0xb5 Core/Src/freertos.o
+ .debug_macro   0x0000000000021978       0x8c Core/Src/freertos.o
+ .debug_macro   0x0000000000021a04       0x91 Core/Src/freertos.o
+ .debug_macro   0x0000000000021a95       0x8d Core/Src/freertos.o
+ .debug_macro   0x0000000000021b22       0x7e Core/Src/freertos.o
+ .debug_macro   0x0000000000021ba0       0x19 Core/Src/freertos.o
+ .debug_macro   0x0000000000021bb9       0xf2 Core/Src/freertos.o
+ .debug_macro   0x0000000000021cab       0x10 Core/Src/freertos.o
+ .debug_macro   0x0000000000021cbb       0x28 Core/Src/freertos.o
+ .debug_macro   0x0000000000021ce3       0x28 Core/Src/freertos.o
+ .debug_macro   0x0000000000021d0b       0x16 Core/Src/freertos.o
+ .debug_macro   0x0000000000021d21       0x16 Core/Src/freertos.o
+ .debug_macro   0x0000000000021d37       0x29 Core/Src/freertos.o
+ .debug_macro   0x0000000000021d60       0x65 Core/Src/freertos.o
+ .debug_macro   0x0000000000021dc5      0x1d0 Core/Src/freertos.o
+ .debug_macro   0x0000000000021f95       0x8f Core/Src/freertos.o
+ .debug_macro   0x0000000000022024      0x224 Core/Src/fsmc.o
+ .debug_macro   0x0000000000022248      0x224 Core/Src/gpio.o
+ .debug_macro   0x000000000002246c      0x2ec Core/Src/kinematic.o
+ .debug_macro   0x0000000000022758      0x1e1 Core/Src/kinematic.o
+ .debug_macro   0x0000000000022939      0x50b Core/Src/main.o
+ .debug_macro   0x0000000000022e44       0xd6 Core/Src/main.o
+ .debug_macro   0x0000000000022f1a      0x239 Core/Src/ringbuffer.o
+ .debug_macro   0x0000000000023153      0x334 Core/Src/robot_lowlayler.o
+ .debug_macro   0x0000000000023487      0x3ed Core/Src/robot_scara.o
+ .debug_macro   0x0000000000023874       0x1c Core/Src/robot_scara.o
+ .debug_macro   0x0000000000023890      0x21a Core/Src/stm32f4xx_hal_msp.o
+ .debug_macro   0x0000000000023aaa      0x20b Core/Src/stm32f4xx_hal_timebase_tim.o
+ .debug_macro   0x0000000000023cb5      0x2ea Core/Src/stm32f4xx_it.o
+ .debug_macro   0x0000000000023f9f      0x1ae Core/Src/sysmem.o
+ .debug_macro   0x000000000002414d      0x23b Core/Src/sysmem.o
+ .debug_macro   0x0000000000024388      0x211 Core/Src/system_stm32f4xx.o
+ .debug_macro   0x0000000000024599      0x224 Core/Src/tim.o
+ .debug_macro   0x00000000000247bd      0x23d Core/Src/usart.o
+ .debug_macro   0x00000000000249fa      0x26b Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
+ .debug_macro   0x0000000000024c65      0x20b Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
+ .debug_macro   0x0000000000024e70      0x211 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.o
+ .debug_macro   0x0000000000025081      0x241 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
+ .debug_macro   0x00000000000252c2      0x2a5 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_nor.o
+ .debug_macro   0x0000000000025567      0x217 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd.o
+ .debug_macro   0x000000000002577e      0x20b Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.o
+ .debug_macro   0x0000000000025989      0x22f Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
+ .debug_macro   0x0000000000025bb8      0x20c Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o
+ .debug_macro   0x0000000000025dc4      0x20b Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
+ .debug_macro   0x0000000000025fcf      0x20c Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
+ .debug_macro   0x00000000000261db      0x20b Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fsmc.o
+ .debug_macro   0x00000000000263e6      0x20b Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.o
+ .debug_macro   0x00000000000265f1      0x427 Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
+ .debug_macro   0x0000000000026a18       0x97 Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
+ .debug_macro   0x0000000000026aaf       0xfd Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
+ .debug_macro   0x0000000000026bac       0xd9 Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
+ .debug_macro   0x0000000000026c85       0x54 Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
+ .debug_macro   0x0000000000026cd9      0x40e Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
+ .debug_macro   0x00000000000270e7      0x1d6 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
+ .debug_macro   0x00000000000272bd      0x418 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o
+ .debug_macro   0x00000000000276d5      0x414 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
+ .debug_macro   0x0000000000027ae9      0x1f1 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.o
+ .debug_macro   0x0000000000027cda       0xc7 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.o
+ .debug_macro   0x0000000000027da1      0x17a Middlewares/Third_Party/FreeRTOS/Source/list.o
+ .debug_macro   0x0000000000027f1b      0x205 Middlewares/Third_Party/FreeRTOS/Source/queue.o
+ .debug_macro   0x0000000000028120      0x273 Middlewares/Third_Party/FreeRTOS/Source/tasks.o
+ .debug_macro   0x0000000000028393       0x10 Middlewares/Third_Party/FreeRTOS/Source/tasks.o
+ .debug_macro   0x00000000000283a3      0x196 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+ .debug_macro   0x0000000000028539      0x1a1 Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.o
+ .debug_macro   0x00000000000286da      0x448 USB_DEVICE/App/usb_device.o
+ .debug_macro   0x0000000000028b22       0x9a USB_DEVICE/App/usb_device.o
+ .debug_macro   0x0000000000028bbc       0x22 USB_DEVICE/App/usb_device.o
+ .debug_macro   0x0000000000028bde      0x526 USB_DEVICE/App/usbd_cdc_if.o
+ .debug_macro   0x0000000000029104      0x451 USB_DEVICE/App/usbd_desc.o
+ .debug_macro   0x0000000000029555       0x1c USB_DEVICE/App/usbd_desc.o
+ .debug_macro   0x0000000000029571      0x418 USB_DEVICE/Target/usbd_conf.o
 
-.debug_line     0x0000000000000000    0x1ef49
- .debug_line    0x0000000000000000      0xa67 Core/Src/command_respond.o
- .debug_line    0x0000000000000a67      0x9e7 Core/Src/common_def.o
- .debug_line    0x000000000000144e      0x92e Core/Src/communicate_payload.o
- .debug_line    0x0000000000001d7c      0x731 Core/Src/dma.o
- .debug_line    0x00000000000024ad      0xe16 Core/Src/freertos.o
- .debug_line    0x00000000000032c3      0x7dc Core/Src/fsmc.o
- .debug_line    0x0000000000003a9f      0x751 Core/Src/gpio.o
- .debug_line    0x00000000000041f0      0x8eb Core/Src/kinematic.o
- .debug_line    0x0000000000004adb      0xc2c Core/Src/main.o
- .debug_line    0x0000000000005707      0x826 Core/Src/ringbuffer.o
- .debug_line    0x0000000000005f2d      0xaf3 Core/Src/robot_lowlayler.o
- .debug_line    0x0000000000006a20     0x1071 Core/Src/robot_scara.o
- .debug_line    0x0000000000007a91      0x737 Core/Src/stm32f4xx_hal_msp.o
- .debug_line    0x00000000000081c8      0x76a Core/Src/stm32f4xx_hal_timebase_tim.o
- .debug_line    0x0000000000008932      0x98d Core/Src/stm32f4xx_it.o
- .debug_line    0x00000000000092bf      0x55e Core/Src/sysmem.o
- .debug_line    0x000000000000981d      0x751 Core/Src/system_stm32f4xx.o
- .debug_line    0x0000000000009f6e      0x762 Core/Src/tim.o
- .debug_line    0x000000000000a6d0      0x7b1 Core/Src/usart.o
- .debug_line    0x000000000000ae81       0x86 Core/Startup/startup_stm32f407vgtx.o
- .debug_line    0x000000000000af07      0x93b Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
- .debug_line    0x000000000000b842      0xa5f Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
- .debug_line    0x000000000000c2a1      0xa09 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.o
- .debug_line    0x000000000000ccaa      0x91a Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
- .debug_line    0x000000000000d5c4      0xd5c Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_nor.o
- .debug_line    0x000000000000e320      0xcb0 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd.o
- .debug_line    0x000000000000efd0      0x794 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.o
- .debug_line    0x000000000000f764      0x993 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
- .debug_line    0x00000000000100f7     0x19b4 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o
- .debug_line    0x0000000000011aab      0xd51 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
- .debug_line    0x00000000000127fc     0x1049 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
- .debug_line    0x0000000000013845      0x980 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fsmc.o
- .debug_line    0x00000000000141c5      0xe5d Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.o
- .debug_line    0x0000000000015022      0xbed Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
- .debug_line    0x0000000000015c0f      0xc27 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
- .debug_line    0x0000000000016836      0xc8d Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o
- .debug_line    0x00000000000174c3      0xa91 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
- .debug_line    0x0000000000017f54      0xcc0 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.o
- .debug_line    0x0000000000018c14      0x66c Middlewares/Third_Party/FreeRTOS/Source/list.o
- .debug_line    0x0000000000019280      0xf6d Middlewares/Third_Party/FreeRTOS/Source/queue.o
- .debug_line    0x000000000001a1ed     0x1173 Middlewares/Third_Party/FreeRTOS/Source/tasks.o
- .debug_line    0x000000000001b360      0x6a3 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
- .debug_line    0x000000000001ba03      0x752 Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.o
- .debug_line    0x000000000001c155      0xa73 USB_DEVICE/App/usb_device.o
- .debug_line    0x000000000001cbc8      0xc79 USB_DEVICE/App/usbd_cdc_if.o
- .debug_line    0x000000000001d841      0xac5 USB_DEVICE/App/usbd_desc.o
- .debug_line    0x000000000001e306      0xc43 USB_DEVICE/Target/usbd_conf.o
+.debug_line     0x0000000000000000    0x1ef59
+ .debug_line    0x0000000000000000      0xa6d Core/Src/command_respond.o
+ .debug_line    0x0000000000000a6d      0x9e7 Core/Src/common_def.o
+ .debug_line    0x0000000000001454      0x92e Core/Src/communicate_payload.o
+ .debug_line    0x0000000000001d82      0x731 Core/Src/dma.o
+ .debug_line    0x00000000000024b3      0xe1c Core/Src/freertos.o
+ .debug_line    0x00000000000032cf      0x7dc Core/Src/fsmc.o
+ .debug_line    0x0000000000003aab      0x751 Core/Src/gpio.o
+ .debug_line    0x00000000000041fc      0x8eb Core/Src/kinematic.o
+ .debug_line    0x0000000000004ae7      0xc2c Core/Src/main.o
+ .debug_line    0x0000000000005713      0x826 Core/Src/ringbuffer.o
+ .debug_line    0x0000000000005f39      0xaf1 Core/Src/robot_lowlayler.o
+ .debug_line    0x0000000000006a2a     0x1077 Core/Src/robot_scara.o
+ .debug_line    0x0000000000007aa1      0x737 Core/Src/stm32f4xx_hal_msp.o
+ .debug_line    0x00000000000081d8      0x76a Core/Src/stm32f4xx_hal_timebase_tim.o
+ .debug_line    0x0000000000008942      0x98d Core/Src/stm32f4xx_it.o
+ .debug_line    0x00000000000092cf      0x55e Core/Src/sysmem.o
+ .debug_line    0x000000000000982d      0x751 Core/Src/system_stm32f4xx.o
+ .debug_line    0x0000000000009f7e      0x762 Core/Src/tim.o
+ .debug_line    0x000000000000a6e0      0x7b1 Core/Src/usart.o
+ .debug_line    0x000000000000ae91       0x86 Core/Startup/startup_stm32f407vgtx.o
+ .debug_line    0x000000000000af17      0x93b Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
+ .debug_line    0x000000000000b852      0xa5f Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
+ .debug_line    0x000000000000c2b1      0xa09 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.o
+ .debug_line    0x000000000000ccba      0x91a Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
+ .debug_line    0x000000000000d5d4      0xd5c Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_nor.o
+ .debug_line    0x000000000000e330      0xcb0 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd.o
+ .debug_line    0x000000000000efe0      0x794 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.o
+ .debug_line    0x000000000000f774      0x993 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
+ .debug_line    0x0000000000010107     0x19b4 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o
+ .debug_line    0x0000000000011abb      0xd51 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
+ .debug_line    0x000000000001280c     0x1049 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
+ .debug_line    0x0000000000013855      0x980 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fsmc.o
+ .debug_line    0x00000000000141d5      0xe5d Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.o
+ .debug_line    0x0000000000015032      0xbed Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
+ .debug_line    0x0000000000015c1f      0xc27 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
+ .debug_line    0x0000000000016846      0xc8d Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o
+ .debug_line    0x00000000000174d3      0xa91 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
+ .debug_line    0x0000000000017f64      0xcc0 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.o
+ .debug_line    0x0000000000018c24      0x66c Middlewares/Third_Party/FreeRTOS/Source/list.o
+ .debug_line    0x0000000000019290      0xf6d Middlewares/Third_Party/FreeRTOS/Source/queue.o
+ .debug_line    0x000000000001a1fd     0x1173 Middlewares/Third_Party/FreeRTOS/Source/tasks.o
+ .debug_line    0x000000000001b370      0x6a3 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+ .debug_line    0x000000000001ba13      0x752 Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.o
+ .debug_line    0x000000000001c165      0xa73 USB_DEVICE/App/usb_device.o
+ .debug_line    0x000000000001cbd8      0xc79 USB_DEVICE/App/usbd_cdc_if.o
+ .debug_line    0x000000000001d851      0xac5 USB_DEVICE/App/usbd_desc.o
+ .debug_line    0x000000000001e316      0xc43 USB_DEVICE/Target/usbd_conf.o
 
-.debug_str      0x0000000000000000    0xdc5c6
- .debug_str     0x0000000000000000    0xcb057 Core/Src/command_respond.o
-                                      0xcb37b (size before relaxing)
- .debug_str     0x00000000000cb057      0x4cb Core/Src/common_def.o
+.debug_str      0x0000000000000000    0xdc5df
+ .debug_str     0x0000000000000000    0xcb070 Core/Src/command_respond.o
+                                      0xcb394 (size before relaxing)
+ .debug_str     0x00000000000cb070      0x4cb Core/Src/common_def.o
                                       0xcab26 (size before relaxing)
- .debug_str     0x00000000000cb522      0x16f Core/Src/communicate_payload.o
+ .debug_str     0x00000000000cb53b      0x16f Core/Src/communicate_payload.o
                                       0xc9586 (size before relaxing)
- .debug_str     0x00000000000cb691      0x5ed Core/Src/dma.o
+ .debug_str     0x00000000000cb6aa      0x5ed Core/Src/dma.o
                                       0xc6a4f (size before relaxing)
- .debug_str     0x00000000000cbc7e     0x75c8 Core/Src/freertos.o
-                                      0xd2fab (size before relaxing)
- .debug_str     0x00000000000d3246      0x2db Core/Src/fsmc.o
+ .debug_str     0x00000000000cbc97     0x75c8 Core/Src/freertos.o
+                                      0xd2fc4 (size before relaxing)
+ .debug_str     0x00000000000d325f      0x2db Core/Src/fsmc.o
                                       0xc692d (size before relaxing)
- .debug_str     0x00000000000d3521       0x20 Core/Src/gpio.o
+ .debug_str     0x00000000000d353a       0x20 Core/Src/gpio.o
                                       0xc6601 (size before relaxing)
- .debug_str     0x00000000000d3541      0x8ee Core/Src/kinematic.o
-                                      0xca54f (size before relaxing)
- .debug_str     0x00000000000d3e2f      0x1a5 Core/Src/main.o
-                                      0xd1d21 (size before relaxing)
- .debug_str     0x00000000000d3fd4       0xdc Core/Src/ringbuffer.o
+ .debug_str     0x00000000000d355a      0x8ee Core/Src/kinematic.o
+                                      0xca568 (size before relaxing)
+ .debug_str     0x00000000000d3e48      0x1a5 Core/Src/main.o
+                                      0xd1d3a (size before relaxing)
+ .debug_str     0x00000000000d3fed       0xdc Core/Src/ringbuffer.o
                                       0xc661f (size before relaxing)
- .debug_str     0x00000000000d40b0      0x393 Core/Src/robot_lowlayler.o
-                                      0xcaaa6 (size before relaxing)
- .debug_str     0x00000000000d4443      0x581 Core/Src/robot_scara.o
-                                      0xcc056 (size before relaxing)
- .debug_str     0x00000000000d49c4       0x2c Core/Src/stm32f4xx_hal_msp.o
+ .debug_str     0x00000000000d40c9      0x393 Core/Src/robot_lowlayler.o
+                                      0xcaabf (size before relaxing)
+ .debug_str     0x00000000000d445c      0x581 Core/Src/robot_scara.o
+                                      0xcc06f (size before relaxing)
+ .debug_str     0x00000000000d49dd       0x2c Core/Src/stm32f4xx_hal_msp.o
                                       0xc6a54 (size before relaxing)
- .debug_str     0x00000000000d49f0       0xaa Core/Src/stm32f4xx_hal_timebase_tim.o
+ .debug_str     0x00000000000d4a09       0xaa Core/Src/stm32f4xx_hal_timebase_tim.o
                                       0xc6ce9 (size before relaxing)
- .debug_str     0x00000000000d4a9a      0x40e Core/Src/stm32f4xx_it.o
+ .debug_str     0x00000000000d4ab3      0x40e Core/Src/stm32f4xx_it.o
                                       0xcca80 (size before relaxing)
- .debug_str     0x00000000000d4ea8      0x351 Core/Src/sysmem.o
+ .debug_str     0x00000000000d4ec1      0x351 Core/Src/sysmem.o
                                        0x7ae3 (size before relaxing)
- .debug_str     0x00000000000d51f9       0xc4 Core/Src/system_stm32f4xx.o
+ .debug_str     0x00000000000d5212       0xc4 Core/Src/system_stm32f4xx.o
                                       0xc6373 (size before relaxing)
- .debug_str     0x00000000000d52bd       0xa4 Core/Src/tim.o
+ .debug_str     0x00000000000d52d6       0xa4 Core/Src/tim.o
                                       0xc6f20 (size before relaxing)
- .debug_str     0x00000000000d5361       0x6f Core/Src/usart.o
+ .debug_str     0x00000000000d537a       0x6f Core/Src/usart.o
                                       0xc7037 (size before relaxing)
- .debug_str     0x00000000000d53d0       0x36 Core/Startup/startup_stm32f407vgtx.o
+ .debug_str     0x00000000000d53e9       0x36 Core/Startup/startup_stm32f407vgtx.o
                                          0x65 (size before relaxing)
- .debug_str     0x00000000000d5406      0x538 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
+ .debug_str     0x00000000000d541f      0x538 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
                                       0xc6e40 (size before relaxing)
- .debug_str     0x00000000000d593e      0x389 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
+ .debug_str     0x00000000000d5957      0x389 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
                                       0xc6c2f (size before relaxing)
- .debug_str     0x00000000000d5cc7      0x31d Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.o
+ .debug_str     0x00000000000d5ce0      0x31d Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.o
                                       0xc6788 (size before relaxing)
- .debug_str     0x00000000000d5fe4      0x207 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
+ .debug_str     0x00000000000d5ffd      0x207 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
                                       0xc65b2 (size before relaxing)
- .debug_str     0x00000000000d61eb      0x61a Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_nor.o
+ .debug_str     0x00000000000d6204      0x61a Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_nor.o
                                       0xc6b52 (size before relaxing)
- .debug_str     0x00000000000d6805      0x54c Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd.o
+ .debug_str     0x00000000000d681e      0x54c Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd.o
                                       0xc6b13 (size before relaxing)
- .debug_str     0x00000000000d6d51      0x13f Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.o
+ .debug_str     0x00000000000d6d6a      0x13f Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.o
                                       0xc6713 (size before relaxing)
- .debug_str     0x00000000000d6e90      0x24f Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
+ .debug_str     0x00000000000d6ea9      0x24f Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
                                       0xc6760 (size before relaxing)
- .debug_str     0x00000000000d70df      0xd29 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o
+ .debug_str     0x00000000000d70f8      0xd29 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o
                                       0xc747f (size before relaxing)
- .debug_str     0x00000000000d7e08      0x4a2 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
+ .debug_str     0x00000000000d7e21      0x4a2 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o
                                       0xc6c7f (size before relaxing)
- .debug_str     0x00000000000d82aa      0x4f3 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
+ .debug_str     0x00000000000d82c3      0x4f3 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
                                       0xc6bbf (size before relaxing)
- .debug_str     0x00000000000d879d      0x105 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fsmc.o
+ .debug_str     0x00000000000d87b6      0x105 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fsmc.o
                                       0xc673f (size before relaxing)
- .debug_str     0x00000000000d88a2      0x66e Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.o
+ .debug_str     0x00000000000d88bb      0x66e Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.o
                                       0xc6c47 (size before relaxing)
- .debug_str     0x00000000000d8f10      0x278 Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
+ .debug_str     0x00000000000d8f29      0x278 Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o
                                       0xcbcda (size before relaxing)
- .debug_str     0x00000000000d9188      0x1b5 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
+ .debug_str     0x00000000000d91a1      0x1b5 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
                                       0xcb5a1 (size before relaxing)
- .debug_str     0x00000000000d933d      0x12b Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o
+ .debug_str     0x00000000000d9356      0x12b Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o
                                       0xcb527 (size before relaxing)
- .debug_str     0x00000000000d9468       0xc9 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
+ .debug_str     0x00000000000d9481       0xc9 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
                                       0xcb4af (size before relaxing)
- .debug_str     0x00000000000d9531      0x633 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.o
+ .debug_str     0x00000000000d954a      0x633 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.o
                                        0xdd93 (size before relaxing)
- .debug_str     0x00000000000d9b64      0x139 Middlewares/Third_Party/FreeRTOS/Source/list.o
+ .debug_str     0x00000000000d9b7d      0x139 Middlewares/Third_Party/FreeRTOS/Source/list.o
                                        0xa4db (size before relaxing)
- .debug_str     0x00000000000d9c9d      0x7c2 Middlewares/Third_Party/FreeRTOS/Source/queue.o
+ .debug_str     0x00000000000d9cb6      0x7c2 Middlewares/Third_Party/FreeRTOS/Source/queue.o
                                        0xbb8f (size before relaxing)
- .debug_str     0x00000000000da45f     0x11ca Middlewares/Third_Party/FreeRTOS/Source/tasks.o
+ .debug_str     0x00000000000da478     0x11ca Middlewares/Third_Party/FreeRTOS/Source/tasks.o
                                        0xc6c8 (size before relaxing)
- .debug_str     0x00000000000db629      0x803 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
+ .debug_str     0x00000000000db642      0x803 Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.o
                                        0x81d4 (size before relaxing)
- .debug_str     0x00000000000dbe2c      0x25a Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.o
+ .debug_str     0x00000000000dbe45      0x25a Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.o
                                        0xabfe (size before relaxing)
- .debug_str     0x00000000000dc086       0xc2 USB_DEVICE/App/usb_device.o
+ .debug_str     0x00000000000dc09f       0xc2 USB_DEVICE/App/usb_device.o
                                       0xcb7ea (size before relaxing)
- .debug_str     0x00000000000dc148       0xbc USB_DEVICE/App/usbd_cdc_if.o
+ .debug_str     0x00000000000dc161       0xbc USB_DEVICE/App/usbd_cdc_if.o
                                       0xd1956 (size before relaxing)
- .debug_str     0x00000000000dc204      0x26e USB_DEVICE/App/usbd_desc.o
+ .debug_str     0x00000000000dc21d      0x26e USB_DEVICE/App/usbd_desc.o
                                       0xcb430 (size before relaxing)
- .debug_str     0x00000000000dc472      0x154 USB_DEVICE/Target/usbd_conf.o
+ .debug_str     0x00000000000dc48b      0x154 USB_DEVICE/Target/usbd_conf.o
                                       0xcc11a (size before relaxing)
 
 .comment        0x0000000000000000       0x7b
