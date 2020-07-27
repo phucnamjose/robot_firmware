@@ -50,7 +50,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define SIMULATION
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -172,11 +172,7 @@ void StartDefaultTask(void const * argument)
   DUTY_Command_TypeDef 	duty_cmd;
   DUTY_Command_TypeDef 	*dataMail;
   uint8_t 				isNewDuty = FALSE;
-  int32_t 				no_stop;
-  int32_t 				no_scan;
-  int32_t 				no_duty;
-  int32_t 				no_duty_success;
-  int32_t 				no_duty_fail;
+
 
   // Report buffer;
   uint8_t				respond[40];
@@ -197,19 +193,18 @@ void StartDefaultTask(void const * argument)
   //uint32_t total_pulse = 0;
 
   // Robot variables
+  SCARA_MethodTypeDef		current_method;
   SCARA_ModeTypeDef			current_mode;
   SCARA_DutyStateTypeDef 	current_duty_state;
   SCARA_ScanStateTypeDef	current_scan_state;
+  SCARA_KeyStateTypeDef		current_key_state;
+  SCARA_KeyTypeDef			current_key;
   double						run_time;
 
   LOG_REPORT("free_rtos.c: PROGRAM START...", __LINE__);
 
   // Init value
-  no_stop = 0;
-  no_scan = 0;
-  no_duty = 0;
-  no_duty_success	= 0;
-  no_duty_fail		= 0;
+  current_method = scaraGetMethod();
   current_mode	 = scaraGetMode();
   current_duty_state	 = scaraGetDutyState();
 
@@ -217,14 +212,12 @@ void StartDefaultTask(void const * argument)
   scaraStartup();
   osDelay(10);
 
-#ifdef SIMULATION
-	  positionNext.Theta1 = -PI/3;
-	  positionNext.Theta2 = PI/3;
-	  positionNext.D3 = 10;
-	  positionNext.Theta4 = 0;
-	  positionNext.t = 0;
-	  kinematicForward(&positionNext);
-#endif
+  positionNext.Theta1 = -PI/3;
+  positionNext.Theta2 = PI/3;
+  positionNext.D3 = 10;
+  positionNext.Theta4 = 0;
+  positionNext.t = 0;
+  kinematicForward(&positionNext);
   /* Infinite loop */
 //Start Timer 7
 	  HAL_TIM_Base_Start_IT(&htim7);
@@ -240,10 +233,9 @@ void StartDefaultTask(void const * argument)
 	  task_usb_lenght		= 0;
 	  usb_lenght			= 0;
 	  // Update new position
-#ifdef SIMULATION
 	  memcpy(&positionPrevios, &positionCurrent, sizeof(SCARA_PositionTypeDef));
 	  memcpy(&positionCurrent, &positionNext, sizeof(SCARA_PositionTypeDef));
-#endif
+#ifndef SIMULATION
 	  if(scaraIsScanLimit()) {
 		  lowlayer_readTruePosition(&positionTrue);
 		  kinematicForward(&positionTrue);
@@ -251,6 +243,7 @@ void StartDefaultTask(void const * argument)
 		  positionTrue.total_time = positionCurrent.total_time;
 		  positionTrue.q = positionCurrent.q;
 	  }
+#endif
 	  /* 2--- Check New Duty Phase ---*/
 	  // Check mail
 	  ret_mail = osMailGet(commandMailHandle, 0);
@@ -262,248 +255,393 @@ void StartDefaultTask(void const * argument)
 	  }
 	  if(isNewDuty) {
 		  memset(respond, 0, 40);
-		  switch( duty_cmd.robot_mode) {
+		  // Check change method
+		  if (duty_cmd.change_method == TRUE) {
+			  if (SCARA_METHOD_MANUAL == duty_cmd.robot_method) {
+				  current_method = SCARA_METHOD_MANUAL;
+				  respond_lenght = commandRespond(RPD_OK,
+												duty_cmd.id_command,
+												"Changed MANUAL Method",
+												(char *)respond);
+			  } else if (SCARA_METHOD_SEMI_AUTO == duty_cmd.robot_method) {
+				  current_method = SCARA_METHOD_SEMI_AUTO;
+				  respond_lenght = commandRespond(RPD_OK,
+												duty_cmd.id_command,
+												"Changed SEMI AUTO Method",
+												(char *)respond);
+			  } else if (SCARA_METHOD_AUTO == duty_cmd.robot_method) {
+				  current_method = SCARA_METHOD_AUTO;
+				  respond_lenght = commandRespond(RPD_OK,
+												duty_cmd.id_command,
+												"Changed AUTO Method",
+												(char *)respond);
+			  }
+		  } else {
+			  	  // Check current method & cmd method
+			  	  if (current_method == duty_cmd.robot_method) {
+				  	  switch( duty_cmd.robot_method) {
+				  	  case SCARA_METHOD_MANUAL:
+				  	  {
+				  		  if (current_key_state == SCARA_KEY_STATE_READY) {
+				  			  current_key = duty_cmd.keyboard;
+				  			  current_key_state = SCARA_KEY_STATE_INIT;// Init new path
+				  		  } else if (current_key == duty_cmd.keyboard && current_key_state == SCARA_KEY_STATE_FLOW) {
+				  			  current_key_state = SCARA_KEY_STATE_INIT;// Continue old path
+				  		  }
+				  	  }
+				  	  break;
+				  	  case SCARA_METHOD_SEMI_AUTO:
+				  	  {
+						  switch( duty_cmd.robot_mode) {
+						  case SCARA_MODE_STOP:
+							  {
+								  current_mode	 = SCARA_MODE_STOP;
+								  respond_lenght = commandRespond(RPD_OK,
+																  duty_cmd.id_command,
+																  "Stop Now",
+																  (char *)respond);
+								  LOG_REPORT("ROBOT STOP !!!", __LINE__);
+							  }
+							  break;
+
+						  case SCARA_MODE_SCAN:
+							  {
+								  if (SCARA_MODE_DUTY == current_mode
+									  && SCARA_DUTY_STATE_READY == current_duty_state) {
+									  current_mode = SCARA_MODE_SCAN;
+									  current_scan_state = SCARA_SCAN_STATE_INIT;
+									  respond_lenght = commandRespond(RPD_OK,
+																	  duty_cmd.id_command,
+																	  "Start Scan",
+																	  (char *)respond);
+								  } else {
+									  respond_lenght = commandRespond(RPD_ERROR,
+																	  duty_cmd.id_command,
+																	  "Busy",
+																	  (char *)respond);
+									  LOG_REPORT("SCAN FAIL: BUSY", __LINE__);
+								  }
+							  }
+							  break;
+
+						  case SCARA_MODE_DUTY:
+							  {
+								  if (SCARA_MODE_DUTY == current_mode && SCARA_DUTY_STATE_READY == current_duty_state) {
+									  if (scaraIsScanLimit()) {
+										  current_mode	 = SCARA_MODE_DUTY;
+										  current_duty_state	 = SCARA_DUTY_STATE_INIT;
+									  } else {
+										  respond_lenght = commandRespond(RPD_ERROR,
+																		  duty_cmd.id_command,
+																		  "Has Not Scan Yet.",
+																		  (char *)respond);
+										  LOG_REPORT("MOVE FAIL:NOT SCAN", __LINE__);
+									  }
+								  } else {
+									  respond_lenght	= commandRespond(RPD_ERROR,
+																		  duty_cmd.id_command,
+																		  "Busy.",
+																		  (char *)respond);
+									  LOG_REPORT("MOVE FAIL:BUSY", __LINE__);
+								  }
+							  }
+							  break;
+						  default:
+							  {
+								  LOG_REPORT("CMD Error Mode !!!", __LINE__);
+							  }
+						  }
+					  }
+					  break;
+				  	  case SCARA_METHOD_AUTO:
+				  	  {
+
+				  	  }
+				  	  break;
+				  	  default:
+				  	  {
+				  		  LOG_REPORT("CMD Error Method !!!", __LINE__);
+				  	  }
+				  	  }
+			  	  } else {
+					  respond_lenght = commandRespond(RPD_ERROR,
+													duty_cmd.id_command,
+													"METHOD isn't correct",
+													(char *)respond);
+			  	  }
+
+			  }
+		  isNewDuty = FALSE;
+	  }
+
+	  /* 3--- Execute Phase ---*/
+	  switch(current_method) {
+	  case SCARA_METHOD_MANUAL:
+	  {
+		  switch( current_key_state) {
+		  case SCARA_KEY_STATE_READY:
+			  /* Wait for application keyboard , do nothing*/
+		  break;
+		  case SCARA_KEY_STATE_INIT:
+		  {
+			  if (scaraKeyInit(current_key, &run_time) == SCARA_STATUS_OK) {
+				  current_key_state = SCARA_KEY_STATE_FLOW;
+#ifdef SIMULATION
+				  scaraPosition2String((char *)position, positionCurrent);
+#else
+				  scaraPosition2String((char *)position, positionTrue);
+#endif
+				  infor_lenght 		= commandRespond(RPD_START,
+													  0,
+													  (char *)position,
+													  (char *)infor);
+			  } else {
+				  current_key_state = SCARA_KEY_STATE_READY;
+			  }
+		  }
+		  break;
+		  case SCARA_KEY_STATE_FLOW:
+		  {
+			  SCARA_StatusTypeDef status;
+			  // Increase run time
+			  run_time += T_SAMPLING;
+			  // Check Time Out
+			  if (scaraIsFinish(run_time)) {
+				  current_key_state = SCARA_KEY_STATE_FINISH;// Key Done
+			  } else {
+				  status = scaraKeyFlow(run_time, &positionNext, positionCurrent);
+				  if ( SCARA_STATUS_OK == status) {
+					  lowlayer_computeAndWritePulse(positionCurrent, positionNext);
+					  // Running Inform
+#ifdef SIMULATION
+					  scaraPosition2String((char *)position, positionCurrent);
+#else
+					  scaraPosition2String((char *)position, positionTrue);
+#endif
+					  infor_lenght = commandRespond(RPD_RUNNING,
+													0,
+													(char *)position,
+													(char *)infor);
+				  } else {
+					  current_key_state = SCARA_KEY_STATE_FINISH;
+					  // Critical
+					  // If a error appear while Flowing, This is very important
+					  infor_lenght = commandRespond(RPD_STOP,
+													0,
+													(char *)DETAIL_STATUS[status],
+													(char *)infor);
+					  LOG_REPORT("STOP KEY", __LINE__);
+				  }
+			  }
+		  }
+		  break;
+		  case SCARA_KEY_STATE_FINISH:
+		  {
+			  current_key_state = SCARA_KEY_STATE_READY;
+			  positionNext.t = 0;
+			  positionNext.total_time = 0;
+			  positionNext.q = 0;
+		  }
+		  break;
+		  }
+	  }
+	  break;
+
+	  case SCARA_METHOD_SEMI_AUTO:
+	  {
+		  switch( current_mode) {
 		  case SCARA_MODE_STOP:
 			  {
-				  no_stop++;
-				  current_mode	 = SCARA_MODE_STOP;
-				  respond_lenght = commandRespond(RPD_OK,
-						  	  	  	  	  	  	  duty_cmd.id_command,
-												  "Stop Now",
-												  (char *)respond);
-				  LOG_REPORT("ROBOT STOP !!!", __LINE__);
+				  current_mode 	= SCARA_MODE_DUTY;
+				  current_duty_state = SCARA_DUTY_STATE_READY;
 			  }
 			  break;
 
 		  case SCARA_MODE_SCAN:
 			  {
-				  if (SCARA_MODE_DUTY == current_mode && SCARA_DUTY_STATE_READY == current_duty_state) {
-					  no_scan++;
-					  current_mode = SCARA_MODE_SCAN;
-					  current_scan_state = SCARA_SCAN_STATE_INIT;
-					  respond_lenght = commandRespond(RPD_OK,
-							  	  	  	  	  	  	  duty_cmd.id_command,
-													  "Start Scan",
-													  (char *)respond);
-				  } else {
-					  respond_lenght = commandRespond(RPD_ERROR,
-							  	  	  	  	  	  	  duty_cmd.id_command,
-													  "Busy",
-													  (char *)respond);
-					  LOG_REPORT("SCAN FAIL: BUSY", __LINE__);
+				  switch (current_scan_state) {
+				  case SCARA_SCAN_STATE_INIT:
+					  {
+						  lowlayer_scanReset();
+						  current_scan_state = SCARA_SCAN_STATE_HARD;
+					  }
+					  break;
+				  case SCARA_SCAN_STATE_HARD:
+					  {
+						  if(lowlayer_scanFlow()) {
+							  current_scan_state = SCARA_SCAN_STATE_SOFT;
+						  }
+					  }
+					  break;
+				  case SCARA_SCAN_STATE_SOFT:
+					  {
+						  if(lowlayer_goToSoftLimit(&positionNext)) {
+							  current_scan_state = SCARA_SCAN_STATE_FINISH;
+							}
+					  }
+					  break;
+				  case SCARA_SCAN_STATE_FINISH:
+					  {
+						  lowlayer_readSetPosition(&positionNext);
+						  current_mode 	= SCARA_MODE_DUTY;
+						  current_duty_state = SCARA_DUTY_STATE_READY;
+						  kinematicForward(&positionNext);
+						  scaraSetScanFlag();
+						  //Done Inform
+						  scaraPosition2String((char *)position, positionNext);
+						  infor_lenght 		= commandRespond(RPD_DONE,
+															 0,
+															(char *)position,
+															(char *)infor);
+					  }
+					  break;
+				  default:
+					  {
+						  LOG_REPORT("ERROR STATE !!!", __LINE__);
+						  while(1);
+					  }
 				  }
+
 			  }
 			  break;
 
 		  case SCARA_MODE_DUTY:
 			  {
-				  no_duty++;
-				  if (SCARA_MODE_DUTY == current_mode && SCARA_DUTY_STATE_READY == current_duty_state) {
-					  if (scaraIsScanLimit()) {
-						  current_mode	 = SCARA_MODE_DUTY;
-						  current_duty_state	 = SCARA_DUTY_STATE_INIT;
-					  } else {
-						  no_duty_fail++;
-						  respond_lenght = commandRespond(RPD_ERROR,
-						  							  	  duty_cmd.id_command,
-														  "Has Not Scan Yet.",
-														  (char *)respond);
-						  LOG_REPORT("MOVE FAIL:NOT SCAN", __LINE__);
+				  switch (current_duty_state) {
+				  case SCARA_DUTY_STATE_READY:
+					  {
+						  // Do nothing();
+						  __NOP();
 					  }
-				  } else {
-					  no_duty_fail++;
-					  respond_lenght	= commandRespond(RPD_ERROR,
-					  							  	  	  duty_cmd.id_command,
-														  "Busy.",
-														  (char *)respond);
-					  LOG_REPORT("MOVE FAIL:BUSY", __LINE__);
-				  }
-			  }
-			  break;
-		  default:
-			  {
-				  LOG_REPORT("CMD Error Mode !!!", __LINE__);
-			  }
-		  }
-		  isNewDuty = FALSE;
-	  }
-
-	/* 3--- Execute Phase ---*/
-	  switch( current_mode) {
-	  case SCARA_MODE_STOP:
-		  {
-			  current_mode 	= SCARA_MODE_DUTY;
-			  current_duty_state = SCARA_DUTY_STATE_READY;
-		  }
-		  break;
-
-	  case SCARA_MODE_SCAN:
-		  {
-			  switch (current_scan_state) {
-			  case SCARA_SCAN_STATE_INIT:
-				  {
-					  lowlayer_scanReset();
-					  current_scan_state = SCARA_SCAN_STATE_HARD;
-				  }
 				  break;
-			  case SCARA_SCAN_STATE_HARD:
-				  {
-					  if(lowlayer_scanFlow()) {
-						  current_scan_state = SCARA_SCAN_STATE_SOFT;
-					  }
-				  }
-				  break;
-			  case SCARA_SCAN_STATE_SOFT:
-				  {
-					  if(lowlayer_goToSoftLimit(&positionNext)) {
-						  current_scan_state = SCARA_SCAN_STATE_FINISH;
-					  	}
-				  }
-				  break;
-			  case SCARA_SCAN_STATE_FINISH:
-				  {
-					  lowlayer_readSetPosition(&positionNext);
-					  current_mode 	= SCARA_MODE_DUTY;
-					  current_duty_state = SCARA_DUTY_STATE_READY;
-					  kinematicForward(&positionNext);
-					  scaraSetScanFlag();
-					   //Done Inform
-//					  scaraPosition2String((char *)position, positionCurrent);
-//					  infor_lenght 		= commandRespond(RPD_DONE,
-//					 	  	  	  	  	  	  	  	  	 0,
-//					 									(char *)position,
-//					 									(char *)infor);
-				  }
-				  break;
-			  default:
-				  {
-					  LOG_REPORT("ERROR STATE !!!", __LINE__);
-					  while(1);
-				  }
-			  }
 
-		  }
-		  break;
-
-	  case SCARA_MODE_DUTY:
-		  {
-			  switch (current_duty_state){
-			  case SCARA_DUTY_STATE_READY:
-				  {
-					  // Do nothing();
-					  __NOP();
-				  }
-			  break;
-
-			  case SCARA_DUTY_STATE_INIT:
-				  {
-					  SCARA_StatusTypeDef status1, status2;
-					  status1 = scaraInitDuty(duty_cmd);
-					  if ( SCARA_STATUS_OK == status1) {
-						  status2 = scaraTestDuty();
-						  if (SCARA_STATUS_OK == status2) {
-						  no_duty_success++;
-						  current_duty_state		= SCARA_DUTY_STATE_FLOW;
-						  run_time			= 0;
-						  // Respond
-						  respond_lenght 	= commandRespond(RPD_OK,
-								  	  	  	  	  	  	  	  duty_cmd.id_command,
-															  (char *)DETAIL_STATUS[status1],
-															  (char *)respond);
-						  //scaraPosition2String((char *)position, positionCurrent);
-						  scaraPosition2String((char *)position, positionTrue);
-						  // Start Inform
-						  infor_lenght 		= commandRespond(RPD_START,
-		  	  	  	  	  	  	  	  	  	  	  	  	  	  0,
-															  (char *)position,
-															  (char *)infor);
+				  case SCARA_DUTY_STATE_INIT:
+					  {
+						  SCARA_StatusTypeDef status1, status2;
+						  status1 = scaraInitDuty(duty_cmd);
+						  if ( SCARA_STATUS_OK == status1) {
+							  status2 = scaraTestDuty();
+							  if (SCARA_STATUS_OK == status2) {
+							  current_duty_state		= SCARA_DUTY_STATE_FLOW;
+							  run_time			= 0;
+							  // Respond
+							  respond_lenght 	= commandRespond(RPD_OK,
+																  duty_cmd.id_command,
+																  (char *)DETAIL_STATUS[status1],
+																  (char *)respond);
+#ifdef SIMULATION
+							  scaraPosition2String((char *)position, positionCurrent);
+#else
+							  scaraPosition2String((char *)position, positionTrue);
+#endif
+							  // Start Inform
+							  infor_lenght 		= commandRespond(RPD_START,
+																  0,
+																  (char *)position,
+																  (char *)infor);
+							  } else {
+								  current_duty_state 	= SCARA_DUTY_STATE_READY;
+								  respond_lenght	= commandRespond(RPD_ERROR,
+																	  duty_cmd.id_command,
+																	  (char *)DETAIL_STATUS[status2],
+																	  (char *)respond);
+								  LOG_REPORT("TEST FAIL", __LINE__);
+							  }
 						  } else {
-							  no_duty_fail++;
 							  current_duty_state 	= SCARA_DUTY_STATE_READY;
 							  respond_lenght	= commandRespond(RPD_ERROR,
-									  	  	  	  	  	  	  	  duty_cmd.id_command,
-																  (char *)DETAIL_STATUS[status2],
+																  duty_cmd.id_command,
+																  (char *)DETAIL_STATUS[status1],
 																  (char *)respond);
-							  LOG_REPORT("TEST FAIL", __LINE__);
+							  LOG_REPORT("INIT FAIL", __LINE__);
 						  }
-					  } else {
-						  no_duty_fail++;
-						  current_duty_state 	= SCARA_DUTY_STATE_READY;
-						  respond_lenght	= commandRespond(RPD_ERROR,
-								  	  	  	  	  	  	  	  duty_cmd.id_command,
-															  (char *)DETAIL_STATUS[status1],
-															  (char *)respond);
-						  LOG_REPORT("INIT FAIL", __LINE__);
 					  }
-				  }
-			  break;
+				  break;
 
-			  case SCARA_DUTY_STATE_FLOW:
-				  {
-					  HAL_GPIO_WritePin(STEP_ENABLE_GPIO_Port, STEP_ENABLE_Pin, GPIO_PIN_RESET);
-					  SCARA_StatusTypeDef status;
-					  // Increase run time
-					  run_time += T_SAMPLING;
-					  // Check Time Out
-					  if (scaraIsFinish(run_time)) {
-						  current_duty_state = SCARA_DUTY_STATE_FINISH;// Work Done
-					  } else {
-						  status = scaraFlowDuty(run_time , &positionNext, positionCurrent);
-						  if ( SCARA_STATUS_OK == status) {
-							  lowlayer_computeAndWritePulse(positionCurrent, positionNext);
-							  // Running Inform
-							  //scaraPosition2String((char *)position, positionCurrent);
-							  scaraPosition2String((char *)position, positionTrue);
-							  infor_lenght = commandRespond(RPD_RUNNING,
-									  	  	  	  	  	  	0,
-															(char *)position,
-															(char *)infor);
+				  case SCARA_DUTY_STATE_FLOW:
+					  {
+						  SCARA_StatusTypeDef status;
+						  // Increase run time
+						  run_time += T_SAMPLING;
+						  // Check Time Out
+						  if (scaraIsFinish(run_time)) {
+							  current_duty_state = SCARA_DUTY_STATE_FINISH;// Work Done
 						  } else {
-							  current_duty_state = SCARA_DUTY_STATE_FINISH;
-							  // Critical
-							  // If a error appear while Flowing, This is very important
-							  infor_lenght = commandRespond(RPD_STOP,
-															0,
-															(char *)DETAIL_STATUS[status],
-															(char *)infor);
-							  LOG_REPORT("STOP", __LINE__);
+							  status = scaraFlowDuty(run_time , &positionNext, positionCurrent);
+							  if ( SCARA_STATUS_OK == status) {
+								  lowlayer_computeAndWritePulse(positionCurrent, positionNext);
+								  // Running Inform
+#ifdef SIMULATION
+								  //scaraPosition2String((char *)position, positionCurrent);
+#else
+								  scaraPosition2String((char *)position, positionTrue);
+#endif
+								  infor_lenght = commandRespond(RPD_RUNNING,
+																0,
+																(char *)position,
+																(char *)infor);
+							  } else {
+								  current_duty_state = SCARA_DUTY_STATE_FINISH;
+								  // Critical
+								  // If a error appear while Flowing, This is very important
+								  infor_lenght = commandRespond(RPD_STOP,
+																0,
+																(char *)DETAIL_STATUS[status],
+																(char *)infor);
+								  LOG_REPORT("STOP DUTY", __LINE__);
+							  }
 						  }
 					  }
-				  }
-			  break;
+				  break;
 
-			  case SCARA_DUTY_STATE_FINISH:
-				  {
-					  //HAL_GPIO_WritePin(STEP_ENABLE_GPIO_Port, STEP_ENABLE_Pin, GPIO_PIN_SET);
-					  current_duty_state = SCARA_DUTY_STATE_READY;
-					  positionNext.t = 0;
-					  positionNext.total_time = 0;
-					  positionNext.q = 0;
-					  // Done Inform
-					  //scaraPosition2String((char *)position, positionCurrent);
-					  scaraPosition2String((char *)position, positionTrue);
-					  infor_lenght 		= commandRespond(RPD_DONE,
-	  	  	  	  	  	  	  	  	  	  	  	  	  	 0,
-														 (char *)position,
-														 (char *)infor);
-				  }
-			  break;
+				  case SCARA_DUTY_STATE_FINISH:
+					  {
+						  current_duty_state = SCARA_DUTY_STATE_READY;
+						  positionNext.t = 0;
+						  positionNext.total_time = 0;
+						  positionNext.q = 0;
+						  // Done Inform
+#ifdef SIMULATION
+						  scaraPosition2String((char *)position, positionCurrent);
+#else
+						  scaraPosition2String((char *)position, positionTrue);
+#endif
+						  infor_lenght 		= commandRespond(RPD_DONE,
+															 0,
+															 (char *)position,
+															 (char *)infor);
+					  }
+				  break;
 
-			  default:
-				  {
-					  LOG_REPORT("ERROR STATE !!!", __LINE__);
-					  while(1);
+				  default:
+					  {
+						  LOG_REPORT("ERROR STATE !!!", __LINE__);
+						  while(1);
+					  }
 				  }
+
 			  }
+			  break;
 
+		  default:
+			  {
+				  LOG_REPORT("ERROR MODE !!!", __LINE__);
+				  while(1);
+			  }
 		  }
-		  break;
+	  }
+	  break;
 
+	  case SCARA_METHOD_AUTO:
+	  {
+
+	  }
+
+	  break;
 	  default:
-		  {
-			  LOG_REPORT("ERROR MODE !!!", __LINE__);
-			  while(1);
-		  }
+	  {
+
+	  }
 	  }
 
 	  /* 4--- Send to PC Phase ---*/
@@ -550,8 +688,6 @@ void Start_USB_RX_Task(void const * argument)
   /* USER CODE BEGIN Start_USB_RX_Task */
 	int32_t distance;
 	int32_t id_command;
-	int32_t no_duty;
-	int32_t no_other;
 	DUTY_Command_TypeDef 	duty_cmd;
 	Robot_CommandTypedef 	cmd_type;
 	Robot_RespondTypedef 	rpd_type;
@@ -561,8 +697,6 @@ void Start_USB_RX_Task(void const * argument)
 	int32_t				respond_lenght;
 	int32_t				message_lenght;
 
-	no_duty	 = 0;
-	no_other = 0;
 
   /* Infinite loop */
   for(;;)
@@ -583,7 +717,6 @@ void Start_USB_RX_Task(void const * argument)
 				  rpd_type = commandReply(cmd_type, duty_cmd, detail);
 
 				  if ( RPD_DUTY == rpd_type) {
-					  no_duty++;
 					  DUTY_Command_TypeDef *dataMail;
 					  dataMail = NULL;
 					  // Wait allocate
@@ -598,7 +731,6 @@ void Start_USB_RX_Task(void const * argument)
 					  }
 
 				  } else {
-					  no_other++;
 					  memset(respond, 0, sizeof(respond));
 					  memset(message, 0, sizeof(message));
 					  respond_lenght	= commandRespond(rpd_type, id_command,

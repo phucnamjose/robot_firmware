@@ -14,7 +14,7 @@
 #define LIM_MIN_J1		(-135.0*PI/180.0)
 #define LIM_MAX_J1		(135.0*PI/180.0)
 #define LIM_MIN_J2		(0.0)
-#define LIM_MAX_J2		(90.0)
+#define LIM_MAX_J2		(100.0)
 #define LIM_MIN_J3		(-170.0*PI/180)
 #define LIM_MAX_J3		(170.0*PI/180.0)
 
@@ -25,15 +25,15 @@
 #define V_DESIGN_J3		(0.9*LIM_PULSE_J3*2*PI)/(GEAR_J3*T_SAMPLING)
 
 #define V_DESIGN_3D		V_DESIGN_J2
-#define V_DESIGN_ROLL	V_DESIGN_J3
+#define V_DESIGN_ROLL	V_DESIGN_J0
 
 /* Maximum Accelerate System*/
-#define A_DESIGN_3D		(V_DESIGN_3D/2)
-#define A_DESIGN_ROLL	(V_DESIGN_ROLL/2)
-#define A_DESIGN_J0		(V_DESIGN_J0/2)
-#define A_DESIGN_J1		(V_DESIGN_J1/2)
-#define A_DESIGN_J2		(V_DESIGN_J2/2)
-#define A_DESIGN_J3		(V_DESIGN_J3/2)
+#define A_DESIGN_3D		(V_DESIGN_3D/1.5)
+#define A_DESIGN_ROLL	(V_DESIGN_ROLL/1.5)
+#define A_DESIGN_J0		(V_DESIGN_J0/1.5)
+#define A_DESIGN_J1		(V_DESIGN_J1/1.5)
+#define A_DESIGN_J2		(V_DESIGN_J2/1.5)
+#define A_DESIGN_J3		(V_DESIGN_J3/1.5)
 
 /* Sampling Period*/
 #define T_SAMPLING		(0.01f)
@@ -66,14 +66,14 @@
 // baud rate, ball screw T3
 #define GEAR_J2				(300.0f/3.0f) // per milimeter.
 // motor, micro step, big-gear, small-gear
-#define GEAR_J3				(400.0f*32.0f*60.0f/19.0f) // per round ( 2*PI)
+#define GEAR_J3				(400.0f*16.0f*60.0f/19.0f) // per round ( 2*PI)
 
 
 /* Limit pulse per 10 ms (pulse) */
 #define LIM_PULSE_J0		(75u) // Calculate in file Excel
 #define LIM_PULSE_J1		(120u)
-#define LIM_PULSE_J2		(120u)
-#define LIM_PULSE_J3		(117u)
+#define LIM_PULSE_J2		(125u)
+#define LIM_PULSE_J3		(101u)
 
 /* Module DDA Address (8 bit data) */
 #define ADDRESS_DDA_0 			(0x60000000)
@@ -105,7 +105,17 @@
 #define HARD_LIM0_NEG		(-1.621454508f)
 #define HARD_LIM1_POS		(2.448773299f)
 #define HARD_LIM2_NEG		(-2.236f)
-#define HARD_LIM3_POS		(3.043581508f)
+#define HARD_LIM3_POS		(3.04047264f)
+
+/* Keyboard shift*/
+#define SHIFT_X				(10.0f)
+#define SHIFT_Y				(10.0f)
+#define SHIFT_Z				(10.0f)
+#define SHIFT_ROLL			(10.0f)
+#define SHIFT_VAR0			(5.0f)
+#define SHIFT_VAR1			(10.0f)
+#define SHIFT_VAR2			(10.0f)
+#define SHIFT_VAR3			(10.0f)
 
 /* Kinematic Parameters (mm) */
 #define		d1				(211.0f)

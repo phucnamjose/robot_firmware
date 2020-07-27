@@ -27,9 +27,18 @@ uint8_t	limit_switch[4];
 uint8_t state_scan;
 uint8_t scan_flag;
 
-const int8_t	pulse_scan[4] = {3, 5, 5, 20};
+const int8_t	pulse_scan[4] = {3, 5, 5, 10};
 
 void	lowlayer_scanReset(void) {
+	pulse_accumulate[0] = 0;
+	pulse_accumulate[1] = 0;
+	pulse_accumulate[2] = 0;
+	pulse_accumulate[3] = 0;
+
+	position_encoder[0] = 0;
+	position_encoder[1] = 0;
+	position_encoder[2] = 0;
+
 	scan_flag = 0;
 	state_scan = 0;
 	HAL_GPIO_WritePin(CAPTURE_ENABLE_GPIO_Port, CAPTURE_ENABLE_Pin, GPIO_PIN_RESET);
@@ -59,6 +68,11 @@ uint8_t	lowlayer_scanFlow(void) {
 		offset_encoder[1] 	= position_capture[1];
 		offset_encoder[2] 	= position_capture[2];
 		offset_stepper		= pulse_accumulate[3];
+		// LOG offset
+		LOG_REPORT("offset encoder 0", offset_encoder[0]);
+		LOG_REPORT("offset encoder 1", offset_encoder[1]);
+		LOG_REPORT("offset encoder 2", offset_encoder[2]);
+		LOG_REPORT("offset stepper", offset_stepper);
 
 		offset_setpoint[0]	= HARD_LIM0_NEG
 				- DIR_ENCODER_0*offset_encoder[0]*2.0*PI/ENCODER_J0;

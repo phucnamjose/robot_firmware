@@ -22,7 +22,18 @@ const char *ROBOTCOMMAND[NUM_OF_COMMAND - 1]  = {"STOP",
 												"OUTP",
 												"READ",
 												"POSI",
-												"SETT"
+												"SETT",
+												"METH",// 12 nomal
+
+										        "JNEW",
+										        "JDEL",
+										        "JPML",
+										        "JPMJ",
+										        "JPOP",
+										        "JTES",
+										        "JRUN ", // 7 job
+
+										        "KEYB"// 1 key board
 												};
 
 const char *ROBOTRESPOND[NUM_OF_RESPOND]  	  = {"IDLE",
@@ -46,11 +57,15 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 	// Stop Now
 	if ( 0 == strcmp( command, ROBOTCOMMAND[CMD_STOPNOW])) {
 		duty_cmd->robot_mode = SCARA_MODE_STOP;
+		duty_cmd->robot_method = SCARA_METHOD_SEMI_AUTO;
+		duty_cmd->change_method = FALSE;
 		return CMD_STOPNOW;
 
 	// Scan Limit
 	} else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_SCAN_LIMIT])) {
 		duty_cmd->robot_mode = SCARA_MODE_SCAN;
+		duty_cmd->robot_method = SCARA_METHOD_SEMI_AUTO;
+		duty_cmd->change_method = FALSE;
 		return CMD_SCAN_LIMIT;
 
 	// Move Home
@@ -74,6 +89,8 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 		duty_cmd->space_type = DUTY_SPACE_JOINT;
 		duty_cmd->joint_type = DUTY_JOINT_4DOF;
 		duty_cmd->robot_mode = SCARA_MODE_DUTY;
+		duty_cmd->robot_method = SCARA_METHOD_SEMI_AUTO;
+		duty_cmd->change_method = FALSE;
 		return CMD_MOVE_HOME;
 
 	// Move Line
@@ -95,7 +112,6 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 			}
 			duty_cmd->path_type = DUTY_PATH_LINE;
 			duty_cmd->space_type = DUTY_SPACE_TASK;
-			duty_cmd->robot_mode = SCARA_MODE_DUTY;
 
 			if ( DUTY_MODE_INIT_QVA == mode_init) {
 				duty_cmd->modeInit_type = DUTY_MODE_INIT_QVA;
@@ -109,6 +125,9 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 		} else {
 			return CMD_ERROR;
 		}
+		duty_cmd->robot_mode = SCARA_MODE_DUTY;
+		duty_cmd->robot_method = SCARA_METHOD_SEMI_AUTO;
+		duty_cmd->change_method = FALSE;
 		return CMD_MOVE_LINE;
 
 	// Move Circle
@@ -134,7 +153,6 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 			}
 			duty_cmd->path_type = DUTY_PATH_CIRCLE;
 			duty_cmd->space_type = DUTY_SPACE_TASK;
-			duty_cmd->robot_mode = SCARA_MODE_DUTY;
 
 			if ( DUTY_MODE_INIT_QVA == mode_init) {
 				duty_cmd->modeInit_type = DUTY_MODE_INIT_QVA;
@@ -148,6 +166,9 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 		} else {
 			return CMD_ERROR;
 		}
+		duty_cmd->robot_mode = SCARA_MODE_DUTY;
+		duty_cmd->robot_method = SCARA_METHOD_SEMI_AUTO;
+		duty_cmd->change_method = FALSE;
 		return CMD_MOVE_CIRCLE;
 
 	// Move Joint
@@ -169,7 +190,6 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 			}
 			duty_cmd->space_type = DUTY_SPACE_JOINT;
 			duty_cmd->joint_type = DUTY_JOINT_4DOF;
-			duty_cmd->robot_mode = SCARA_MODE_DUTY;
 
 			if ( DUTY_MODE_INIT_QVA == mode_init) {
 				duty_cmd->modeInit_type = DUTY_MODE_INIT_QVA;
@@ -183,6 +203,10 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 		} else {
 			return CMD_ERROR;
 		}
+		duty_cmd->robot_mode = SCARA_MODE_DUTY;
+		duty_cmd->robot_method = SCARA_METHOD_SEMI_AUTO;
+		duty_cmd->change_method = FALSE;
+
 		return CMD_MOVE_JOINT;
 
 	// Rotate Single
@@ -202,7 +226,6 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 			}
 			duty_cmd->space_type = DUTY_SPACE_JOINT;
 			duty_cmd->joint_type = DUTY_JOINT_SINGLE;
-			duty_cmd->robot_mode = SCARA_MODE_DUTY;
 
 			if ( DUTY_MODE_INIT_QVA == mode_init) {
 				duty_cmd->modeInit_type = DUTY_MODE_INIT_QVA;
@@ -216,6 +239,10 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 		} else {
 			return CMD_ERROR;
 		}
+		duty_cmd->robot_mode = SCARA_MODE_DUTY;
+		duty_cmd->robot_method = SCARA_METHOD_SEMI_AUTO;
+		duty_cmd->change_method = FALSE;
+
 		return CMD_ROTATE_SINGLE;
 
 	// Set Output
@@ -265,8 +292,66 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 		}
 		return CMD_SETTING;
 
+	} else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_METHOD_CHANGE])) {
+		int8_t method;
+		result = sscanf( para, "%d",
+						(int *)&method);
+		if (1 != result) {
+			return CMD_ERROR;
+		}
+		if (SCARA_METHOD_MANUAL == method) {
+			duty_cmd->robot_method = SCARA_METHOD_MANUAL;
+		} else if (SCARA_METHOD_SEMI_AUTO == method) {
+			duty_cmd->robot_method = SCARA_METHOD_SEMI_AUTO;
+		} else if (SCARA_METHOD_AUTO == method) {
+			duty_cmd->robot_method = SCARA_METHOD_AUTO;
+		} else {
+			return CMD_ERROR;
+		}
+		duty_cmd->change_method = TRUE;
+		return CMD_METHOD_CHANGE;
+	} else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_JOB_NEW])) {
+		duty_cmd->robot_method = SCARA_METHOD_AUTO;
+		duty_cmd->change_method = FALSE;
+		return CMD_JOB_NEW;
+	} else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_JOB_DELETE])) {
+		duty_cmd->robot_method = SCARA_METHOD_AUTO;
+		duty_cmd->change_method = FALSE;
+		return CMD_JOB_DELETE;
+	} else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_JOB_PUSH_MOVE_LINE])) {
+		duty_cmd->robot_method = SCARA_METHOD_AUTO;
+		duty_cmd->change_method = FALSE;
+		return CMD_JOB_PUSH_MOVE_LINE;
+	} else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_JOB_PUSH_MOVE_JOINT])) {
+		duty_cmd->robot_method = SCARA_METHOD_AUTO;
+		duty_cmd->change_method = FALSE;
+		return CMD_JOB_PUSH_MOVE_JOINT;
+	} else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_JOB_PUSH_OUTPUT])) {
+		duty_cmd->robot_method = SCARA_METHOD_AUTO;
+		duty_cmd->change_method = FALSE;
+		return CMD_JOB_PUSH_OUTPUT;
+	} else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_JOB_TEST])) {
+		duty_cmd->robot_method = SCARA_METHOD_AUTO;
+		duty_cmd->change_method = FALSE;
+		return CMD_JOB_TEST;
+	} else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_JOB_RUN])) {
+		duty_cmd->robot_method = SCARA_METHOD_AUTO;
+		duty_cmd->change_method = FALSE;
+		return CMD_JOB_RUN;
+	} else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_KEYBOARD])) {
+		int8_t key_num;
+		result = sscanf( para, "%d",
+						(int *)&key_num);
+		if (1 != result) {
+			return CMD_ERROR;
+		}
+		duty_cmd->keyboard = (SCARA_KeyTypeDef)key_num;
+		duty_cmd->robot_method = SCARA_METHOD_MANUAL;
+		duty_cmd->change_method = FALSE;
+		return CMD_KEYBOARD;
+	}
 	// Error command
-	} else {
+	else {
 		return CMD_ERROR;
 	}
 }
@@ -314,7 +399,6 @@ Robot_RespondTypedef	commandReply	(Robot_CommandTypedef cmd_type,
 			}
 		}
 		break;
-
 	case CMD_READ_POSITION:
 		{
 			SCARA_PositionTypeDef position;
@@ -323,12 +407,11 @@ Robot_RespondTypedef	commandReply	(Robot_CommandTypedef cmd_type,
 			ret =  RPD_POSITION;
 		}
 		break;
-
 	case CMD_SETTING:
 		if ( DUTY_COORDINATES_ABS == duty_cmd.coordinate_type) {
-			strcpy( (char *)detail, "Absolute.");
+			strcpy( (char *)detail, "ABSOLUTE.");
 		} else if ( DUTY_COORDINATES_REL == duty_cmd.coordinate_type) {
-			strcpy( (char *)detail, "Relative.");
+			strcpy( (char *)detail, "RELATIVE.");
 		} else {
 			strcat((char *)detail, DETAIL_STATUS[SCARA_STATUS_ERROR_COORDINATE]);
 			return RPD_ERROR;
@@ -337,19 +420,40 @@ Robot_RespondTypedef	commandReply	(Robot_CommandTypedef cmd_type,
 		if ( DUTY_TRAJECTORY_LSPB == duty_cmd.trajec_type) {
 			strcat((char *)detail, " LSPB");
 		} else if ( DUTY_TRAJECTORY_SCURVE == duty_cmd.trajec_type) {
-			strcat((char *)detail, " S-curve");
+			strcat((char *)detail, " S-CURVE");
 		} else {
 			strcat((char *)detail, DETAIL_STATUS[SCARA_STATUS_ERROR_TRAJECTORY]);
 			return RPD_ERROR;
 		}
 		ret = RPD_OK;
 		break;
+	case CMD_METHOD_CHANGE:
+		ret = RPD_DUTY;
+		break;
+	case CMD_JOB_NEW:
+		break;
+	case CMD_JOB_DELETE:
+		break;
+	case CMD_JOB_PUSH_MOVE_LINE:
+		break;
+	case CMD_JOB_PUSH_MOVE_JOINT:
+		break;
+	case CMD_JOB_PUSH_OUTPUT:
+		break;
+	case CMD_JOB_TEST:
+		break;
+	case CMD_JOB_RUN:
+		ret = RPD_DUTY;
+		break;
+	case CMD_KEYBOARD:
+		ret = RPD_DUTY;
+		break;
 	case CMD_ERROR:
 		strcpy( (char *)detail, "Check parameters");
 		ret = RPD_ERROR;
 		break;
 	default:
-		strcpy( (char *)detail, "Check parameters");
+		strcpy( (char *)detail, "Unknown command");
 		ret = RPD_ERROR;
 	}
 	return ret;

@@ -33,9 +33,16 @@ typedef enum
 
 typedef enum
 {
-	  SCARA_MODE_STOP					= 0x00U,  /*!< SCARA scan limit switch to determine absolute position*/
-	  SCARA_MODE_SCAN					= 0x01U,  /*!< SCARA work  */
-	  SCARA_MODE_DUTY					= 0x02U   /*!< SCARA stop immediate  */
+	  SCARA_METHOD_MANUAL					= 0x00U,  /*!< Control by joy stick */
+	  SCARA_METHOD_SEMI_AUTO				= 0x01U,  /*!< Control by single command: MOVJ, MOVL, MOVC   */
+	  SCARA_METHOD_AUTO						= 0x02U   /*!< Control by job file  */
+}SCARA_MethodTypeDef;
+
+typedef enum
+{
+	  SCARA_MODE_STOP					= 0x00U,  /*!< SCARA scan stop immediate  */
+	  SCARA_MODE_SCAN					= 0x01U,  /*!< SCARA scan limit switch to determine absolute position*/
+	  SCARA_MODE_DUTY					= 0x02U   /*!< SCARA work  */
 }SCARA_ModeTypeDef;
 
 typedef enum
@@ -45,6 +52,14 @@ typedef enum
 	  SCARA_DUTY_STATE_FLOW				= 0x02U,  /*!< FLow in duty */
 	  SCARA_DUTY_STATE_FINISH			= 0x03U  /*!< Fishish duty */
 }SCARA_DutyStateTypeDef;
+
+typedef enum
+{
+	  SCARA_KEY_STATE_READY			= 0x00U,  /*!< There is not key yet */
+	  SCARA_KEY_STATE_INIT			= 0x01U,  /*!< Init key   */
+	  SCARA_KEY_STATE_FLOW			= 0x02U,  /*!< FLow in key */
+	  SCARA_KEY_STATE_FINISH		= 0x03U  /*!< Fishish key */
+}SCARA_KeyStateTypeDef;
 
 
 typedef enum
@@ -102,12 +117,35 @@ typedef enum
 	  TRAJECTORY_ROLL			= 0x05U,  /*!< Trajectory planning for mm  */
 }Trajectory_TargetTypeDef;
 
+typedef enum
+{
+    SCARA_KEY_X_INC,
+    SCARA_KEY_X_DEC,
+    SCARA_KEY_Y_INC,
+    SCARA_KEY_Y_DEC,
+    SCARA_KEY_Z_INC,
+    SCARA_KEY_Z_DEC,
+    SCARA_KEY_ROLL_INC,
+    SCARA_KEY_ROLL_DEC,
+    SCARA_KEY_VAR0_INC,
+    SCARA_KEY_VAR0_DEC,
+    SCARA_KEY_VAR1_INC,
+    SCARA_KEY_VAR1_DEC,
+    SCARA_KEY_VAR2_INC,
+    SCARA_KEY_VAR2_DEC,
+    SCARA_KEY_VAR3_INC,
+    SCARA_KEY_VAR3_DEC,// 16 key board
+}SCARA_KeyTypeDef;
 
 /*** Instance Form ***/
 typedef struct
 {
 	double						q;
-	double						v;
+	double						q_roll;
+	double						q_theta1;
+	double						q_theta2;
+	double						q_d3;
+	double						q_theta4;
 	double						a;
 	double						t;
 	double						total_time;
@@ -119,6 +157,12 @@ typedef struct
 	double 						Theta2;//Rotate
 	double 						D3;//Transpose
 	double 						Theta4;//Rotate
+	double						v_theta1;
+	double						v_theta2;
+	double						v_d3;
+	double						v_theta4;
+	double						v_3d;
+	double						v_roll;
 }SCARA_PositionTypeDef;
 
 typedef struct
@@ -262,7 +306,10 @@ typedef struct
 
 typedef struct
 {
+	uint8_t						change_method;
+	SCARA_MethodTypeDef			robot_method;
 	SCARA_ModeTypeDef			robot_mode;
+	SCARA_KeyTypeDef			keyboard;
 	int32_t 					id_command;
 	CoordinatesTypeDef			coordinate_type;
 	SpaceTypeDef				space_type;
@@ -282,6 +329,7 @@ typedef struct
 
 typedef struct
 {
+	SCARA_MethodTypeDef			method;
 	SCARA_ModeTypeDef 			mode;
 	SCARA_DutyStateTypeDef 		duty_State;
 	uint8_t						isScanLitmit;
@@ -335,12 +383,18 @@ void						scaraSetScanFlag	(void);
 void						scaraSetOutput		(uint8_t level);
 void						scaraSetDutyState	(SCARA_DutyStateTypeDef state);
 void						scaraSetMode		(SCARA_ModeTypeDef mode);
+void						scaraSetMethod		(SCARA_MethodTypeDef method);
 
 void						scaraGetPosition	(SCARA_PositionTypeDef *pos);
 SCARA_ModeTypeDef			scaraGetMode		(void);
+SCARA_MethodTypeDef			scaraGetMethod		(void);
 SCARA_DutyStateTypeDef		scaraGetDutyState	(void);
 uint8_t						scaraIsScanLimit	(void);
 uint8_t						scaraIsFinish		(double run_time);
 int32_t						scaraPosition2String(char *result, SCARA_PositionTypeDef position);
 
+SCARA_StatusTypeDef			scaraKeyInit(SCARA_KeyTypeDef key, double *runtime);
+SCARA_StatusTypeDef			scaraKeyFlow(double time,
+										SCARA_PositionTypeDef *pos_Next,
+										SCARA_PositionTypeDef pos_Current);
 #endif /* INC_ROBOT_SCARA_H_ */
