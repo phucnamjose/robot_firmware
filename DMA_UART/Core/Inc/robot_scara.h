@@ -310,6 +310,7 @@ typedef struct
 	SCARA_MethodTypeDef			robot_method;
 	SCARA_ModeTypeDef			robot_mode;
 	SCARA_KeyTypeDef			keyboard;
+	int32_t						key_speed;
 	int32_t 					id_command;
 	CoordinatesTypeDef			coordinate_type;
 	SpaceTypeDef				space_type;
@@ -393,7 +394,7 @@ uint8_t						scaraIsScanLimit	(void);
 uint8_t						scaraIsFinish		(double run_time);
 int32_t						scaraPosition2String(char *result, SCARA_PositionTypeDef position);
 
-SCARA_StatusTypeDef			scaraKeyInit(SCARA_KeyTypeDef key, double *runtime);
+SCARA_StatusTypeDef			scaraKeyInit(SCARA_KeyTypeDef key, int32_t speed, double *runtime);
 SCARA_StatusTypeDef			scaraKeyFlow(double time,
 										SCARA_PositionTypeDef *pos_Next,
 										SCARA_PositionTypeDef pos_Current);

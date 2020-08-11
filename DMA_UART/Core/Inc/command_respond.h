@@ -35,7 +35,8 @@ typedef enum
     CMD_JOB_TEST,
     CMD_JOB_RUN,// 7 job
 
-    CMD_KEYBOARD,// 1 key board
+    CMD_KEYBOARD,// 2 key board
+	CMD_KEY_SPEED,
 	CMD_ERROR,
 	NUM_OF_COMMAND
 }Robot_CommandTypedef;

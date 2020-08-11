@@ -199,6 +199,7 @@ void StartDefaultTask(void const * argument)
   SCARA_ScanStateTypeDef	current_scan_state;
   SCARA_KeyStateTypeDef		current_key_state;
   SCARA_KeyTypeDef			current_key;
+  int32_t					current_key_speed;
   double						run_time;
 
   LOG_REPORT("free_rtos.c: PROGRAM START...", __LINE__);
@@ -258,6 +259,7 @@ void StartDefaultTask(void const * argument)
 		  // Check change method
 		  if (duty_cmd.change_method == TRUE) {
 			  if (SCARA_METHOD_MANUAL == duty_cmd.robot_method) {
+				  // Need add check condition idle in each method
 				  current_method = SCARA_METHOD_MANUAL;
 				  respond_lenght = commandRespond(RPD_OK,
 												duty_cmd.id_command,
@@ -285,7 +287,10 @@ void StartDefaultTask(void const * argument)
 				  		  if (current_key_state == SCARA_KEY_STATE_READY) {
 				  			  current_key = duty_cmd.keyboard;
 				  			  current_key_state = SCARA_KEY_STATE_INIT;// Init new path
-				  		  } else if (current_key == duty_cmd.keyboard && current_key_state == SCARA_KEY_STATE_FLOW) {
+				  			  current_key_speed = duty_cmd.key_speed;
+				  		  } else if (current_key == duty_cmd.keyboard
+				  				  	  && current_key_state == SCARA_KEY_STATE_FLOW
+									  && current_key_speed == duty_cmd.key_speed) {
 				  			  current_key_state = SCARA_KEY_STATE_INIT;// Continue old path
 				  		  }
 				  	  }
@@ -384,7 +389,7 @@ void StartDefaultTask(void const * argument)
 		  break;
 		  case SCARA_KEY_STATE_INIT:
 		  {
-			  if (scaraKeyInit(current_key, &run_time) == SCARA_STATUS_OK) {
+			  if (scaraKeyInit(current_key, current_key_speed, &run_time) == SCARA_STATUS_OK) {
 				  current_key_state = SCARA_KEY_STATE_FLOW;
 #ifdef SIMULATION
 				  scaraPosition2String((char *)position, positionCurrent);
@@ -572,7 +577,7 @@ void StartDefaultTask(void const * argument)
 								  lowlayer_computeAndWritePulse(positionCurrent, positionNext);
 								  // Running Inform
 #ifdef SIMULATION
-								  //scaraPosition2String((char *)position, positionCurrent);
+								  scaraPosition2String((char *)position, positionCurrent);
 #else
 								  scaraPosition2String((char *)position, positionTrue);
 #endif
@@ -668,6 +673,7 @@ void StartDefaultTask(void const * argument)
 	  }
 
 	  /* 5--- Update ---*/
+	  scaraSetMethod(current_method);
 	  scaraSetMode(current_mode);
 	  scaraSetDutyState(current_duty_state);
 
@@ -697,6 +703,8 @@ void Start_USB_RX_Task(void const * argument)
 	int32_t				respond_lenght;
 	int32_t				message_lenght;
 
+	// Default value
+	duty_cmd.key_speed = 1;
 
   /* Infinite loop */
   for(;;)

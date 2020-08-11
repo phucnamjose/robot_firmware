@@ -23,7 +23,7 @@ const char *ROBOTCOMMAND[NUM_OF_COMMAND - 1]  = {"STOP",
 												"READ",
 												"POSI",
 												"SETT",
-												"METH",// 12 nomal
+												"METH",  // 12 nomal
 
 										        "JNEW",
 										        "JDEL",
@@ -33,7 +33,8 @@ const char *ROBOTCOMMAND[NUM_OF_COMMAND - 1]  = {"STOP",
 										        "JTES",
 										        "JRUN ", // 7 job
 
-										        "KEYB"// 1 key board
+										        "KEYB",  // 2 key board
+												"KSPE"
 												};
 
 const char *ROBOTRESPOND[NUM_OF_RESPOND]  	  = {"IDLE",
@@ -350,6 +351,20 @@ Robot_CommandTypedef 	commandRead	(uint8_t *message, int32_t *id_command, DUTY_C
 		duty_cmd->change_method = FALSE;
 		return CMD_KEYBOARD;
 	}
+	else if  ( 0 == strcmp( command, ROBOTCOMMAND[CMD_KEY_SPEED])) {
+		int32_t speed;
+		result = sscanf( para, "%d",
+						(int *)&speed);
+		if (1 != result) {
+			return CMD_ERROR;
+		}
+		// check limit
+		if ((speed < SHIFT_SPEED_MIN) || (speed > SHIFT_SPPED_MAX)) {
+			return CMD_ERROR;
+		}
+		duty_cmd->key_speed = speed;
+		return CMD_KEY_SPEED;
+	}
 	// Error command
 	else {
 		return CMD_ERROR;
@@ -447,6 +462,10 @@ Robot_RespondTypedef	commandReply	(Robot_CommandTypedef cmd_type,
 		break;
 	case CMD_KEYBOARD:
 		ret = RPD_DUTY;
+		break;
+	case CMD_KEY_SPEED:
+		sprintf((char*) detail, "MANUAL SPEED = %d", duty_cmd.key_speed);
+		ret = RPD_OK;
 		break;
 	case CMD_ERROR:
 		strcpy( (char *)detail, "Check parameters");

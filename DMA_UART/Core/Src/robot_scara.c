@@ -1359,221 +1359,289 @@ int32_t					scaraPosition2String(char *result, SCARA_PositionTypeDef position) {
 }
 
 /* Convert key command to duty */
-SCARA_StatusTypeDef		scaraKeyInit(SCARA_KeyTypeDef key, double *runtime) {
+SCARA_StatusTypeDef		scaraKeyInit(SCARA_KeyTypeDef key,int32_t speed, double *runtime) {
 	DUTY_Command_TypeDef cmd;
 	SCARA_StatusTypeDef  status;
+	double s, v, a;
 	cmd.coordinate_type = DUTY_COORDINATES_REL;
 	cmd.trajec_type = DUTY_TRAJECTORY_LSPB;
 	cmd.modeInit_type = DUTY_MODE_INIT_QVA;
 	double v_current;
 	Trajectory_LSPB_TypeDef *lspb;
+	if (speed < SHIFT_SPEED_MIN || speed > SHIFT_SPPED_MAX) {
+		return SCARA_STATUS_ERROR_PARA;
+	}
 	switch(key) {
 	case SCARA_KEY_X_INC:
 	{
+		s = SHIFT_3D*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_3D);
+		cmd.a_factor = a/(A_DESIGN_3D);
+
 		cmd.space_type = DUTY_SPACE_TASK;
 		cmd.path_type = DUTY_PATH_LINE;
-		cmd.target_point.x 		= SHIFT_X; // Can define de phu hop vs toc do
+		cmd.target_point.x 		= s;
 		cmd.target_point.y 		= 0;
 		cmd.target_point.z 		= 0;
 		cmd.target_point.roll 	= 0;
 		v_current = positionCurrent.v_3d;
 		lspb = &(myDUTY.task.trajectory_3d.lspb);
-		cmd.v_factor = 0.1;
-		cmd.a_factor = 0.7;
 	}
 	break;
 	case SCARA_KEY_X_DEC:
 	{
+		s = SHIFT_3D*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_3D);
+		cmd.a_factor = a/(A_DESIGN_3D);
+
 		cmd.space_type = DUTY_SPACE_TASK;
 		cmd.path_type = DUTY_PATH_LINE;
-		cmd.target_point.x 		= -SHIFT_X;
+		cmd.target_point.x 		= -s;
 		cmd.target_point.y 		= 0;
 		cmd.target_point.z 		= 0;
 		cmd.target_point.roll 	= 0;
 		v_current = positionCurrent.v_3d;
 		lspb = &(myDUTY.task.trajectory_3d.lspb);
-		cmd.v_factor = 0.1;
-		cmd.a_factor = 0.7;
 	}
 	break;
 	case SCARA_KEY_Y_INC:
 	{
+		s = SHIFT_3D*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_3D);
+		cmd.a_factor = a/(A_DESIGN_3D);
+
 		cmd.space_type = DUTY_SPACE_TASK;
 		cmd.path_type = DUTY_PATH_LINE;
 		cmd.target_point.x 		= 0;
-		cmd.target_point.y 		= SHIFT_Y;
+		cmd.target_point.y 		= s;
 		cmd.target_point.z 		= 0;
 		cmd.target_point.roll	= 0;
 		v_current = positionCurrent.v_3d;
 		lspb = &(myDUTY.task.trajectory_3d.lspb);
-		cmd.v_factor = 0.1;
-		cmd.a_factor = 0.7;
 	}
 			break;
 	case SCARA_KEY_Y_DEC:
 	{
+		s = SHIFT_3D*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_3D);
+		cmd.a_factor = a/(A_DESIGN_3D);
+
 		cmd.space_type = DUTY_SPACE_TASK;
 		cmd.path_type = DUTY_PATH_LINE;
 		cmd.target_point.x 		= 0;
-		cmd.target_point.y 		= -SHIFT_Y;
+		cmd.target_point.y 		= -s;
 		cmd.target_point.z 		= 0;
 		cmd.target_point.roll 	= 0;
 		v_current = positionCurrent.v_3d;
 		lspb = &(myDUTY.task.trajectory_3d.lspb);
-		cmd.v_factor = 0.1;
-		cmd.a_factor = 0.7;
 	}
 			break;
 	case SCARA_KEY_Z_INC:
 	{
+		s = SHIFT_3D*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_3D);
+		cmd.a_factor = a/(A_DESIGN_3D);
+
 		cmd.space_type = DUTY_SPACE_TASK;
 		cmd.path_type = DUTY_PATH_LINE;
 		cmd.target_point.x 		= 0;
 		cmd.target_point.y 		= 0;
-		cmd.target_point.z 		= SHIFT_Z;
+		cmd.target_point.z 		= s;
 		cmd.target_point.roll 	= 0;
 		v_current = positionCurrent.v_3d;
 		lspb = &(myDUTY.task.trajectory_3d.lspb);
-		cmd.v_factor = 0.1;
-		cmd.a_factor = 0.7;
 	}
 			break;
 	case SCARA_KEY_Z_DEC:
 	{
+		s = SHIFT_3D*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_3D);
+		cmd.a_factor = a/(A_DESIGN_3D);
+
 		cmd.space_type = DUTY_SPACE_TASK;
 		cmd.path_type = DUTY_PATH_LINE;
 		cmd.target_point.x 		= 0;
 		cmd.target_point.y 		= 0;
-		cmd.target_point.z 		= -SHIFT_Z;
+		cmd.target_point.z 		= -s;
 		cmd.target_point.roll 	= 0;
 		v_current = positionCurrent.v_3d;
 		lspb = &(myDUTY.task.trajectory_3d.lspb);
-		cmd.v_factor = 0.1;
-		cmd.a_factor = 0.7;
 	}
 			break;
 	case SCARA_KEY_ROLL_INC:
 	{
+		s = SHIFT_ROLL*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_ROLL);
+		cmd.a_factor = a/(A_DESIGN_ROLL);
+
 		cmd.space_type = DUTY_SPACE_TASK;
 		cmd.path_type = DUTY_PATH_LINE;
 		cmd.target_point.x 		= 0;
 		cmd.target_point.y 		= 0;
 		cmd.target_point.z 		= 0;
-		cmd.target_point.roll 	= SHIFT_ROLL;
+		cmd.target_point.roll 	= s*180/PI;
 		v_current = positionCurrent.v_roll;
 		lspb = &(myDUTY.task.trajectory_roll.lspb);
-		cmd.v_factor = 0.1;
-		cmd.a_factor = 0.7;
 	}
 			break;
 	case SCARA_KEY_ROLL_DEC:
 	{
+		s = SHIFT_ROLL*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_ROLL);
+		cmd.a_factor = a/(A_DESIGN_ROLL);
+
 		cmd.space_type = DUTY_SPACE_TASK;
 		cmd.path_type = DUTY_PATH_LINE;
-		cmd.target_point.x 		= 10;
+		cmd.target_point.x 		= 0;
 		cmd.target_point.y 		= 0;
 		cmd.target_point.z 		= 0;
-		cmd.target_point.roll 	= -SHIFT_ROLL;
+		cmd.target_point.roll 	= -s*180/PI;
 		v_current = positionCurrent.v_roll;
 		lspb = &(myDUTY.task.trajectory_roll.lspb);
-		cmd.v_factor = 0.1;
-		cmd.a_factor = 0.7;
 	}
 			break;
 	case SCARA_KEY_VAR0_INC:
 	{
+		s = SHIFT_VAR0*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_J0);
+		cmd.a_factor = a/(A_DESIGN_J0);
+
 		cmd.space_type = DUTY_SPACE_JOINT;
 		cmd.joint_type = DUTY_JOINT_SINGLE;
 		cmd.sub_para_int 	= 0;
-		cmd.sub_para_double = SHIFT_VAR0;
+		cmd.sub_para_double = s*180/PI;
 		v_current = positionCurrent.v_theta1;
 		lspb = &(myDUTY.joint.trajectory[0].lspb);
-		cmd.v_factor = 0.08;
-		cmd.a_factor = 0.8;
 	}
 			break;
 	case SCARA_KEY_VAR0_DEC:
 	{
+		s = SHIFT_VAR0*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_J0);
+		cmd.a_factor = a/(A_DESIGN_J0);
+
 		cmd.space_type = DUTY_SPACE_JOINT;
 		cmd.joint_type = DUTY_JOINT_SINGLE;
 		cmd.sub_para_int 	= 0;
-		cmd.sub_para_double = -SHIFT_VAR0;
+		cmd.sub_para_double = -s*180/PI;
 		v_current = positionCurrent.v_theta1;
 		lspb = &(myDUTY.joint.trajectory[0].lspb);
-		cmd.v_factor = 0.08;
-		cmd.a_factor = 0.8;
 	}
 			break;
 	case SCARA_KEY_VAR1_INC:
 	{
+		s = SHIFT_VAR1*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_J1);
+		cmd.a_factor = a/(A_DESIGN_J1);
+
 		cmd.space_type = DUTY_SPACE_JOINT;
 		cmd.joint_type = DUTY_JOINT_SINGLE;
 		cmd.sub_para_int 	= 1;
-		cmd.sub_para_double = SHIFT_VAR1;
+		cmd.sub_para_double = s*180/PI;
 		v_current = positionCurrent.v_theta2;
 		lspb = &(myDUTY.joint.trajectory[1].lspb);
-		cmd.v_factor = 0.1;
-		cmd.a_factor = 0.7;
 	}
 			break;
 	case SCARA_KEY_VAR1_DEC:
 	{
+		s = SHIFT_VAR1*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_J1);
+		cmd.a_factor = a/(A_DESIGN_J1);
+
 		cmd.space_type = DUTY_SPACE_JOINT;
 		cmd.joint_type = DUTY_JOINT_SINGLE;
 		cmd.sub_para_int 	= 1;
-		cmd.sub_para_double = -SHIFT_VAR1;
+		cmd.sub_para_double = -s*180/PI;
 		v_current = positionCurrent.v_theta2;
 		lspb = &(myDUTY.joint.trajectory[1].lspb);
-		cmd.v_factor = 0.1;
-		cmd.a_factor = 0.7;
 	}
 			break;
 	case SCARA_KEY_VAR2_INC:
 	{
+		s = SHIFT_VAR2*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_J2);
+		cmd.a_factor = a/(A_DESIGN_J2);
+
 		cmd.space_type = DUTY_SPACE_JOINT;
 		cmd.joint_type = DUTY_JOINT_SINGLE;
 		cmd.sub_para_int 	= 2;
-		cmd.sub_para_double = SHIFT_VAR2;
+		cmd.sub_para_double = s;
 		v_current = positionCurrent.v_d3;
 		lspb = &(myDUTY.joint.trajectory[2].lspb);
-		cmd.v_factor = 0.1;
-		cmd.a_factor = 0.7;
 	}
 			break;
 	case SCARA_KEY_VAR2_DEC:
 	{
+		s = SHIFT_VAR2*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_J2);
+		cmd.a_factor = a/(A_DESIGN_J2);
+
 		cmd.space_type = DUTY_SPACE_JOINT;
 		cmd.joint_type = DUTY_JOINT_SINGLE;
 		cmd.sub_para_int 	= 2;
-		cmd.sub_para_double = -SHIFT_VAR2;
+		cmd.sub_para_double = -s;
 		v_current = positionCurrent.v_d3;
 		lspb = &(myDUTY.joint.trajectory[2].lspb);
-		cmd.v_factor = 0.1;
-		cmd.a_factor = 0.7;
 	}
 			break;
 	case SCARA_KEY_VAR3_INC:
 	{
+		s = SHIFT_VAR3*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_J3);
+		cmd.a_factor = a/(A_DESIGN_J3);
+
 		cmd.space_type = DUTY_SPACE_JOINT;
 		cmd.joint_type = DUTY_JOINT_SINGLE;
 		cmd.sub_para_int 	= 3;
-		cmd.sub_para_double = SHIFT_VAR3;
+		cmd.sub_para_double = s*180/PI;
 		v_current = positionCurrent.v_theta4;
 		lspb = &(myDUTY.joint.trajectory[3].lspb);
-		cmd.v_factor = 0.1;
-		cmd.a_factor = 0.7;
 	}
 			break;
 	case SCARA_KEY_VAR3_DEC:
 	{
+		s = SHIFT_VAR3*speed;
+		v = s/(SHIFT_PERIOD - SHIFT_T_UP);
+		a = v/(SHIFT_T_UP);
+		cmd.v_factor = v/(V_DESIGN_J3);
+		cmd.a_factor = a/(A_DESIGN_J3);
+
 		cmd.space_type = DUTY_SPACE_JOINT;
 		cmd.joint_type = DUTY_JOINT_SINGLE;
 		cmd.sub_para_int 	= 3;
-		cmd.sub_para_double = -SHIFT_VAR3;
+		cmd.sub_para_double = -s*180/PI;
 		v_current = positionCurrent.v_theta4;
 		lspb = &(myDUTY.joint.trajectory[3].lspb);
-		cmd.v_factor = 0.1;
-		cmd.a_factor = 0.7;
 	}
 			break;
 	}

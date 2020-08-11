@@ -24,5 +24,5 @@ robot_scara.c:1302:24:scaraGetDutyState	4	static
 robot_scara.c:1306:13:scaraIsScanLimit	4	static
 robot_scara.c:1310:13:scaraIsFinish	24	static
 robot_scara.c:1319:13:scaraPosition2String	200	static
-robot_scara.c:1362:22:scaraKeyInit	880	static
-robot_scara.c:1566:22:scaraKeyFlow	584	static
+robot_scara.c:1362:22:scaraKeyInit	984	static
+robot_scara.c:1664:22:scaraKeyFlow	584	static

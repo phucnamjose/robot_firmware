@@ -28,12 +28,12 @@
 #define V_DESIGN_ROLL	V_DESIGN_J0
 
 /* Maximum Accelerate System*/
-#define A_DESIGN_3D		(V_DESIGN_3D/1.5)
-#define A_DESIGN_ROLL	(V_DESIGN_ROLL/1.5)
-#define A_DESIGN_J0		(V_DESIGN_J0/1.5)
-#define A_DESIGN_J1		(V_DESIGN_J1/1.5)
-#define A_DESIGN_J2		(V_DESIGN_J2/1.5)
-#define A_DESIGN_J3		(V_DESIGN_J3/1.5)
+#define A_DESIGN_3D		(V_DESIGN_3D/1.0)
+#define A_DESIGN_ROLL	(V_DESIGN_ROLL/1.0)
+#define A_DESIGN_J0		(V_DESIGN_J0/1.0)
+#define A_DESIGN_J1		(V_DESIGN_J1/1.0)
+#define A_DESIGN_J2		(V_DESIGN_J2/1.0)
+#define A_DESIGN_J3		(V_DESIGN_J3/1.0)
 
 /* Sampling Period*/
 #define T_SAMPLING		(0.01f)
@@ -105,17 +105,24 @@
 #define HARD_LIM0_NEG		(-1.621454508f)
 #define HARD_LIM1_POS		(2.448773299f)
 #define HARD_LIM2_NEG		(-2.236f)
-#define HARD_LIM3_POS		(3.04047264f)
+#define HARD_LIM3_POS		(3.10886773f)
 
-/* Keyboard shift*/
-#define SHIFT_X				(10.0f)
-#define SHIFT_Y				(10.0f)
-#define SHIFT_Z				(10.0f)
-#define SHIFT_ROLL			(10.0f)
-#define SHIFT_VAR0			(5.0f)
-#define SHIFT_VAR1			(10.0f)
-#define SHIFT_VAR2			(10.0f)
-#define SHIFT_VAR3			(10.0f)
+
+/* Basic keyboard shift unit*/
+#define SHIFT_VAR0		(0.052359878f)
+#define SHIFT_VAR1		(0.052359878f)
+#define SHIFT_VAR2		(3.0f)
+#define SHIFT_VAR3		(0.052359878f)
+#define SHIFT_3D		(3.0f)
+#define SHIFT_ROLL		(0.052359878f)
+
+/* Shift period */
+#define SHIFT_PERIOD	(1.2f)
+#define SHIFT_T_UP		(0.264f)
+
+/* Shift speed limit */
+#define SHIFT_SPEED_MIN	(1)
+#define SHIFT_SPPED_MAX	(7)
 
 /* Kinematic Parameters (mm) */
 #define		d1				(211.0f)
