@@ -84,7 +84,7 @@ void Error_Handler(void);
 #define USB_SIGN_Pin GPIO_PIN_4
 #define USB_SIGN_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
-#define SIMULATION
+//#define SIMULATION
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

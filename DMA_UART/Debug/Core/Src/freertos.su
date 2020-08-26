@@ -1,4 +1,4 @@
 freertos.c:97:6:vApplicationGetIdleTaskMemory	24	static
 freertos.c:111:6:MX_FREERTOS_Init	96	static
 freertos.c:164:6:StartDefaultTask	1984	static,ignoring_inline_asm
-freertos.c:691:6:Start_USB_RX_Task	1360	dynamic
+freertos.c:692:6:Start_USB_RX_Task	1360	dynamic

@@ -105,7 +105,7 @@
 #define HARD_LIM0_NEG		(-1.621454508f)
 #define HARD_LIM1_POS		(2.448773299f)
 #define HARD_LIM2_NEG		(-2.236f)
-#define HARD_LIM3_POS		(3.10886773f)
+#define HARD_LIM3_POS		(3.024928301f)
 
 
 /* Basic keyboard shift unit*/
